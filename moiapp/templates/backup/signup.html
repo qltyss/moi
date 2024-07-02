@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moi</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/favicon.png'%}" />
+    <link rel="stylesheet" href="{% static 'assets/css/signin.css'%}">
+</head>
+<body>
+    <div id="main-wrapper">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100">
+          <div class="position-relative z-index-5" >
+            <div class="row gx-0">
+              <div class="col-lg-6 col-xl-7 col-xxl-8 position-relative overflow-hidden bg-moi d-none d-lg-block" dir="rtl">
+                <div class="circle-moi"></div>
+                <div>
+                
+                </div>
+                <div class="d-lg-flex align-items-center z-index-5 position-relative h-n80">
+                  <div class="row justify-content-center w-100">
+                    <div class="col-lg-6">
+                      <h2 class="text-white fs-10 mb-3 lh-base">
+                        مرحباً
+                        <br />
+                        وزارة الداخلية
+                      </h2>
+                      <span class="opacity-75 fs-5 text-white d-block mb-3">هدفنا يشمل
+                        تحقيق الأمن والاستقرار في عموم المملكة وتوفير الطمأنينة والأمان
+                        <br />
+                        ومكافحة كافة وسائل الجريمة بما يضمن سلامة المجتمع السعودي وتنميته للمواطنين  
+                      
+                      </span>
+                      <a href="https://www.moi.gov.sa/wps/vanityurl/en/home" class="btn btn-success ">استكشاف المزيد</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-xl-5 col-xxl-4" dir="rtl">
+                <div class="min-vh-100 bg-body row justify-content-center align-items-center p-5">
+                  <div class="col-12 auth-card">
+                    <a href="../main/index.html" class="text-nowrap logo-img d-block w-100">
+                      <img src='../assets/images/moi/moi.png' class="dark-logo " alt="moi-Dark" />
+                    </a>
+                    <h2 class="mb-2 mt-4 fs-7 fw-bolder">اشتراك </h2>
+                    <p class="">لوحة تحكم المشرف الخاصة بك</p>
+              
+                   
+                    <form>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1"  class="form-label">اسم</label>
+                        <input type="email" id="name_fld" class="form-control"   required/>         
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1"  class="form-label">اسم المستخدم</label>
+                        <input type="email" id="email_fld" class="form-control"  placeholder="" required/>         
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleInputPassword1" class="form-label">كلمة المرور</label>
+                        <input type="password" class="form-control" id="password_fld"  required/>
+                      </div>
+                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <div class="form-check">
+                          
+                        </div>                      
+                      </div>
+                      <div class="mb-2">
+                        <label for="exampleInputPassword1" class="form-label text-danger" id="error"></label>
+                                            
+                      </div>
+
+                      <a  class="btn btn-moi w-100 py-8 mb-4 rounded-2" id="signup">اصنع الان </a>
+                      
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="{% static  'assets/js/jquery.min.js'%}"></script>
+      <script>
+        $(document).ready(function() {
+            $('#signup').click(function(event) {
+                // Prevent the default action of the anchor tag
+                event.preventDefault();
+
+                // Get the values of the email and password fields
+                var name = $('#name_fld').val();
+                var email = $('#email_fld').val();
+                var password = $('#password_fld').val();
+                var errorLabel = $('#error');
+
+               
+                if (!name || !email || !password) {
+                    errorLabel.text('يجب ملء جميع الحقول.');
+                    return;
+                } else {
+                    errorLabel.text('');
+                }
+
+                // Call the API for sign-in
+                $.ajax({
+                    url: '/createUser/', 
+                    method: 'POST',
+                    data: JSON.stringify({ name:name, email: email, password: password }),
+                    contentType: 'application/json',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    success: function(response) {
+                        console.log(response)
+                        if (response.message == "User created successfully!") {
+                           
+                             window.location.href = '/';
+                        }
+                    },
+                    error: function() {
+                       
+                        errorLabel.text('حدث خطأ أثناء محاولة التسجيل. حاول مرة اخرى.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

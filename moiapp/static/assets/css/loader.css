@@ -1,0 +1,60 @@
+
+  :root {
+    --hue: 210;
+    --size: 100px;
+    --border: 10px;
+    --speed: 1s;
+    --blur: var(--border);
+  }
+
+  #loaderrow {
+    /* Position the loader at the center of the page */
+    position: fixed;
+    top: 50%; /* Vertically center the loader */
+    left: 50%; /* Horizontally center the loader */
+    transform: translate(-50%, -50%); /* Adjust position for centering */
+    /* Additional styles */
+    z-index: 9999; /* Ensure loader is on top of everything */
+}
+
+  .loader {
+    width: var(--border);
+    aspect-ratio: 1;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    --y: calc((var(--size) * -0.5) + (var(--border) * 0.5));
+    transform:
+      rotate(0deg)
+      translateY(var(--y));
+    animation: spin var(--speed) infinite linear;
+  }
+  
+  .loader::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--border) * -0.5);
+    border-radius: 50%;
+    background: rgba(20, 170, 27, 0.384);
+    filter: blur(var(--blur));
+    z-index: -1;
+  }
+  
+  .loader::after {
+    content: "";
+    width: var(--size);
+    aspect-ratio: 1;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    translate: -50% 0;
+    background: conic-gradient(#2abb75, #26934D, #23A967, transparent 75%);
+    border-radius: 50%;
+    mask: radial-gradient(
+      transparent calc(((var(--size) * 0.5) - var(--border)) - 1px),
+      white calc((var(--size) * 0.5) - var(--border)));
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(-360deg) translateY(var(--y)); }
+  }

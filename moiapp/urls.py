@@ -30,5 +30,11 @@ urlpatterns = [
      path('save_emp_image/', views.save_emp_image, name='save_emp_image'),
      path('drone_trafic/', views.drone_trafic, name='drone_trafic'),
     path('update_settings/<str:direction>/', views.update_settings, name='update_settings'),
+    
+    # Dania's urls
+    path('video_feed_html/', views.video_feed_html, name='video_feed_html'),
+    path('get_value/', views.get_value, name='get_value'),
+    path('turn_on/', views.turn_on, name='turn_on'),
+    path('turn_off/', views.turn_off, name='turn_off')
     # path('update_theme/<str:newtheme>/', views.update_theme, name='update_theme'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

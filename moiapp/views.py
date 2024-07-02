@@ -28,6 +28,12 @@ import os
 
 from django.contrib.auth.decorators import login_required
 
+# Dania' Lib
+from ultralytics.utils.plotting import Annotator
+from ultralytics import YOLO
+import numpy as np
+import torch
+
 def index(request):
     return render(request, 'signin.html')
 
@@ -689,3 +695,146 @@ def signout(request):
         return JsonResponse({'message': 'Sign out successful'}, status=200)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+    
+
+# Dania's code
+cap = cv2.VideoCapture('12.mp4')
+model_road = YOLO("models/moi2-m.pt")
+model_vehicles = YOLO("models/yolov8l-seg.pt")
+Capacity_number = 20
+all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": None}
+trigg = 0
+
+
+def print_device_info():
+    try:
+        print(f"CUDA Available: {torch.cuda.is_available()}")
+        print(f"CUDA Device Count: {torch.cuda.device_count()}")
+    except Exception as e:
+        print(f"Failed to get device info: {e}")
+
+@csrf_exempt
+@gzip.gzip_page
+def turn_on(request):
+    global trigg  # Declare trigg as global to modify the global variable
+    print("Endpoint '/on' was triggered!")
+    trigg = 1
+    return JsonResponse({'value': trigg})
+
+@csrf_exempt
+@gzip.gzip_page
+def turn_off(request):
+    global trigg  # Declare trigg as global to modify the global variable
+    print("Endpoint '/off' was triggered!")
+    trigg = 0
+    return JsonResponse({'value': trigg})
+
+def Calculate_crowding_rate(number_of_vehicles):
+    traffic = 0.80 * Capacity_number
+    moderate_traffic = 0.50 * Capacity_number
+    no_traffic = 0.25 * Capacity_number 
+
+    final_result = "---"
+    if number_of_vehicles >= traffic:
+        final_result = "Heavy Traffic"
+    elif number_of_vehicles <= moderate_traffic and number_of_vehicles >= no_traffic:
+        final_result = "Moderate Traffic"
+    elif number_of_vehicles <= no_traffic:
+        final_result = "Light Traffic"
+
+    return final_result
+
+class_colors = {
+    1: (255, 0, 0),  # Blue
+    2: (13, 169, 29),  # Green
+    3: (0, 0, 255),  # Red
+    5: (255, 255, 0),  # Cyan
+}
+
+@csrf_exempt
+@gzip.gzip_page
+def video_feed_html(request):
+    frame_skip = 5
+    resize_scale = 0.5
+    
+    def generate_frames():
+        global all_data, trigg
+        print_device_info()
+        frame_count = 0
+        unique_track_ids = set()  # Set to store unique track IDs
+        
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Failed to grab frame from live feed.")
+                break
+            frame_count += 1
+            if frame_count % frame_skip != 0:
+                continue
+
+            if trigg == 1:
+                frame = cv2.resize(frame, None, fx=resize_scale, fy=resize_scale, interpolation=cv2.INTER_LINEAR)
+                # Perform road segmentation
+                seg_results = model_road.predict(frame, device="cuda:0", classes=[0], save=False, save_conf=False, verbose=False)
+                road_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)
+                if seg_results and seg_results[0].masks is not None and seg_results[0].masks.data.numel() > 0:
+                    road_mask_tensor = seg_results[0].masks.data[0]
+                    road_mask = road_mask_tensor.cpu().numpy().astype(np.uint8)
+                    road_mask = cv2.resize(road_mask, (frame.shape[1], frame.shape[0]))
+
+                segmentation_overlay = np.zeros_like(frame)
+                segmentation_overlay[:, :, 2] = road_mask * 255
+                alpha = 0.3
+                frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
+
+                # Vehicle detection
+                detect_results = model_vehicles.track(frame_with_mask, conf=0.2, classes=[1, 2, 3, 5], save=False, save_conf=False, verbose=False, persist=True)
+                vehicle_classes = []
+                for detect_result in detect_results:
+                    boxes = detect_result.boxes
+                    ids = boxes.id.cpu().numpy().astype(int) if boxes.id is not None else []
+                    
+                    for box, id in zip(boxes, ids):
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])  # Extract coordinates
+                        object_bbox = road_mask[y1:y2, x1:x2]  # Determine the mask intersection
+
+                        if np.any(object_bbox):  # If part of the box is within the mask
+                            class_id = int(box.cls[0])
+                            color = class_colors.get(class_id, (0, 0, 0))
+
+                            # Add the track ID to the set to ensure uniqueness
+                            unique_track_ids.add(id)
+
+                            # Draw and label the detected vehicle within the mask
+                            cv2.rectangle(frame_with_mask, (x1, y1), (x2, y2), color, 2)
+                            label = f"{detect_result.names[class_id]}"
+                            cv2.putText(frame_with_mask, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                            vehicle_classes.append(detect_result.names[class_id])
+                
+                total_current_vehicles_count = len(vehicle_classes)
+                final_result = Calculate_crowding_rate(total_current_vehicles_count)
+                print(unique_track_ids)
+                total_vehicles_count = len(unique_track_ids)
+                all_data = {
+                    "Capacity": Capacity_number, 
+                    "Number_of_Current_Vehicles": total_current_vehicles_count, 
+                    "final_result": final_result,
+                    "Number_of_total_vehicles": total_vehicles_count,  # Add the unique track IDs to all_data
+                }
+
+            # Always encode and send the frame
+            ret, jpeg = cv2.imencode('.jpg', frame_with_mask if trigg == 1 else frame)
+            if not ret:
+                continue
+
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+    return StreamingHttpResponse(generate_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
+
+def get_value(request):
+    global all_data, trigg
+    print(trigg)
+    if not all_data:
+        return JsonResponse({'error': 'Data not available yet'}, status=404)
+    return JsonResponse({'value': all_data})

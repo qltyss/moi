@@ -18,6 +18,46 @@ $(document).ready(function(){
 
     drone_traffic();
 
+    function saveDroneData() {
+      
+      var csrftoken = getCookie('csrftoken'); 
+      var total = $('#total_drone_traffic').text();
+      var status = $('#drone_traffic_status').text();
+        // Use AJAX to send the data to the Django backend
+      $.ajax({
+          url: '/add-drone/',  // Adjust this if your URL is different
+          method: 'POST',
+          data: {
+              'total': total,
+              'status': status,
+              'csrfmiddlewaretoken': csrftoken
+          },
+          success: function(response) {
+              console.log('Success:', response.message);
+              alert('Data saved successfully!'); // Optional: alert the user on success
+          },
+          error: function(xhr, status, error) {
+              console.error('Error:', error);
+              // alert('Failed to save data!'); // Optional: alert the user on failure
+          }
+      });
+  };
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
     $("#lunchDrone").on('click', function () {
 
       if ($(this).hasClass('bg-danger-subtle')) {
@@ -100,8 +140,8 @@ $(document).ready(function(){
                     jsonObject[key] = isNaN(trimmedValue) ? trimmedValue : parseFloat(trimmedValue);
             });
 
-            $("#drone_alt").text(jsonObject.altitude_m);
-            $("#drone_bat").text(jsonObject.battery_percentage);
+            $("#drone_altitude").text(jsonObject.altitude_m);
+            $("#drone_battery").text(jsonObject.battery_percentage);
             console.log(typeof(jsonObject));
             console.log(jsonObject);
             console.log(jsonObject.battery_voltage);

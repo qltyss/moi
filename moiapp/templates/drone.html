@@ -2458,7 +2458,7 @@
                           </span>
                         </div>
                         <div class="ms-auto">
-                          <h2 class="fs-7 text-danger" data-lang-key="OFF">معطلة</h2>
+                          <h2 class="fs-7 text-danger" data-lang-key="OFF" id="drone_status">معطلة</h2>
                           <p class="fw-medium text-danger mb-0" data-lang-key="Drone">درون</p>
                         </div>
                       </div>
@@ -2475,8 +2475,8 @@
                           </span>
                         </div>
                         <div class="ms-auto">
-                          <h2 class="fs-7 text-info">80%</h2>
-                          <p class="fw-medium text-info mb-0" data-lang-key="Battery">بطارية</p>
+                          <h2 class="fs-7 text-info" id="drone_battery">%</h2>
+                          <p class="fw-medium text-info mb-0" data-lang-key="Battery" >بطارية</p>
                         </div>
                       </div>
                     </div>
@@ -2492,7 +2492,7 @@
                           </span>
                         </div>
                         <div class="ms-auto">
-                          <h2 class="fs-7 text-warning">150</h2>
+                          <h2 class="fs-7 text-warning" id="drone_altitude">0</h2>
                           <p class="fw-medium text-warning mb-0" data-lang-key="Altitude">ارتفاع</p>
                         </div>
                       </div>
@@ -2508,7 +2508,7 @@
                             <iconify-icon icon="solar:layers-linear" class="fs-7 text-primary"></iconify-icon>
                           </span>
                           <div>
-                            <h5 class="card-title" data-lang-key="TraficAnalysis">تحليل المرور</h5>
+                            <h5 class="card-title" data-lang-key="TraficAnalysis" id="saveDroneData">تحليل المرور</h5>
                             <p class="card-subtitle mb-0" id="drone_error">03 يونيو 2024</p>
                           </div>
                         </div>
@@ -2530,23 +2530,7 @@
                   <div class="image-container" style="min-height: 220px;">
                     <!-- Dania's Code start -->
                     <img src="{% url 'video_feed_html' %}" alt="Image" class="img-fluid rounded">
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                    <script>
-                        console.log("hi");
                     
-                        function updateValue() {
-                            $.ajax({
-                                url: '/get_value/', 
-                                type: 'GET',
-                                dataType: 'json',
-                                success: function(response) {
-                                    var all_data = response.value;
-                                    console.log(all_data);
-                                }
-                            });
-                        }
-                        setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
-                    </script>
                   <!-- Dania's Code end -->
 
                     
@@ -2585,7 +2569,7 @@
                       </div>
                       <div>
                         <p class="fs-3 mb-0 fw-normal text-info" data-lang-key="TotalTrafic">إجمالي حركة المرور</p>
-                        <h6 class="fw-semibold text-info fs-4 mb-0">358</h6>
+                        <h6 class="fw-semibold text-info fs-4 mb-0" id="total_drone_trafic"></h6>
                       </div>
                     </div>
                     <div class="d-flex align-items-center">
@@ -2594,7 +2578,7 @@
                       </div>
                       <div>
                         <p class="fs-3 mb-0 fw-normal text-danger" data-lang-key="status">حالة</p>
-                        <h6 class="fw-semibold text-danger fs-4 mb-0" data-lang-key="trafic_status">مزدحمة</h6>
+                        <h6 class="fw-semibold text-danger fs-4 mb-0" data-lang-key="trafic_status" id="drone_trafic_status"></h6>
                       </div>
                     </div>
                   </div>
@@ -2876,7 +2860,7 @@
 
 
   <div class="dark-transparent sidebartoggler"></div>
- 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
   <!-- solar icons -->
@@ -2884,7 +2868,26 @@
   <script src="{% static 'assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js' %}"></script>
   <script src="{% static 'assets/js/plugins/meg.init.js' %}"></script>
   <script src="{% static 'assets/js/auth.js' %}"></script>
-
+  
+  <script>
+      console.log("hi");
+  
+      function updateValue() {
+          $.ajax({
+              url: '/get_value/', 
+              type: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  var all_data = response.value;
+                  console.log(all_data);
+                  $("#total_drone_trafic").text(all_data.Number_of_total_vehicles);
+                  $("#drone_trafic_status").text(all_data.final_result);
+            
+              }
+          });
+      }
+      setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
+  </script>
 </body>
 
 </html>

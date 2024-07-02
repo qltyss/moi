@@ -704,7 +704,7 @@ model_road = YOLO("models/moi2-m.pt")
 model_vehicles = YOLO("models/yolov8l-seg.pt")
 Capacity_number = 20
 all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": None}
-trigg = 0
+trigg = 1
 
 
 def print_device_info():
@@ -838,3 +838,14 @@ def get_value(request):
     if not all_data:
         return JsonResponse({'error': 'Data not available yet'}, status=404)
     return JsonResponse({'value': all_data})
+
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["POST"])
+def add_drone(request):
+    # Extract data from request
+    total = request.POST.get('total')
+    status = request.POST.get('status')
+    drone = Drone(total=total, status=status)
+    drone.save()
+    # Return a response
+    return JsonResponse({'message': 'Drone added successfully', 'id': drone.id})

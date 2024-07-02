@@ -13,7 +13,7 @@ urlpatterns = [
     path('addface/', views.addface, name='addface'),  
     path('signin/', views.signin_view, name='signin_view'),
     path('signup/', views.signup, name='signup'),
-     path('signout/', views.signout, name='signout'),
+    path('signout/', views.signout, name='signout'),
     path('createUser/', views.create_user_view, name='create_user_view'),
     path('employees/', views.get_employee_info, name='get_employee_info'),
     path('amr_front/', views.amr_front, name='amr_front'),
@@ -29,8 +29,8 @@ urlpatterns = [
      path('dashboard_latest_records/', views.dashboard_latest_records, name='dashboard_latest_records'),
      path('save_emp_image/', views.save_emp_image, name='save_emp_image'),
      path('drone_trafic/', views.drone_trafic, name='drone_trafic'),
-    path('update_settings/<str:direction>/', views.update_settings, name='update_settings'),
-    
+     path('update_settings/<str:direction>/', views.update_settings, name='update_settings'),
+     path('add-drone/', views.add_drone, name='add-drone'),
     # Dania's urls
     path('video_feed_html/', views.video_feed_html, name='video_feed_html'),
     path('get_value/', views.get_value, name='get_value'),

@@ -155,6 +155,12 @@
                     <span class="hide-menu">Face Registration</span>
                   </a>
                 </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/editemp/" aria-expanded="false">
+                    <iconify-icon class="ti ti-user"></iconify-icon>
+                    <span class="hide-menu">Edit Employee</span>
+                  </a>
+                </li>
 <!-- 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="../main/index2.html" aria-expanded="false">
@@ -2457,9 +2463,9 @@
                             <i class="ti ti-drone"></i>
                           </span>
                         </div>
-                        <div class="ms-auto">
-                          <h2 class="fs-7 text-danger" data-lang-key="OFF" id="drone_status">معطلة</h2>
-                          <p class="fw-medium text-danger mb-0" data-lang-key="Drone">درون</p>
+                        <div class="ms-auto text-danger">
+                          <h2 class="fs-7 text-danger" data-lang-key="OFF" id="current_drone_status">OFF</h2>
+                          <p class="fw-medium  mb-0" data-lang-key="Drone">درون</p>
                         </div>
                       </div>
                     </div>
@@ -2476,7 +2482,7 @@
                         </div>
                         <div class="ms-auto">
                           <h2 class="fs-7 text-info" id="drone_battery">%</h2>
-                          <p class="fw-medium text-info mb-0" data-lang-key="Battery" >بطارية</p>
+                          <p class="fw-medium text-info mb-0" data-lang-key="Battery">بطارية</p>
                         </div>
                       </div>
                     </div>
@@ -2492,7 +2498,7 @@
                           </span>
                         </div>
                         <div class="ms-auto">
-                          <h2 class="fs-7 text-warning" id="drone_altitude">0</h2>
+                          <h2 class="fs-7 text-warning" id="drone_alt">0</h2>
                           <p class="fw-medium text-warning mb-0" data-lang-key="Altitude">ارتفاع</p>
                         </div>
                       </div>
@@ -2508,7 +2514,7 @@
                             <iconify-icon icon="solar:layers-linear" class="fs-7 text-primary"></iconify-icon>
                           </span>
                           <div>
-                            <h5 class="card-title" data-lang-key="TraficAnalysis" id="saveDroneData">تحليل المرور</h5>
+                            <h5 class="card-title" data-lang-key="TraficAnalysis">تحليل المرور</h5>
                             <p class="card-subtitle mb-0" id="drone_error">03 يونيو 2024</p>
                           </div>
                         </div>
@@ -2528,13 +2534,10 @@
               <div class="row">
                 <div class="col-lg-12 pt-2">
                   <div class="image-container" style="min-height: 220px;">
-                    <!-- Dania's Code start -->
-                    <img src="{% url 'video_feed_html' %}" alt="Image" class="img-fluid rounded">
-                    
+                  <!-- Dania's Code start -->
+                  <img src="{% url 'video_feed_html' %}" alt="Image" class="img-fluid rounded">   
                   <!-- Dania's Code end -->
-
-                    
-                    <!-- <div class="overlay">
+                  <!-- <div class="overlay">
                       <img src="{% static 'assets/images/profile/user-2.jpg' %}" alt="matdash-img" class="rounded-circle" style="width: 15%;">
                     </div> -->
                   </div>
@@ -2558,7 +2561,7 @@
                   <div class="position-relative w-100 d-flex align-items-center justify-content-between">
                     <div>
                       <h6 class="mb-2 fw-semibold fs-4" data-lang-key="TraficAnalysis">تحليل حركة المرور</h6>
-                      <span class="fs-2" dir="ltr">3 Jan 2024 01:23 AM </span>
+                      <span class="fs-2" dir="ltr" id="drone_latest_Time"> </span>
                     </div>  
                                              
                   </div>
@@ -2569,7 +2572,7 @@
                       </div>
                       <div>
                         <p class="fs-3 mb-0 fw-normal text-info" data-lang-key="TotalTrafic">إجمالي حركة المرور</p>
-                        <h6 class="fw-semibold text-info fs-4 mb-0" id="total_drone_trafic"></h6>
+                        <h6 class="fw-semibold text-info fs-4 mb-0" id="drone_traffic_value"></h6>
                       </div>
                     </div>
                     <div class="d-flex align-items-center">
@@ -2577,8 +2580,8 @@
                         <i class="ti ti-grid-dots text-danger fs-6"></i>
                       </div>
                       <div>
-                        <p class="fs-3 mb-0 fw-normal text-danger" data-lang-key="status">حالة</p>
-                        <h6 class="fw-semibold text-danger fs-4 mb-0" data-lang-key="trafic_status" id="drone_trafic_status"></h6>
+                        <p class="fs-3 mb-0 fw-normal text-danger" data-lang-key="status" >الحالة</p>
+                        <h6 class="fw-semibold text-danger fs-4 mb-0" data-lang-key="trafic_status" id="drone_traffic_status_values">..</h6>
                       </div>
                     </div>
                   </div>
@@ -2860,7 +2863,7 @@
 
 
   <div class="dark-transparent sidebartoggler"></div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ 
 
 
   <!-- solar icons -->
@@ -2868,26 +2871,65 @@
   <script src="{% static 'assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js' %}"></script>
   <script src="{% static 'assets/js/plugins/meg.init.js' %}"></script>
   <script src="{% static 'assets/js/auth.js' %}"></script>
-  
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-      console.log("hi");
-  
-      function updateValue() {
-          $.ajax({
-              url: '/get_value/', 
-              type: 'GET',
-              dataType: 'json',
-              success: function(response) {
-                  var all_data = response.value;
-                  console.log(all_data);
-                  $("#total_drone_trafic").text(all_data.Number_of_total_vehicles);
-                  $("#drone_trafic_status").text(all_data.final_result);
-            
+    console.log("hi");
+
+    function updateValue() {
+        $.ajax({
+            url: '/get_value/', 
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var all_data = response.value;
+                console.log(all_data);
+            $("#drone_traffic_value").text(response.value.Number_of_total_vehicles);
+            $("#drone_traffic_status_values").text(response.value.final_result);
+            $("#drone_latest_Time").text(response.value.time);
+            var dir = sessionStorage.getItem('dir');
+            if(response.value.final_result  === "Heavy"){
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.value.final_result);
+                
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("مزدحم");
               }
-          });
-      }
-      setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
-  </script>
+             
+
+            }else if(response.final_result  === "Moderate"){
+
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.final_result);
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("معتدل");
+              }
+
+            }else if(response.value.final_result  === "Light"){
+              
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.value.final_result);
+                $("#drone_traffic_status_values").removeClass('text-danger');
+                $("#drone_traffic_status_values").removeClass('text-warning');
+                $("#drone_traffic_status_values").addClass('text-success');
+              
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").removeClass('text-danger');
+                $("#drone_traffic_status_values").removeClass('text-warning');
+                $("#drone_traffic_status_values").addClass('text-success');
+                $("#drone_traffic_status_values").text("غير مزدحم");
+               
+              }
+
+            }
+          
+            }
+        });
+    }
+    setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
+</script>
+
+
 </body>
 
 </html>

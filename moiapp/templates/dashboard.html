@@ -117,6 +117,12 @@
                     <span class="hide-menu">Face Registration</span>
                   </a>
                 </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/editemp/" aria-expanded="false">
+                    <iconify-icon class="ti ti-user"></iconify-icon>
+                    <span class="hide-menu">Edit Employee</span>
+                  </a>
+                </li>
 
               </ul>
             </nav>
@@ -2310,13 +2316,13 @@
           </div>
           <div class="row">
       
-      
+            <!-- Traffic Status -->
             <div class="col-lg-3 col-md-6">
               <div class="card bg-danger text-dark border-bottom border-info" id="congestion_card_background">
                 <div class="card-body">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <h4 class="fs-7 text-white" id="congestion_card_text" data-lang-key="Congested">مزدحم</h4>
+                      <h4 class="fs-7 text-white"  data-lang-key="dashboard_traffic_staus" id="dashboard_traffic_status"></h4>
                             <h6 class="fw-medium text-white mb-0" data-lang-key="CurrentTraficStatus">حالة المرور الحالية</h6>
                     </div>
                     <span class="text-white display-6">
@@ -2327,7 +2333,7 @@
                 </div>
               </div>
             </div>
-      
+            <!-- Total Traffic -->
             <div class="col-lg-3 col-md-6">
               <div class="card border-bottom border-warning">
                 <div class="card-body">
@@ -2343,9 +2349,7 @@
                 </div>
               </div>
             </div>
-      
-            
-           
+            <!-- Total Face Detections -->
             <div class="col-lg-3 col-md-6">
               <div class="card border-bottom border-success">
                 <div class="card-body">
@@ -2363,13 +2367,14 @@
                 </div>
               </div>
             </div>
+            <!-- Total Wrong Parking -->
             <div class="col-lg-3 col-md-6">
               <div class="card border-bottom border-danger">
                 <div class="card-body">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
                       <h4 class="fs-7" id="wrongparking_card_text">0</h4>
-                      <h6 class="fw-medium text-danger mb-0" data-lang-key="TotalWrongParkings">إجمالي الوقوف الخاطئة</h6>
+                      <h6 class="fw-medium text-danger mb-0" data-lang-key="TotalWrongParkings">إجمالي الوقوف الخاطئ</h6>
                     </div>
                     <span class="text-danger display-6">
                       <i class="ti ti-parking-off"></i>
@@ -2378,9 +2383,10 @@
                 </div>
               </div>
             </div>
+            <!-- Filter and Face Analysis -->
             <div class="col-lg-4">
       
-      
+           <!-- Filter by Date -->
               <div class="card">
                 <div class="card-body">
                   
@@ -2406,67 +2412,7 @@
                   
                 </div>
               </div>
-              <div class="card w-100 position-relative overflow-hidden">
-                <div class="card-body">
-                  <h4 class="card-title mb-0" data-lang-key="LiveRoboticStatus">حالة الروبوت الحي</h4>
-                  <div class="row align-items-center">
-                    <div class="col-md-12">
-                      <div class="pt-2 my-3 border-top">
-                        <div class="row pt-3">
-                          <div class="col-sm-6">
-                            <div class="hstack gap-6 mb-3 mb-md-0">
-                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-danger-subtle rounded">
-                                <iconify-icon icon="mdi:power" class="fs-7 text-danger"></iconify-icon>
-                              </span>
-                              <div>
-                                  <span class="text-muted fw-bold" data-lang-key="AMR">سَيّارة  </span>
-                                  <h6 class="fw-bolder mb-0 text-danger" data-lang-key="OFF">متوقف</h6>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="hstack gap-6">
-                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-primary-subtle rounded">
-                                <iconify-icon icon="mdi:power-on" class="fs-7 text-primary"></iconify-icon>
-                              </span>
-                              <div>
-                                  <span class="text-muted fw-bold" data-lang-key="Drone">درون</span>
-                                  <h6 class="fw-bolder mb-0 text-success" data-lang-key="ON">مشغّل</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  
-                  </div>
-                </div>
-              </div>
-      
-            </div>
-            <div class="col-lg-4">
-              
-              <div class="card bg-primary-subtle">
-                <div class="card-body">
-                  <div class="hstack align-items-center gap-3 mb-4">
-                    <span class="d-flex align-items-center justify-content-center round-48 bg-white rounded flex-shrink-0">
-                      <iconify-icon icon="mdi:car" class="fs-7 text-primary"></iconify-icon>
-                    </span>
-                    <div>
-                      <p class="mb-2 text-dark fw-semibold"data-lang-key="TodaysTrafficAnalysis">تحليل حركة المرور لهذا اليوم</p>
-                      <p id="today_Date"></p>
-                    </div>
-                  </div>
-                  <div style="height: 335px;">
-                    <div id="traffic_analysis"></div>
-                  </div>
-                 
-                </div>
-              </div>
-      
-            </div>
-            <div class="col-lg-4">
-      
+              <!-- Face Analysis Chart -->
               <div class="card w-100 position-relative">
                 <div class="card-body">
                   <div class="row align-items-center">
@@ -2509,8 +2455,71 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <!-- Traffic Analysis Chart -->
+            <div class="col-lg-4">
+              
+              <div class="card bg-primary-subtle">
+                <div class="card-body">
+                  <div class="hstack align-items-center gap-3 mb-4">
+                    <span class="d-flex align-items-center justify-content-center round-48 bg-white rounded flex-shrink-0">
+                      <iconify-icon icon="mdi:car" class="fs-7 text-primary"></iconify-icon>
+                    </span>
+                    <div>
+                      <p class="mb-2 text-dark fw-semibold"data-lang-key="TodaysTrafficAnalysis">تحليل حركة المرور لهذا اليوم</p>
+                      <p id="today_Date"></p>
+                    </div>
+                  </div>
+                  <div style="height: 335px;">
+                    <div id="traffic_analysis"></div>
+                  </div>
+                 
+                </div>
+              </div>
+      
+            </div>
+            <!-- Status and Detection -->
+            <div class="col-lg-4">
+               <!-- Robotic Status -->
+               <div class="card w-100 position-relative overflow-hidden">
+                <div class="p-2">
+                  <h4 class="card-title mb-0" data-lang-key="LiveRoboticStatus">حالة الروبوت الحي</h4>
+                  <div class="row align-items-center">
+                    <div class="col-md-12">
+                      <div class="pt-2 my-3 border-top">
+                        <div class="row pt-3">
+                          <div class="col-sm-6">
+                            <div class="hstack gap-6 mb-3 mb-md-0">
+                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-danger-subtle rounded">
+                                <iconify-icon icon="mdi:power" class="fs-7 text-danger"></iconify-icon>
+                              </span>
+                              <div>
+                                  <span class="text-muted fw-bold" data-lang-key="AMR">السيارة  </span>
+                                  <h6 class="fw-bolder mb-0 text-danger" data-lang-key="OFF">متوقف</h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="hstack gap-6">
+                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-primary-subtle rounded">
+                                <iconify-icon icon="mdi:power-on" class="fs-7 text-primary"></iconify-icon>
+                              </span>
+                              <div>
+                                  <span class="text-muted fw-bold" data-lang-key="Drone">الدرون</span>
+                                  <h6 class="fw-bolder mb-0 text-success" data-lang-key="ON">مشغّل</h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                  </div>
+                </div>
+              </div>
+              <!-- Live Detection -->
               <div class="card social-widget overflow-hidden">
-                <div class="card-body text-bg-primary p-2">
+                <div class="card-body text-bg-primary p-1">
                   <div class="d-flex align-items-center text-white">
                    
                       <h5 class="mb-0 text-white" data-lang-key="LiveDetectionPanel"> لوحة الكشف الحي</h5>
@@ -2520,8 +2529,8 @@
                 
                 </div>
                 <div class="card-body" >
-                  <div class="row " id="live_detection" dir="ltr" style="height:140px; overflow-x: auto; overflow-y: hidden;white-space: nowrap">
-                    
+                  <!-- <div class="row " id="live_detection" dir="ltr" style="height:140px; overflow-x: auto; overflow-y: hidden;white-space: nowrap"> -->
+                    <div class="row " id="live_detection" dir="ltr" style="height:230px; overflow-x: auto; overflow-y: hidden;white-space: nowrap">
                    
                     
                   </div>

@@ -82,7 +82,6 @@
 
 <body>
 
-  <!-- Preloader -->
   <div class="row " id="loaderrow">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 rounded d-flex flex-column justify-content-center  align-items-center " >
         <div class="loader" role="alert" aria-live="assertive"></div>
@@ -193,7 +192,7 @@
           <div class="sidebarmenu">
             <div class="brand-logo d-flex align-items-center nav-logo">
               <a href="/dashboard/" class="text-nowrap logo-img" >
-                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75"/>
+                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75" id="main_logo"/>
               </a>
 
             </div>
@@ -1341,18 +1340,18 @@
                   <li class="nav-item dropdown">
                     <a class="nav-link" href="javascript:void(0)" id="drop1" aria-expanded="false">
                       <div class="d-flex align-items-center gap-2 lh-base">
-                        <img src="{% static 'assets/images/employee/Dr_Elie.jpg' %}" class="rounded-circle" width="35" height="35" alt="mois-img" />
+                        <img src="{% static 'assets/images//moi/moi.png' %}" class="rounded-circle" width="35" height="35" alt="mois-img" />
                         <iconify-icon icon="solar:alt-arrow-down-bold" class="fs-2"></iconify-icon>
                       </div>
                     </a>
                     <div class="dropdown-menu profile-dropdown dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop1">
                       <div class="position-relative px-4 pt-3 pb-2">
                         <div class="d-flex align-items-center mb-3 pb-3 border-bottom gap-6">
-                          <img src="{% static 'assets/images/employee/Dr_Elie.jpg' %}" class="rounded-circle" width="56" height="56" alt="mois-img" />
+                          <img src="{% static 'assets/images/moi/moi.png' %}" class="rounded-circle" width="56" height="56" alt="mois-img" />
                           <div>
-                            <h5 class="mb-0 fs-12" id="uname">
+                            <h5 class="mb-0 fs-12 uname" id="uname">
                             </h5>
-                            <p class="mb-0 text-dark" id="uemail">
+                            <p class="mb-0 text-dark uemail" id="uemail">
                          
                             </p>
                           </div>
@@ -1778,19 +1777,19 @@
                   <li class="nav-item dropdown">
                     <a class="nav-link" href="javascript:void(0)" id="drop1" aria-expanded="false">
                       <div class="d-flex align-items-center gap-2 lh-base">
-                        <img src="{% static 'assets/images/employee/Dr_Elie.jpg' %}" class="rounded-circle" width="35" height="35" alt="mois-img" />
+                        <img src="{% static 'assets/images/moi/moi.png' %}" class="rounded-circle" width="35" height="35" alt="mois-img" />
                         <iconify-icon icon="solar:alt-arrow-down-bold" class="fs-2"></iconify-icon>
                       </div>
                     </a>
                     <div class="dropdown-menu profile-dropdown dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop1">
                       <div class="position-relative px-4 pt-3 pb-2">
                         <div class="d-flex align-items-center mb-3 pb-3 border-bottom gap-6">
-                          <img src="{% static 'assets/images/employee/Dr_Elie.jpg' %}" class="rounded-circle" width="56" height="56" alt="mois-img" />
+                          <img src="{% static 'assets/images/moi/moi.png' %}" class="rounded-circle" width="56" height="56" alt="mois-img" />
                           <div>
-                            <h5 class="mb-0 fs-12">Mohammad <span class="text-success fs-11">Pro</span>
+                            <h5 class="mb-0 fs-12 uname">
                             </h5>
-                            <p class="mb-0 text-dark">
-                              Mohammad@qltyss.com
+                            <p class="mb-0 text-dark uemail">
+                             
                             </p>
                           </div>
                         </div>
@@ -1818,191 +1817,168 @@
     
 
       <div class="body-wrapper">
-          <div class="container-fluid">
-              
-            <div class="card card-body py-3">
-              <div class="row align-items-center">
-                <div class="col-12">
-                  <div class="d-sm-flex align-items-center justify-space-between">
-                    <h4 class="mb-4 mb-md-0 card-title">AMR Panel</h4>
-                    <nav aria-label="breadcrumb" class="ms-auto">
-                      <ol class="breadcrumb">
-                        <li class="breadcrumb-item d-flex align-items-center">
-                          <a class="text-muted text-decoration-none d-flex" href="dashboard/">
-                            <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
-                          </a>
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page">
-                          <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">
-                            AMR
-                          </span>
-                        </li>
-                      </ol>
-                    </nav>
+        <div class="container-fluid">
+          <div class="card card-body py-3">
+            <div class="row align-items-center">
+              <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="amrPanel">لوحة AMR</h4>
+                  <nav aria-label="breadcrumb" class="ms-auto">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item d-flex align-items-center">
+                        <a class="text-muted text-decoration-none d-flex" href="dashboard/">
+                          <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                        </a>
+                      </li>
+                      <li class="breadcrumb-item" aria-current="page">
+                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary" data-lang-key="AMR">AMR</span>
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-lg-12 pb-0 mb-0">
+              <div class="row">
+                <!-- Column -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="card overflow-hidden">
+                    <div class="d-flex flex-row">
+                      <div class="p-3 bg-info d-flex align-items-center">
+                        <h3 class="text-dark box mb-0">
+                          <i class="ti ti-car"></i>
+                        </h3>
+                      </div>
+                      <div class="p-3">
+                        <h6 class="text-info mb-0 fs-4 fw-bold" data-lang-key="scanVehicles">إجمالي المركبات</h6>
+                        <span id="scaned_count" class="text-info fw-bold mb-0 fs-6">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="card overflow-hidden">
+                    <div class="d-flex flex-row">
+                      <div class="p-3 bg-danger-subtle d-flex align-items-center">
+                        <h3 class="text-danger box mb-0">
+                          <i class="ti ti-parking-off"></i>
+                        </h3>
+                      </div>
+                      <div class="p-3">
+                        <h3 class="text-danger mb-0 fs-6" id="wrongpark-count">0</h3>
+                        <span data-lang-key="wronglyParked">موقف بشكل خاطئ</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <!-- <div class="col-lg-3 col-md-6">
+                  <div class="card overflow-hidden">
+                    <div class="d-flex flex-row">
+                      <div class="p-3 bg-primary-subtle d-flex align-items-center">
+                        <h3 class="text-primary box mb-0">
+                          <i class="ti ti-parking"></i>
+                        </h3>
+                      </div>
+                      <div class="p-3">
+                        <h3 class="text-primary mb-0 fs-6" id="correctparked_count">0</h3>
+                        <span data-lang-key="correctlyParked">موقف بشكل صحيح</span>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <!-- Column -->
+                <!-- Column -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="card bg-danger overflow-hidden">
+                    <div class="d-flex flex-row">
+                      <div class="p-3 bg-info-subtle d-flex align-items-center">
+                        <h3 class="text-light box mb-0">
+                          <i class="ti ti-truck"></i>
+                        </h3>
+                      </div>
+                      <div class="p-3">
+                        <h3 class="text-light mb-0 fs-6" data-lang-key="amr_status">إيقاف</h3>
+                        <span class="text-light" data-lang-key="amrStatus">حالة AMR</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Column -->
+              </div>
+            </div>
+        
+            <div class="col-lg-5">
+              <div class="card w-100">
+                <div class="card-body">
+                  <div class="mb-2">
+                    <div class="d-flex flex-wrap gap-3 mb-2 justify-content-between align-items-center">
+                      <h5 class="card-title fw-semibold mb-0" data-lang-key="vehicleDetection">كشف المركبات</h5>
+                      <div class="">
+                        <input class="form-control" type="date" placeholder="النهاية" id="vehicle_filter" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <div class="d-flex justify-content-between align-items-center">
+                              
+                                <span data-lang-key="carPlatePanel">لوحة السيارة</span>
+                            </div>
+                        </button>
+                    </h2>
+                      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                          <div class="card" style="box-shadow:none !important">
+                            <div class="comment-widgets scrollable mb-2 common-widget" style="height: 275px;overflow-y: auto !important;" id="carplatepanel">
+                              <!-- Content dynamically loaded -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                          <span data-lang-key="wrongParkingPanel">لوحة مواقف خاطئة</span>
+                        </button>
+                      </h2>
+                      <div id="flush-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                          <div class="card" style="box-shadow:none !important">
+                            <div class="comment-widgets scrollable mb-2 common-widget" style="height: 230px;overflow-y: auto !important;" id="wrongpanels">
+                              <!-- Content dynamically loaded -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-lg-12 pb-0 mb-0">
-                <div class="row ">
-
-                        <!-- Column -->
-                  <div class="col-lg-3 col-md-6">
-                    <div class="card overflow-hidden">
-                      <div class="d-flex flex-row">
-                        <div class="p-3 bg-info d-flex align-items-center">
-                          <h3 class="text-dark box mb-0">
-                            <i class="ti ti-car"></i>
-                          </h3>
-                        </div>
-                        <div class="p-3">
-                          <h6 class="text-info mb-0 fs-4 fw-bold">Total Scan Vehicles</h6>
-                          <span id="scaned_count" class="text-info fw-bold mb-0 fs-6" >0</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Column -->
-                  <!-- Column -->
-                  <div class="col-lg-3 col-md-6">
-                    <div class="card overflow-hidden">
-                      <div class="d-flex flex-row">
-                        <div class="p-3 bg-danger-subtle d-flex align-items-center">
-                          <h3 class="text-danger box mb-0">
-                            <i class="ti ti-parking-off"></i>
-                          </h3>
-                        </div>
-                        <div class="p-3">
-                          <h3 class="text-danger mb-0 fs-6" id="wrongpark-count">0</h3>
-                          <span>Wrongly Parked</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Column -->
-                  <!-- Column -->
-                  <div class="col-lg-3 col-md-6">
-                    <div class="card overflow-hidden">
-                      <div class="d-flex flex-row">
-                        <div class="p-3 bg-primary-subtle d-flex align-items-center">
-                          <h3 class="text-primary box mb-0">
-                            <i class="ti ti-parking"></i>
-                          </h3>
-                        </div>
-                        <div class="p-3">
-                          <h3 class="text-primary mb-0 fs-6" id="correctparked_count">0</h3>
-                          <span>Correctly Parked</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Column -->
-                  <!-- Column -->
-                  <div class="col-lg-3 col-md-6">
-                    <div class="card bg-danger overflow-hidden">
-                      <div class="d-flex flex-row">
-                        <div class="p-3 bg-info-subtle d-flex align-items-center">
-                          <h3 class="text-light box mb-0">
-                            <i class="ti ti-truck"></i>
-                          </h3>
-                        </div>
-                        <div class="p-3">
-                          <h3 class="text-light mb-0 fs-6">OFF</h3>
-                          <span class="text-light">AMR Status</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Column -->
-
-                    
-                </div>
-              </div>
-
-              <div class="col-lg-5">
-                <div class="card w-100">
-                  <div class="card-body">
-                    <div class="mb-2">
-                      <div class="d-flex flex-wrap gap-3 mb-2 justify-content-between align-items-center">
-                        <h5 class="card-title fw-semibold mb-0">Vehicle Detection</h5>
-                        <div class="">
-                          <input class="form-control" type="date" placeholder="End "  id="vehicle_filter" />
-                        </div>
-                      </div>
-                      
-                    </div>
-                    <div class="accordion accordion-flush" id="accordionFlushExample">
-                      <div class="accordion-item ">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            Car plate Panel
-                          </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse " aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                          <div class="accordion-body">
-                            <div class="card" style="box-shadow:none !important">
-                              
-                              <div class="comment-widgets scrollable mb-2 common-widget" style="height: 275px;overflow-y: auto !important;" id="carplatepanel">
-                               
-                                
-                               
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingTwo">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Wrong Parking Panel
-                          </button>
-                        </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                          <div class="accordion-body">
-                            <div class="card"  style="box-shadow:none !important">
-                              
-                              <div class="comment-widgets scrollable mb-2 common-widget" style="height: 230px;overflow-y: auto !important;"  id="wrongpanels">
-                                <!-- Comment Row -->
-
- 
-                               
-
-                                
-                               
-                               
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
+        
             <div class="col-lg-7">
-                <div class="row card" >
-                    <div class="col-lg-12 py-2">
-                      <div class="image-container" style="min-height: 59vh;">
-                        <!-- <img src="{% url 'amr_front' %}" alt="Image" class="img-fluid rounded" id="amr_stream" style="height:30rem">  -->
-                         <!--<div class="overlay">
-                          
-                        </div> -->
-                      </div>
-
-                    </div>
-               
-                    
+              <div class="row card">
+                <div class="col-lg-12 py-2">
+                  <div class="image-container" style="min-height: 59vh;">
+                    <!-- Content dynamically loaded -->
+                    <img src="{% url 'amr_back' %}" alt="Image" class="img-fluid rounded">
+                  </div>
                 </div>
+              </div>
             </div>
-            </div>
-                
-               
-                
-
-         </div>
+          </div>
+        </div>
+        
       </div>
    </div>
 

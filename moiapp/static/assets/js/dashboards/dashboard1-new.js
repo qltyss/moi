@@ -216,6 +216,33 @@ function updatefaceChartValues(chartInstance, seriesValues) {
               $("#wrongparking_card_text").text(response.wrongparking);
               $("#person_card_text").text(response.person);
               $("#traffic_card_text").text(response.drone.toFixed(0));
+              
+              if(response.drone_latest_status  === "Heavy"){
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("مزدحم");
+                }
+               
+
+              }else if(response.drone_latest_status  === "Moderate"){
+
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("معتدل");
+                }
+
+              }else if(response.drone_latest_status  === "Light"){
+
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("طبيعي");
+                }
+
+              }
+              
               var series = [response.white, response.black, response.unknown];
               updatefaceChartValues(face_analysis_chart, series);
           },
@@ -355,6 +382,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
+          console.log("Live Detection: ",response)
             if (response.length > 0) {
                 console.log(response.length);
                 updateLiveDetection(response);
@@ -457,13 +485,32 @@ function updateLiveDetection(response) {
       let recordId = `${record.name}-${record.time}`;
       
       // Determine the image file name
-      var img = record.status == "unknown" ? 'unknown.jpg' : record.name.replace(/ /g, '_') + '.jpg';
+      var img = record.employee_status == "unknown" ? 'unknown.jpg' : record.employee_name.replace(/ /g, '_') + '.jpg';
+
+      // Determine the badge class based on employee status
+    var badgeClass;
+    if (record.employee_status === 'white') {
+        badgeClass = 'bg-success-subtle text-success';
+    } else if (record.employee_status === 'black') {
+        badgeClass = 'bg-danger-subtle text-danger';
+    } else if (record.employee_status === 'unknown') {
+        badgeClass = 'bg-warning-subtle text-warning';
+    } else {
+        badgeClass = 'bg-secondary-subtle text-secondary'; // Default class
+    }
 
       // Create the HTML for the record
       var html = `<div class="col-4 text-center">
-                      <img src="../static/assets/images/employee/${img}" alt="${record.name}" class="img-fluid rounded" />
-                      <h6 class="fs-2 mt-1">${record.name}</h6>
-                      <p class="fs-2 mt-1">${record.time}</p>
+                      <img src="../static/assets/images/employee/${img}" alt="${record.employee_name}" class="img-fluid rounded" />
+                      <h6 class="fs-2 mt-1">${record.employee_name}</h6>
+                      <h6 class="badge ${badgeClass} ">${record.employee_status}</h6>
+                      
+                      <div class="comment-text w-100 border-top">
+                       <h6 class="border-bottom fw-bold" style="margin-bottom: 1px;">Car Details</h6>
+                        <h7 class="fw-medium mt-1">${record.plate_text}</h7>
+                        <p class=" fs-2 text-info fw-bold mt-1" style="margin-bottom: 0px;">${record.car_model}</p>
+                         <p class=" fs-2 text-info fw-bold mt-1" style="margin-bottom: 1px;">${record.car_color}</p>
+                         <p class="fs-2 ">${record.time}</p>
                   </div>`;
 
       // Append the HTML to the live_detection div

@@ -35,7 +35,7 @@ $(document).ready(function() {
         return `${year}-${month}-${day}`;
     }
     function getEmp(date = ''){
-        let url = '/employees/';
+        let url = '/employees_detection/';
         if (date) {
             url += `?date=${date}`;
         }
@@ -44,7 +44,7 @@ $(document).ready(function() {
                   method: 'GET',                    
                   contentType: 'application/json',
                   success: function(response) {
-                    //   console.log(response)
+                       console.log("Emplyees log: ",response)
   
                       appendTable(response,'all_emp_list');  
                       appendTable(response,'white_list');
@@ -154,19 +154,19 @@ $(document).ready(function() {
     //       // Loop through each employee in the response data
     //       employees.forEach(employee => {
   
-    //         if (employee.status === 'black') {
+    //         if (employee.emp__status === 'black') {
     //             blackCount++;
-    //         } else if (employee.status === 'white') {
+    //         } else if (employee.emp__status === 'white') {
     //             whiteCount++;
     //         }
     //           // If tbodyName is 'white_list', filter only white status employees
-    //           if (tbodyName === 'white_list' && employee.status !== 'white') {
+    //           if (tbodyName === 'white_list' && employee.emp__status !== 'white') {
   
     //               return; // Skip this employee if tbodyName is 'white_list' but employee status is not 'white'
     //           }
   
     //           // If tbodyName is 'black_list', filter only black status employees
-    //           if (tbodyName === 'black_list' && employee.status !== 'black') {
+    //           if (tbodyName === 'black_list' && employee.emp__status !== 'black') {
     //               return; // Skip this employee if tbodyName is 'black_list' but employee status is not 'black'
     //           }
               
@@ -175,22 +175,22 @@ $(document).ready(function() {
     //               <tr class=" ">
     //                   <td class="ps-0">
     //                       <div class="d-flex align-items-center gap-6">
-    //                       <img src="../static/assets/images/employee/${employee.image}" alt="${employee.name}" width="48" class="rounded" />
+    //                       <img src="../static/assets/images/employee/${employee.emp__image}" alt="${employee.emp__name}" width="48" class="rounded" />
     //                           <div>
-    //                               <h6 class="mb-0">${employee.name}</h6>
-    //                               <span>${employee.position}</span>
+    //                               <h6 class="mb-0">${employee.emp__name}</h6>
+    //                               <span>${employee.emp__position}</span>
     //                           </div>
     //                       </div>
     //                   </td>
     //                   <td class="text-center ">
                        
     //                      <span class="badge ${
-    //                         employee.status === 'white' ? 'bg-success-subtle text-success' :
-    //                         employee.status === 'black' ? 'bg-danger-subtle text-danger' :
-    //                         employee.status === 'unknown' ? 'bg-warning-subtle text-warning' :
+    //                         employee.emp__status === 'white' ? 'bg-success-subtle text-success' :
+    //                         employee.emp__status === 'black' ? 'bg-danger-subtle text-danger' :
+    //                         employee.emp__status === 'unknown' ? 'bg-warning-subtle text-warning' :
     //                         ''
     //                     }">
-    //                         ${employee.status}
+    //                         ${employee.emp__status}
     //                     </span>
     //                   </td>
     //                   <td dir="ltr">
@@ -242,6 +242,7 @@ $(document).ready(function() {
         var gettime = formatDate(employees[0].time);
         const todayDate = getTodayDate();
         const filre_date = $("#face_filter").val();
+        
         if (employees.length > 0 )  {
            
             if (!filre_date || filre_date === todayDate) {
@@ -251,11 +252,11 @@ $(document).ready(function() {
                     <a href="javascript:void(0)" class="px-4 py-3 bg-hover-light-black d-flex align-items-start justify-content-between chat-user" id="chat_user_1" data-user-id="1">
                         <div class="d-flex align-items-center">
                             <span class="position-relative">
-                                <img   src="../static/assets/images/employee/${employees[0].image}" id="current_img" width="48" height="48" class="rounded-circle" />
+                                <img   src="../static/assets/images/employee/${employees[0].emp__image}" id="current_img" width="48" height="48" class="rounded-circle" />
                             </span>
                             <div class="ms-3 d-inline-block w-75">
-                                <h6 class="mb-1 fw-semibold chat-title" data-username="James Anderson" id="current_pname"> ${employees[0].name} </h6>
-                                <span class="fs-3 text-truncate text-body-color d-block" data-lang-key="" id="current_pstatus">${employees[0].position}</span>
+                                <h6 class="mb-1 fw-semibold chat-title" data-username="James Anderson" id="current_pname"> ${employees[0].emp__name} </h6>
+                                <span class="fs-3 text-truncate text-body-color d-block" data-lang-key="" id="current_pstatus">${employees[0].emp__position}</span>
                             </div>
                         </div>
                         <p class="fs-2 mb-0 text-muted" dir="ltr" data-lang-key="facedetectiontime" id="current_detect_time">${gettime.time}</p>
@@ -266,19 +267,19 @@ $(document).ready(function() {
         
         // Loop through each employee in the sorted array
         employees.forEach(employee => {
-            if (employee.status === 'black') {
+            if (employee.emp__status === 'black') {
                 blackCount++;
-            } else if (employee.status === 'white') {
+            } else if (employee.emp__status === 'white') {
                 whiteCount++;
             }
     
             // If tbodyName is 'white_list', filter only white status employees
-            if (tbodyName === 'white_list' && employee.status !== 'white') {
+            if (tbodyName === 'white_list' && employee.emp__status !== 'white') {
                 return; // Skip this employee if tbodyName is 'white_list' but employee status is not 'white'
             }
     
             // If tbodyName is 'black_list', filter only black status employees
-            if (tbodyName === 'black_list' && employee.status !== 'black') {
+            if (tbodyName === 'black_list' && employee.emp__status !== 'black') {
                 return; // Skip this employee if tbodyName is 'black_list' but employee status is not 'black'
             }
             var formatted = formatDate(employee.time);
@@ -287,25 +288,34 @@ $(document).ready(function() {
                 <tr>
                     <td class="ps-0">
                         <div class="d-flex align-items-center gap-6">
-                            <img src="../static/assets/images/employee/${employee.image}" alt="${employee.name}" width="48" class="rounded" />
+                            <img src="../static/assets/images/employee/${employee.emp__image}" alt="${employee.emp__name}" width="48" class="rounded" />
                             <div>
-                                <h6 class="mb-0">${employee.name}</h6>
-                                <span>${employee.position}</span>
+                                <h6 class="mb-0">${employee.emp__name}</h6>
+                                <span>${employee.emp__position}</span>
                             </div>
                         </div>
                     </td>
                     <td class="text-center">
                         <span class="badge text-capitalize ${
-                            employee.status === 'white' ? 'bg-success-subtle text-success' :
-                            employee.status === 'black' ? 'bg-danger-subtle text-danger' :
-                            employee.status === 'unknown' ? 'bg-warning-subtle text-warning' :
+                            employee.emp__status === 'white' ? 'bg-success-subtle text-success' :
+                            employee.emp__status === 'black' ? 'bg-danger-subtle text-danger' :
+                            employee.emp__status === 'unknown' ? 'bg-warning-subtle text-warning' :
                             ''
                         }">
-                            ${employee.status}
+                            ${employee.emp__status}
                         </span>
                     </td>
                     <td dir="ltr">
-                        <span>${formatted.fullDate}</span>
+                        <span>${replaceAlphabetWithSpace(employee.time)}</span>
+                    </td>
+                    <td class="ps-0">
+                        <div class="d-flex align-items-center gap-6">
+                            <img src="../static/assets/images/car_default.png" alt="${employee.emp__name}" width="48" class="rounded" />
+                            <div>
+                                <h6 class="mb-0">${employee.plate_text}</h6>
+                                <span>${employee.car_model} (${employee.car_color})</span>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `);
@@ -315,7 +325,48 @@ $(document).ready(function() {
         $("#total_black").text(blackCount);
         $("#total_white").text(whiteCount);
     }
+    function formatDateTime(date) {
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        var seconds = date.getSeconds().toString().padStart(2, '0');
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+        var day = date.getDate().toString().padStart(2, '0');
 
+        return `${hours}:${minutes}:${seconds} ${year}-${month}-${day}`;
+    }
+
+    // function formatDate(inputDateStr) {
+    //     const inputDate = new Date(inputDateStr);
+        
+    //     // Month names
+    //     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    //                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+    //     // Day, month, and year
+    //     const day = inputDate.getDate();
+    //     const monthIndex = inputDate.getMonth();
+    //     const year = inputDate.getFullYear();
+        
+    //     // Time
+    //     let hours = inputDate.getHours();
+    //     const minutes = inputDate.getMinutes();
+    //     console.log("hr",hours)
+    //     const ampm = hours >= 12 ? 'PM' : 'AM';
+    //     hours %= 12;
+    //     hours = hours || 12; // Handle midnight (0 hours)
+        
+    //     // Format the time
+    //     const timeString = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        
+    //     // Format the date and time
+    //     const formattedDate = `${day} ${monthNames[monthIndex]} ${year} ${timeString}`;
+        
+    //     return { time: timeString, fullDate: formattedDate };
+    // }
+    function replaceAlphabetWithSpace(inputString) {
+        return inputString.replace(/[A-Za-z]/g, ' ');
+    }
     function formatDate(inputDateStr) {
         const inputDate = new Date(inputDateStr);
         
@@ -328,76 +379,18 @@ $(document).ready(function() {
         const monthIndex = inputDate.getMonth();
         const year = inputDate.getFullYear();
         
-        // Time
-        let hours = inputDate.getHours();
+        // Time in 24-hour format
+        const hours = inputDate.getHours();
         const minutes = inputDate.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours %= 12;
-        hours = hours || 12; // Handle midnight (0 hours)
         
         // Format the time
-        const timeString = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         
         // Format the date and time
         const formattedDate = `${day} ${monthNames[monthIndex]} ${year} ${timeString}`;
         
         return { time: timeString, fullDate: formattedDate };
     }
-
-    //   function formatDate(inputDateStr) {
-    //     const inputDate = new Date(inputDateStr);
-        
-    //     // Month names
-    //     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    //                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
-    //     // Day, month, and year
-    //     const day = inputDate.getDate();
-    //     const monthIndex = inputDate.getMonth();
-    //     const year = inputDate.getFullYear();
-    
-    //     // Time
-    //     let hours = inputDate.getHours();
-    //     const minutes = inputDate.getMinutes();
-    //     const ampm = hours >= 12 ? 'PM' : 'AM';
-    //     hours %= 12;
-    //     hours = hours || 12; // Handle midnight (0 hours)
-    
-    //     // Format the date and time
-    //     const formattedDate = `${day} ${monthNames[monthIndex]} ${year} ${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-    
-    //     return formattedDate;
-    // }
-
-
-    // $.ajax({
-    //       url: "{% url 'run_face_detection' %}",
-    //       type: "GET",
-    //       dataType: "json",
-    //       success: function(data) {
-    //           console.log("API response:", data.api_response);
-    //       },
-    //       error: function(xhr, status, error) {
-    //           console.error("Error fetching API response:", error);
-    //       }
-    //   });
-
-    //   function fetchApiResponse() {
-    //   $.ajax({
-    //       url: "{% url 'scan_face_result' %}",
-    //       type: "GET",
-    //       dataType: "json",
-    //       success: function(data) {
-    //           console.log("API response:", data.api_response);
-    //       },
-    //       error: function(xhr, status, error) {
-    //           console.error("Error fetching API response:", error);
-    //       }
-    //   });
-
-    //   }
-    //   setInterval(fetchApiResponse, 1000);
-    //   fetchApiResponse();
 
     $('#signout').on('click',function(event) {
         event.preventDefault();

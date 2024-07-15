@@ -61,7 +61,7 @@
           <div class="sidebarmenu">
             <div class="brand-logo d-flex align-items-center nav-logo">
               <a href="/dashboard/" class="text-nowrap logo-img" >
-                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75"/>
+                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75" id="main_logo"/>
               </a>
 
             </div>
@@ -1687,13 +1687,12 @@
 
       <div class="body-wrapper">
         <div class="container-fluid">
-          
-
+  
           <div class="card card-body py-3">
             <div class="row align-items-center">
               <div class="col-12">
                 <div class="d-sm-flex align-items-center justify-space-between">
-                  <h4 class="mb-4 mb-md-0 card-title">Face Capture Panel</h4>
+                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="faceCapturePanel">لوحة التقاط الوجه</h4>
                   <nav aria-label="breadcrumb" class="ms-auto">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item d-flex align-items-center">
@@ -1702,9 +1701,7 @@
                         </a>
                       </li>
                       <li class="breadcrumb-item" aria-current="page">
-                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">
-                          FCP
-                        </span>
+                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary" data-lang-key="FCP">FCP</span>
                       </li>
                     </ol>
                   </nav>
@@ -1712,48 +1709,40 @@
               </div>
             </div>
           </div>
+        
           <!-- face upload start -->
           <div class="row">
             <div class="col-lg-4">
-            
               <div class="card shadow-none border">
                 <div class="card-body">
                   <div class="d-flex align-items-center gap-3">
                     <img src="{% static 'assets/images/profile/user-8.jpg' %}" alt="mois-img" class="rounded-circle" width="33" height="33">
-                    <h6 class="fw-semibold mb-0 fs-4">Emp-Info</h6>
-                    
+                    <h6 class="fw-semibold mb-0 fs-4" data-lang-key="employeeInfo">معلومات الموظف</h6>
                   </div>
-                  <!-- <h4 class="fw-semibold mb-1">Person Info</h4> -->
+        
                   <div class="row">
                     <div class="d-flex align-items-center gap-6 flex-wrap p-3 flex-lg-nowrap">
-                    
-                      <input type="text" class="form-control py-8" id="name" aria-describedby="textHelp" placeholder="Name">
-                      
+                      <input type="text" class="form-control py-8" id="name" aria-describedby="textHelp" placeholder="الاسم" data-lang-key="Name">
                     </div>
                     <div class="d-flex align-items-center gap-6 flex-wrap p-3 flex-lg-nowrap">
-                     
-                      <input type="text" class="form-control py-8" id="position" aria-describedby="textHelp" placeholder="Position">
-                      
+                      <input type="text" class="form-control py-8" id="position" aria-describedby="textHelp" placeholder="المنصب" data-lang-key="Position">
                     </div>
-                    <div class="d-flex align-items-center gap-6 flex-wrap p-3 flex-lg-nowrap" >
+                    <div class="d-flex align-items-center gap-6 flex-wrap p-3 flex-lg-nowrap">
                       <select class="form-select" id="status">
-                        <option value="white">White List</option>
-                        <option value="black">Black List</option>
+                        <option value="white" data-lang-key="whiteList">القائمة البيضاء</option>
+                        <option value="black" data-lang-key="blackList">القائمة السوداء</option>
                       </select>
                     </div>
                   </div>
-                  <div class="row ">
+        
+                  <div class="row">
                     <div class="d-flex align-items-center gap-6 pb-3">
                       <span class="round-48 d-flex align-items-center justify-content-center rounded bg-danger-subtle" id="resetImgs">
-                        <iconify-icon icon="solar:refresh-broken" class="fs-7 text-danger  "> </iconify-icon>
+                        <iconify-icon icon="solar:refresh-broken" class="fs-7 text-danger"> </iconify-icon>
                       </span>
-                      <h6 class="mb-0 fs-4">Photos</h6>
+                      <h6 class="mb-0 fs-4" data-lang-key="photos">الصور</h6>
                     </div>
-                    <small class="form-control-feedback mb-3 text-info">
-                      Multiple face angles needed for scanning
-                    </small>
- 
-
+                    <small class="form-control-feedback mb-3 text-info" data-lang-key="MultipleFaceAnglesNeededForScanning">الحاجة إلى زوايا وجه متعددة للمسح</small>
                     <div class="col-4">
                       <!-- <img src="{% static 'assets/images/moi/user-5.png' %}" alt="mois-img" id="img1" class="rounded-1 img-fluid mb-9 position-relative"> -->
                       <div class="position-relative overflow-hidden d-inline-block ">
@@ -1796,63 +1785,51 @@
                         <span class="badge round-20 text-bg-info fs-2 position-absolute top-0 end-0 d-flex align-items-center justify-content-center me-1 mt-11" >6</span>
                       </div>
                     </div>
-                    
                   </div>
+        
                   <div class="row">
                     <div class="col-12">
                       <small for="" class="text-danger my-1" id="error_div"></small>
                       <div class="d-md-flex align-items-center">
-                        
-                        <div class="">
-                          
-                         
+                        <div>
                           <label class="form-check-label btn btn-success" for="flexCheckDefault" id="saveFace">
-                            <i class="ti ti-send fs-4"></i>    
-                            <span class="spinner-border spinner-border-sm d-none" id="spinner" role="status" aria-hidden="true"></span>                       
-                            <span id="submitText">Submit</span>
-                            
+                            <i class="ti ti-send fs-4"></i>
+                            <span class="spinner-border spinner-border-sm d-none" id="spinner" role="status" aria-hidden="true"></span>
+                            <span id="submitText" data-lang-key="submit">إرسال</span>
                           </label>
                         </div>
                         <div class="ms-auto mt-3 mt-md-0">
-                          <button type="button" class="btn btn-warning hstack gap-6" id="capture">
+                          <button type="button" class="btn btn-warning hstack gap-6" id="capture" data-lang-key="capture">
                             <i class="ti ti-capture fs-4"></i>
-                            Capture
+                            التقاط
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
                 </div>
               </div>
             </div>
+        
             <div class="col-lg-8">
               <div class="card">
-                  <div class="card-body border-bottom">
-
-                      <div class="d-flex align-items-center gap-6 flex-wrap mb-3">
-                          <span class="d-flex align-items-center justify-content-center round-48 bg-primary-subtle rounded flex-shrink-0">
-                              <iconify-icon icon="solar:monitor-camera-bold-duotone" class="fs-7 text-primary"></iconify-icon>
-                          </span>
-                          <h6 class="mb-0">Camera Streaming</h6>
-                      </div>
-                      <div class="video-container">
-                          <video id="videoElement" class="rounded-4 border border-2 mb-3" width="100%" height="auto" autoplay></video>
-                         
-                      </div>
+                <div class="card-body border-bottom">
+                  <div class="d-flex align-items-center gap-6 flex-wrap mb-3">
+                    <span class="d-flex align-items-center justify-content-center round-48 bg-primary-subtle rounded flex-shrink-0">
+                      <iconify-icon icon="solar:monitor-camera-bold-duotone" class="fs-7 text-primary"></iconify-icon>
+                    </span>
+                    <h6 class="mb-0" data-lang-key="cameraStreaming">بث الكاميرا</h6>
                   </div>
-                  <!-- <div class="d-flex align-items-center gap-6 flex-wrap p-3 flex-lg-nowrap">
-                      <button type="submit" class="btn btn-primary btn-block-lg hstack gap-6">
-                          <i class="ti ti-capture fs-4"></i>
-                          Capture
-                      </button>
-                  </div> -->
+                  <div class="video-container">
+                    <video id="videoElement" class="rounded-4 border border-2 mb-3" width="100%" height="auto" autoplay></video>
+                  </div>
+                </div>
               </div>
-          </div>
-          
+            </div>
           </div>
           <!-- face upload end -->
         </div>
+        
       </div>
    
 

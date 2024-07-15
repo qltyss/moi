@@ -1,11 +1,8 @@
 $(document).ready(function(){
 
 
- 
-          // var sessionToken = localStorage.getItem('sessionToken');
-      // if (!sessionToken) {         
-      //     window.location.href = 'signin.html';
-      // }    
+  var dir = sessionStorage.getItem('dir');
+  drone_traffic();
       $('#signout').on('click',function(event) {
         event.preventDefault();
 
@@ -14,116 +11,223 @@ $(document).ready(function(){
         // alert(sessionStorage.getItem("moitoken"))
        window.location.href = 'signin.html'; // Replace with your login page
     });
-
-
-    drone_traffic();
+    // saveDroneData()
 
     function saveDroneData() {
-      
       var csrftoken = getCookie('csrftoken'); 
-      var total = $('#total_drone_traffic').text();
-      var status = $('#drone_traffic_status').text();
-        // Use AJAX to send the data to the Django backend
+      var total = $('#drone_traffic_value').text();
+      var status = $('#drone_traffic_status_values').text();
+  
+      if (status === "Heavy" || status === "ثقيل") {
+          status = "Heavy";
+      } else if (status === "Moderate" || status === "معتدل") {
+          status = "Moderate";
+      } else if (status === "Light" || status === "طبيعي") {
+          status = "Light";
+      }
+  
       $.ajax({
-          url: '/add-drone/',  // Adjust this if your URL is different
+          url: '/add_drone/',  // Adjust this if your URL is different
           method: 'POST',
           data: {
               'total': total,
               'status': status,
               'csrfmiddlewaretoken': csrftoken
           },
-          success: function(response) {
-              console.log('Success:', response.message);
-              alert('Data saved successfully!'); // Optional: alert the user on success
+          success: function (response) {
+              //console.log('Success:', response.message);
+              // Optionally alert the user
           },
-          error: function(xhr, status, error) {
+          error: function (xhr, status, error) {
               console.error('Error:', error);
-              // alert('Failed to save data!'); // Optional: alert the user on failure
+              // Optionally alert the user
+          },
+          complete: function () {
+              // Clear the interval after saving data
+              if (droneStatusInterval) {
+                  clearInterval(droneStatusInterval);
+                  droneStatusInterval = null; // Clear the reference
+              }
           }
       });
-  };
+  }
+//     function saveDroneData() {
+      
+//       var csrftoken = getCookie('csrftoken'); 
+//       var total = $('#drone_traffic_value').text();
+//       var status = $('#drone_traffic_status_values').text();
+      
+//       if(status  === "Heavy" || status === "ثقيل"){
+//        status  === "Heavy"
+       
 
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-    $("#lunchDrone").on('click', function () {
+//       }else if(status  === "Moderate" || status === "معتدل"){
 
-      if ($(this).hasClass('bg-danger-subtle')) {
+//        status  === "Moderate"
 
-        $(".drone_status").text("Mission in Processing...");
+//       }else if(status  === "Light" || status === "طبيعي"){
 
-          $(this).prop('disabled', true);
+//        status = "Light"
 
-          $.ajax({
-              url: 'http://192.168.100.58:18080/start',
-              method: 'GET',
-              success: function (response) {
+//       }
 
-              var statusArray = response.split(',');
-              var jsonObject = {};
-              function removeNonPrintable(str) {
-                return str.replace(/[^\x20-\x7E]+/g, '');
-              }
-              $.each(statusArray, function(index, value) {
-                      // Split each key-value pair into key and value
-                      var pair = value.split(':');
-                      // Trim the key to remove any leading or trailing whitespace and remove non-printable characters
-                      var key = removeNonPrintable(pair[0].trim());
-                      // Trim the value to remove any leading or trailing whitespace and remove non-printable characters
-                      var trimmedValue = removeNonPrintable(pair[1].trim());
-                      // Assign the key-value pair to the jsonObject
-                      jsonObject[key] = isNaN(trimmedValue) ? trimmedValue : parseInt(trimmedValue);
-              });
+//       $.ajax({
+//           url: '/add_drone/',  // Adjust this if your URL is different
+//           method: 'POST',
+//           data: {
+//               'total': total,
+//               'status': status,
+//               'csrfmiddlewaretoken': csrftoken
+//           },
+//           success: function(response) {
+//               console.log('Success:', response.message);
+//               // alert('Data saved successfully!'); // Optional: alert the user on success
+//           },
+//           error: function(xhr, status, error) {
+//               console.error('Error:', error);
+//               // alert('Failed to save data!'); // Optional: alert the user on failure
+//           }
+//       });
+//   };
 
-              // console.log(typeof(jsonObject));
-              // console.log(jsonObject);
-              // console.log(jsonObject.status);
-              // console.log(jsonObject.is_battery_charged);
-              // console.log(jsonObject.is_mission_started);
-              // console.log(jsonObject.is_rtk_fixed);
-
-
-                  if (jsonObject.status=="started") {
-                      // Toggle classes
-                      $("#lunchDrone").toggleClass('bg-danger-subtle bg-success-subtle');
-                      $("#lunchDrone").find('iconify-icon').toggleClass('text-danger text-success');
-                      $(".drone_status").text("...Mission Started"); 
-                      droneStatus();
-
-                  }else if (jsonObject.status=="failed") {
-                    $(".drone_status").text("...Mission Failed");
-                  }
-              },
-              error: function (xhr, status, error) {
-                  console.error('Error:', error);
-                  // $("#lunchDrone").toggleClass('bg-danger-subtle bg-success-subtle');
-                  // $("#lunchDrone").find('iconify-icon').toggleClass('text-danger text-success');
-                  $(".drone_status").text("...Click Again To Start Mission");
-              }
-          });
-      } else {
-          alert("Mission is already started!");
-
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
       }
+  }
+  return cookieValue;
+}
+
+    
+let droneStatusInterval = null;
+
+
+$("#lunchDrone").on('click', function () {
+    if ($(this).hasClass('btn-danger')) {
+        $(".drone_status").text("Mission in Processing...");
+        $(this).prop('disabled', true);
+        $.ajax({
+            url: 'http://127.0.1.1:18080/start',
+            method: 'GET',
+            success: function (response) {
+                var statusArray = response.split(',');
+                var jsonObject = {};
+
+                function removeNonPrintable(str) {
+                    return str.replace(/[^\x20-\x7E]+/g, '');
+                }
+
+                $.each(statusArray, function(index, value) {
+                    var pair = value.split(':');
+                    var key = removeNonPrintable(pair[0].trim());
+                    var trimmedValue = removeNonPrintable(pair[1].trim());
+                    jsonObject[key] = isNaN(trimmedValue) ? trimmedValue : parseInt(trimmedValue);
+                });
+
+                if (jsonObject.status == "started") {
+                    // Toggle classes
+                    $("#current_drone_status").text("ON");
+                    $("#lunchDrone").toggleClass('bg-danger-subtle bg-success-subtle');
+                    $("#lunchDrone").find('iconify-icon').toggleClass('text-danger text-success');
+                    $(".drone_status").text("...Mission Started");
+
+                    // Start the repeated calling of droneStatus()
+                    droneStatusInterval = setInterval(function() {
+                        droneStatus();
+                    }, 2000);
+
+                } else if (jsonObject.status == "failed") {
+                    $(".drone_status").text("...Mission Failed");
+                    // Stop the interval if the mission failed
+                    if (droneStatusInterval) {
+                        clearInterval(droneStatusInterval);
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                $(".drone_status").text("...Click Again To Start Mission");
+
+                // Stop the interval if an error occurred
+                if (droneStatusInterval) {
+                    clearInterval(droneStatusInterval);
+                }
+            }
+        });
+    } else {
+        alert("Mission is already started!");
+    }
 });
+
+//     $("#lunchDrone").on('click', function () {
+
+//       if ($(this).hasClass('bg-danger-subtle')) {
+
+//         $(".drone_status").text("Mission in Processing...");
+
+//           $(this).prop('disabled', true);
+
+//           $.ajax({
+//               url: 'http://192.168.100.58:18080/start',
+//               method: 'GET',
+//               success: function (response) {
+
+//               var statusArray = response.split(',');
+//               var jsonObject = {};
+//               function removeNonPrintable(str) {
+//                 return str.replace(/[^\x20-\x7E]+/g, '');
+//               }
+//               $.each(statusArray, function(index, value) {
+//                       // Split each key-value pair into key and value
+//                       var pair = value.split(':');
+//                       // Trim the key to remove any leading or trailing whitespace and remove non-printable characters
+//                       var key = removeNonPrintable(pair[0].trim());
+//                       // Trim the value to remove any leading or trailing whitespace and remove non-printable characters
+//                       var trimmedValue = removeNonPrintable(pair[1].trim());
+//                       // Assign the key-value pair to the jsonObject
+//                       jsonObject[key] = isNaN(trimmedValue) ? trimmedValue : parseInt(trimmedValue);
+//               });
+
+
+
+
+//                   if (jsonObject.status=="started") {
+//                       // Toggle classes
+//                       $("#lunchDrone").toggleClass('bg-danger-subtle bg-success-subtle');
+//                       $("#lunchDrone").find('iconify-icon').toggleClass('text-danger text-success');
+//                       $(".drone_status").text("...Mission Started"); 
+//                       droneStatus();
+
+//                   }else if (jsonObject.status=="failed") {
+//                     $(".drone_status").text("...Mission Failed");
+//                   }
+//               },
+//               error: function (xhr, status, error) {
+//                   console.error('Error:', error);
+//                   // $("#lunchDrone").toggleClass('bg-danger-subtle bg-success-subtle');
+//                   // $("#lunchDrone").find('iconify-icon').toggleClass('text-danger text-success');
+//                   $(".drone_status").text("...Click Again To Start Mission");
+//               }
+//           });
+//       } else {
+//           alert("Mission is already started!");
+
+//       }
+// });
     function droneStatus() {
         $.ajax({
             url: 'http://192.168.100.58:18080/telemetry',
             method: 'GET',
             success: function (response) {
-              console.log('Telemetry API response:',response);
+              //console.log('Telemetry API response:',response);
             var statusArray = response.split(',');
             var jsonObject = {};
             function removeNonPrintable(str) {
@@ -140,18 +244,22 @@ $(document).ready(function(){
                     jsonObject[key] = isNaN(trimmedValue) ? trimmedValue : parseFloat(trimmedValue);
             });
 
-            $("#drone_altitude").text(jsonObject.altitude_m);
+            $("#drone_alt").text(jsonObject.altitude_m);
             $("#drone_battery").text(jsonObject.battery_percentage);
-            console.log(typeof(jsonObject));
-            console.log(jsonObject);
-            console.log(jsonObject.battery_voltage);
-            console.log(jsonObject.battery_percentage);
-            console.log(jsonObject.altitude_m);
-            console.log(jsonObject.arming_stat);
+            if(jsonObject.mission_status === "stop"){
+              $("#current_drone_status").text("OFF");
+              saveDroneData();
+            }
+            // console.log(typeof(jsonObject));
+            // console.log(jsonObject);
+            // console.log(jsonObject.battery_voltage);
+            // console.log(jsonObject.battery_percentage);
+            // console.log(jsonObject.altitude_m);
+            // console.log(jsonObject.arming_stat);
 
             },
             error: function (xhr, status, error) {
-                console.error('Error:', error);
+                console.error('Error Drone status:', error);
             }
         });
 
@@ -267,10 +375,10 @@ $(document).ready(function(){
 
 
   $('#drone_filter').on('change', function(){
-     
+    $("#loaderrow").removeClass("d-none");
     const selectedDate = $(this).val();
     drone_traffic(selectedDate);
-    
+    $("#loaderrow").addClass("d-none");
     
   });
   function drone_traffic(date = '') {
@@ -279,30 +387,83 @@ $(document).ready(function(){
     if (date) {
       url += `?date=${date}`;
     }
-    $("#loaderrow").addClass("d-none");
+    
       $.ajax({
         url: url,
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
-          console.log(typeof(response))
-          console.log(response)
+          //console.log(typeof(response))
+          //console.log(response)
       
  
         updateDroneChart(drone_trafic_chart, response.time, response.traffic, drone_chart);
       },
         error: function() {
-            console.log("error");
+            console.log("error drone traffic");
         }
     });
   }
+  get_drone_status();
+  function get_drone_status() {
+    let url = '/get_drone_status/';
+   
+    $.ajax({
+        url: url,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+            //console.log(typeof(response));
+            //console.log(response);
+           // console.log("dir",dir);
+
+            // Update these to match the field names from your Django view
+            $("#drone_traffic_value").text(response.total_traffic);
+            $("#drone_traffic_status_values").text(response.status);
+            $("#drone_latest_Time").text(response.time);
+
+            if(response.status  === "Heavy"){
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.status);
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("ثقيل");
+              }
+             
+
+            }else if(response.status  === "Moderate"){
+
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.status);
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("معتدل");
+              }
+
+            }else if(response.status  === "Light"){
+
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.status);
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("طبيعي");
+              }
+
+            }
+            // Handle no data case if needed
+            if (response.no_data_found_today) {
+                console.log("No data found for today.");
+            }
+        },
+        error: function() {
+            console.log("error get drone status");
+        }
+    });
+}
 
     function updateDroneChart( chartInstance, categories, seriesValues, chartOptions) {
       const $chartDiv = $(`#drone_trafic_analysis`);
 
 
     
-      console.log("drome",seriesValues.length)
+      //console.log("drome",seriesValues.length)
       if (seriesValues.length === 0) {
         // Clear the chart div
         $chartDiv.empty();

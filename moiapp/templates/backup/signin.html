@@ -184,6 +184,7 @@
                   success: function(response) {
                     // console.log(response)
                     sessionStorage.setItem("user", JSON.stringify(response));
+                    sessionStorage.setItem("dir", 'rtl');
                     window.location.href = 'dashboard/';
                   },
                   error: function(error) {

@@ -141,6 +141,12 @@
                     <span class="hide-menu">Face Registration</span>
                   </a>
                 </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/editemp/" aria-expanded="false">
+                    <iconify-icon class="ti ti-user"></iconify-icon>
+                    <span class="hide-menu">Edit Employee</span>
+                  </a>
+                </li>
 
               </ul>
             </nav>
@@ -1616,7 +1622,7 @@
             <div class="row align-items-center">
               <div class="col-12">
                 <div class="d-sm-flex align-items-center justify-space-between">
-                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="faceDetectionPanel">لوحة كشف الوجه</h4>
+                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="detectionPanel">نظام التعرف</h4>
                   <nav aria-label="breadcrumb" class="ms-auto">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item d-flex align-items-center">
@@ -1741,7 +1747,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-wrap gap-3 mb-2 justify-content-between align-items-center">
-                      <h5 class="card-title fw-semibold mb-0" data-lang-key="faceDetectionHistory">سجل كشف الوجه</h5>
+                      <h5 class="card-title fw-semibold mb-0" data-lang-key="detectionHistory">سجل التعرف</h5>
                       <div class="">
                        
                         <input class="form-control" type="date" placeholder="End " id="face_filter" />
@@ -1785,6 +1791,8 @@
                                 <th scope="col" class="text-dark fw-normal ps-0" data-lang-key="name">الاسم</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="status">الحالة</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="time">الوقت</th>
+                                <th scope="col" class="text-dark fw-normal" data-lang-key="carDetails">تفاصيل السيارة</th>
+                                
                               </tr>
                             </thead>
                             <tbody id="all_emp_list"></tbody>
@@ -1799,6 +1807,7 @@
                                 <th scope="col" class="text-dark fw-normal ps-0" data-lang-key="name">الاسم</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="status">الحالة</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="time">الوقت</th>
+                                <th scope="col" class="text-dark fw-normal" data-lang-key="carDetails">تفاصيل السيارة</th>
                               </tr>
                             </thead>
                             <tbody id="white_list"></tbody>
@@ -1813,6 +1822,7 @@
                                 <th scope="col" class="text-dark fw-normal ps-0" data-lang-key="name">الاسم</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="status">الحالة</th>
                                 <th scope="col" class="text-dark fw-normal" data-lang-key="time">الوقت</th>
+                                <th scope="col" class="text-dark fw-normal" data-lang-key="carDetails">تفاصيل السيارة</th>
                               </tr>
                             </thead>
                             <tbody id="black_list"></tbody>

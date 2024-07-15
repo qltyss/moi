@@ -24,6 +24,8 @@
             TotalFaceAnalysis: "Total Face Analysis",
             WhiteList: "White List",
             BlackList: "Black List",
+            whiteList: "White List",
+            blackList: "Black List",
             Unknown: "Unknown",
             LiveDetectionPanel: "Live Detection Panel",
             CurrentTraficStatus:"Traffic Status",
@@ -49,11 +51,17 @@
             nocarplate_record:"No detections recorded today",
             nowrong_parking:"No detections recorded today",
             amr_status:"OFF",
+            carOwner:"Car Owner",
+            plateText:"Plate Text",
+            image:"Image",
           
             // Face Detection Panel related terms
             faceDetectionPanel: "Face Detection Panel",
-            fdp: "Face Detection Panel", // Assuming 'fdp' is an alias for 'Face Detection Panel'
+            detectionPanel: "Detection Panel",
+            fdp: "Face Detection Panel",
+            detectionPanel: "Detection Panel",
             faceDetectionHistory: "Face Detection History",
+            detectionHistory: "Detection History",
             all: "All",
             status: "Status",
             time: "Time",
@@ -65,6 +73,7 @@
             totalDetection:"Total Detection",
             Unknown:"Unknown",
             current_pname:"Not Detected",
+            carDetails:"Car Details",
             
 
           
@@ -81,6 +90,11 @@
             trafic_status:"Congested",
             WhiteLists: "White List",
             BlackLists: "Black List",
+
+            // edit emp
+            delete :"delete",
+            edit:"edit",
+            srno:"SrNo",
           };
     
         var dir = sessionStorage.getItem('dir');

@@ -12,9 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 import random
 import string
-from .models import Employee
+from .models import Employee, DetectionLog
 from .models import WrongParking
-from .models import CarPlate
+# from .models import CarPlate
 from .models import Drone
 
 from django.http import StreamingHttpResponse
@@ -33,6 +33,8 @@ from ultralytics.utils.plotting import Annotator
 from ultralytics import YOLO
 import numpy as np
 import torch
+
+
 
 def index(request):
     return render(request, 'signin.html')
@@ -60,6 +62,9 @@ def dashboard(request):
 def facedetection(request):
     return render(request, 'detection.html')
 
+@login_required
+def editemp(request):
+    return render(request, 'editEmp.html')
 
 import time
 
@@ -127,53 +132,9 @@ from django.http import JsonResponse
 from django.db.models import Count, Sum
 from .models import Employee, WrongParking, Drone  # Adjust import according to your project structure
 
-# def dashboard_data(request):
-#     # Get start and end dates from request parameters
-#     start_date = request.GET.get('start_date', '')
-#     end_date = request.GET.get('end_date', '')
 
-#     # Construct the response data
-#     response_data = {
-#         'person': 0,
-#         'wrongparking': 0,
-#         'drone': 0,
-#         'white': 0,
-#         'black': 0,
-#         'unknown': 0
-#     }
-
-#     # Check if both start and end dates are provided
-#     if start_date and end_date:
-#         # Perform filtering based on start and end dates
-#         total_employees = Employee.objects.filter(time__range=[start_date, end_date]).count()
-#         wrongparking_count = WrongParking.objects.filter(time__range=[start_date, end_date]).count()
-#         drone_total = Drone.objects.filter(time__range=[start_date, end_date]).aggregate(total_sum=Sum('total'))['total_sum']
-#         status_counts = Employee.objects.filter(time__range=[start_date, end_date]).values('status').annotate(count=Count('status'))
-#     elif start_date:
-#         # If only start date is provided, use it as end date and perform filtering
-#         total_employees = Employee.objects.filter(time=start_date).count()
-#         wrongparking_count = WrongParking.objects.filter(time=start_date).count()
-#         drone_total = Drone.objects.filter(time=start_date).aggregate(total_sum=Sum('total'))['total_sum']
-#         status_counts = Employee.objects.filter(time=start_date).values('status').annotate(count=Count('status'))
-#     else:
-#         # If no dates are provided, get overall counts
-#         total_employees = Employee.objects.count()
-#         wrongparking_count = WrongParking.objects.count()
-#         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
-#         status_counts = Employee.objects.values('status').annotate(count=Count('status'))
-
-#     # Update the response dictionary with actual counts from the queries
-#     response_data['person'] = total_employees
-#     response_data['wrongparking'] = wrongparking_count
-#     response_data['drone'] = drone_total or 0
-
-#     for entry in status_counts:
-#         response_data[entry['status']] = entry['count']
-
-#     return JsonResponse(response_data)
 
 from datetime import datetime, timedelta
-
 def dashboard_data(request):
     # Get start and end dates from request parameters
     start_date_str = request.GET.get('start_date', '')
@@ -197,27 +158,45 @@ def dashboard_data(request):
         'drone': 0,
         'white': 0,
         'black': 0,
-        'unknown': 0
+        'unknown': 0,
+        'drone_latest_status': None  # Initialize drone_latest_status
     }
 
     if start_date and end_date:
         # Perform filtering based on start and end dates
-        total_employees = Employee.objects.filter(time__gte=start_date, time__lt=end_date).count()
-        wrongparking_count = WrongParking.objects.filter(time__gte=start_date, time__lt=end_date).count()
-        drone_total = Drone.objects.filter(time__gte=start_date, time__lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
-        status_counts = Employee.objects.filter(time__gte=start_date, time__lt=end_date).values('status').annotate(count=Count('status'))
+        total_employees = DetectionLog.objects.filter(time_gte=start_date, time_lt=end_date).count()
+        wrongparking_count = WrongParking.objects.filter(time_gte=start_date, time_lt=end_date).count()
+        drone_total = Drone.objects.filter(time_gte=start_date, time_lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
+        
+        # Get emp_ids from DetectionLog entries
+        emp_ids = DetectionLog.objects.filter(time_gte=start_date, time_lt=end_date).values_list('emp_id', flat=True)
+        
+        # Count statuses from Employee model for the emp_ids found
+        status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+        
     elif start_date:
         # If only start date is provided, use it as end date and perform filtering
-        total_employees = Employee.objects.filter(time=start_date).count()
+        total_employees = DetectionLog.objects.filter(time=start_date).count()
         wrongparking_count = WrongParking.objects.filter(time=start_date).count()
         drone_total = Drone.objects.filter(time=start_date).aggregate(total_sum=Sum('total'))['total_sum']
-        status_counts = Employee.objects.filter(time=start_date).values('status').annotate(count=Count('status'))
+        
+        # Get emp_ids from DetectionLog entries
+        emp_ids = DetectionLog.objects.filter(time=start_date).values_list('emp_id', flat=True)
+        
+        # Count statuses from Employee model for the emp_ids found
+        status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+        
     else:
         # If no dates are provided, get overall counts
-        total_employees = Employee.objects.count()
+        total_employees = DetectionLog.objects.count()
         wrongparking_count = WrongParking.objects.count()
         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
-        status_counts = Employee.objects.values('status').annotate(count=Count('status'))
+        
+        # Get all emp_ids from DetectionLog entries
+        emp_ids = DetectionLog.objects.values_list('emp_id', flat=True)
+        
+        # Count statuses from Employee model for all emp_ids
+        status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
 
     # Update the response dictionary with actual counts from the queries
     response_data['person'] = total_employees
@@ -227,7 +206,100 @@ def dashboard_data(request):
     for entry in status_counts:
         response_data[entry['status']] = entry['count']
 
+    # Get today's date
+    today = datetime.today().date()
+
+    # Get the latest drone status for today
+    latest_drone_entry = Drone.objects.filter(time__date=today).order_by('-time').first()
+    
+    # Update drone_latest_status in the response data
+    if latest_drone_entry:
+        response_data['drone_latest_status'] = latest_drone_entry.status
+
     return JsonResponse(response_data)
+
+# def dashboard_data(request):
+#     # Get start and end dates from request parameters
+#     start_date_str = request.GET.get('start_date', '')
+#     end_date_str = request.GET.get('end_date', '')
+
+#     # Parse dates and add one day to end_date to include it fully
+#     if start_date_str:
+#         start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+#     else:
+#         start_date = None
+
+#     if end_date_str:
+#         end_date = datetime.strptime(end_date_str, '%Y-%m-%d') + timedelta(days=1)
+#     else:
+#         end_date = None
+
+#     # Construct the response data
+#     response_data = {
+#         'person': 0,
+#         'wrongparking': 0,
+#         'drone': 0,
+#         'white': 0,
+#         'black': 0,
+#         'unknown': 0,
+#         'drone_latest_status': None  # Initialize drone_latest_status
+#     }
+
+#     if start_date and end_date:
+#         # Perform filtering based on start and end dates
+#         total_employees = DetectionLog.objects.filter(time_gte=start_date, time_lt=end_date).count()
+#         wrongparking_count = WrongParking.objects.filter(time_gte=start_date, time_lt=end_date).count()
+#         drone_total = Drone.objects.filter(time_gte=start_date, time_lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
+        
+#         # Get emp_ids from DetectionLog entries
+#         emp_ids = DetectionLog.objects.filter(time_gte=start_date, time_lt=end_date).values_list('emp_id', flat=True)
+        
+#         # Count statuses from Employee model for the emp_ids found
+#         status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+        
+#     elif start_date:
+#         # If only start date is provided, use it as end date and perform filtering
+#         total_employees = DetectionLog.objects.filter(time=start_date).count()
+#         wrongparking_count = WrongParking.objects.filter(time=start_date).count()
+#         drone_total = Drone.objects.filter(time=start_date).aggregate(total_sum=Sum('total'))['total_sum']
+        
+#         # Get emp_ids from DetectionLog entries
+#         emp_ids = DetectionLog.objects.filter(time=start_date).values_list('emp_id', flat=True)
+        
+#         # Count statuses from Employee model for the emp_ids found
+#         status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+        
+#     else:
+#         # If no dates are provided, get overall counts
+#         total_employees = DetectionLog.objects.count()
+#         wrongparking_count = WrongParking.objects.count()
+#         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
+        
+#         # Get all emp_ids from DetectionLog entries
+#         emp_ids = DetectionLog.objects.values_list('emp_id', flat=True)
+        
+#         # Count statuses from Employee model for all emp_ids
+#         status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+
+#     # Update the response dictionary with actual counts from the queries
+#     response_data['person'] = total_employees
+#     response_data['wrongparking'] = wrongparking_count
+#     response_data['drone'] = drone_total or 0
+
+#     for entry in status_counts:
+#         response_data[entry['status']] = entry['count']
+
+#     # Get today's date
+#     today = datetime.today().date()
+
+#     # Get the latest drone status for today
+#     latest_drone_entry = Drone.objects.filter(time__date=today).order_by('-time').first()
+    
+#     # Update drone_latest_status in the response data
+#     if latest_drone_entry:
+#         response_data['drone_latest_status'] = latest_drone_entry.status
+
+#     return JsonResponse(response_data)
 
 
 
@@ -274,7 +346,7 @@ def process_stream(rtsp_url, api_endpoint):
 
 def run_face_detection(request):
     rtsp_url = "rtsp://admin:QSS2030QSS@192.168.100.208/Streaming/Channels/101/"
-    api_endpoint = "http://192.168.100.110:3005/face_recognition"
+    api_endpoint = "http://192.168.100.161:3005/face_recognition"
     process_stream(rtsp_url, api_endpoint)
 
 
@@ -306,7 +378,7 @@ def amr_front(request):
 # Function to stream webcam frames
 def stream():
     # Initialize video capture object
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("wrong_parking.mp4")
 
     # Check if the webcam is opened successfully
     if not cap.isOpened():
@@ -349,38 +421,79 @@ def wrongparking(request):
 
 
 
-def carplate(request):
-    if request.method == 'GET':
-        date_str = request.GET.get('date')
-        if date_str:
-            query_date = parse_date(date_str)
-        else:
-            query_date = date.today()
+# def carplate(request):
+#     if request.method == 'GET':
+#         date_str = request.GET.get('date')
+#         if date_str:
+#             query_date = parse_date(date_str)
+#         else:
+#             query_date = date.today()
 
-        carplate = CarPlate.objects.filter(time__date=query_date).order_by('-time').values()
-        return JsonResponse(list(carplate), safe=False)
+#         carplate = CarPlate.objects.filter(time__date=query_date).order_by('-time').values()
+#         return JsonResponse(list(carplate), safe=False)
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+
+def get_employee_info_old(request):
+    if request.method == 'GET':
+        employees = Employee.objects.exclude(id=0).values()
+        return JsonResponse(list(employees), safe=False)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
+from django.db.models import Q
 
 def get_employee_info(request):
     if request.method == 'GET':
+        # Extract date parameter from GET request
         date_str = request.GET.get('date')
         if date_str:
             query_date = parse_date(date_str)
         else:
             query_date = date.today()
 
-        # Filter employees by the date part of the datetime field
-        employees = Employee.objects.filter(time__date=query_date).values()
-        # print(employees)
-        return JsonResponse(list(employees), safe=False)
+        # Filter DetectionLog entries based on the date
+        logs = DetectionLog.objects.filter(time__date=query_date).select_related('emp').values(
+            'emp__id', 'emp__name','emp__status','emp__image','emp__position','plate_text', 'time', 'car_color', 'car_model'
+        )
+
+        # Prepare JSON response
+        return JsonResponse(list(logs), safe=False)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 from django.db.models import Max
 def dashboard_latest_records(request):
+    # Get the maximum times for today from DetectionLog
+    max_times_today = DetectionLog.objects.filter(
+        time__date=date.today()
+    ).values('time').annotate(max_time=Max('time')).order_by('-max_time')[:3]
+
+    # Get the latest DetectionLog records for today based on the maximum times
+    latest_records = DetectionLog.objects.filter(
+        time__in=[max_time['max_time'] for max_time in max_times_today]
+    )
+
+    if latest_records.exists():
+        # Serialize the records to JSON
+        serialized_records = [
+            {
+                'id': record.id,
+                'employee_name': record.emp.name,  # Accessing Employee's name
+                'employee_status': record.emp.status,  # Accessing Employee's status
+                'plate_text': record.plate_text,
+                'car_color': record.car_color,
+                'car_model': record.car_model,
+                'time': record.time.strftime('%H:%M:%S')
+            }
+            for record in latest_records
+        ]
+        return JsonResponse(serialized_records, safe=False)
+    else:
+        return JsonResponse({'message': 'No records found for today'})
+def dashboard_latest_records_old(request):
     # Get the maximum times for today
     max_times_today = Employee.objects.filter(
         time__date=date.today()
@@ -422,6 +535,43 @@ def dashboard_trafic(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
 
+def get_drone_status(request):
+    if request.method == 'GET':
+        today = date.today()
+        latest_drone = Drone.objects.filter(time__date=today).order_by('-time').first()
+        
+        if latest_drone is not None:
+            # Format the time as "9 Feb 2024 1:35 PM"
+            formatted_time = latest_drone.time.strftime('%d %b %Y %I:%M %p')
+            
+            response_data = {
+                'total_traffic': latest_drone.total,  # Renamed to total_traffic
+                'status': latest_drone.status,
+                'time': formatted_time
+            }
+        else:
+            # No data found for today
+            response_data = {
+                'total_traffic': 0,  # Changed to total_traffic
+                'status': 'none',
+                'time': 'none',
+                'no_data_found_today': True
+            }
+
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+# @require_http_methods(["POST"])
+def add_drone(request):
+    # Extract data from request
+    total = request.POST.get('total')
+    status = request.POST.get('status')
+    drone = Drone(total=total, status=status)
+    drone.save()
+    # Return a response
+    return JsonResponse({'message': 'Drone added successfully', 'id': drone.id})
+
 def drone_trafic(request):
     if request.method == 'GET':
         date_str = request.GET.get('date')
@@ -448,6 +598,7 @@ def drone_trafic(request):
 
 from django.core.files.base import ContentFile
 from django.conf import settings
+
 def save_emp_image(request):
     if request.method == 'POST':
         imgname = request.POST.get('name')
@@ -572,7 +723,7 @@ def update_settings(request, direction):
 
 
 
-def facestatus_count(request):
+def facestatus_count_old(request):
     if request.method == 'GET':
         date_str = request.GET.get('date')
         if date_str:
@@ -594,8 +745,75 @@ def facestatus_count(request):
         return JsonResponse(response_data)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
+    
+# def facestatus_count(request):
+#     if request.method == 'GET':
+#         date_str = request.GET.get('date')
+#         if date_str:
+#             query_date = parse_date(date_str)
+#         else:
+#             query_date = date.today()
+        
+#         # Filter DetectionLog entries for the given date
+#         detection_logs = DetectionLog.objects.filter(time__date=query_date)
+        
+#         # Get all emp_ids from DetectionLog entries
+#         emp_ids = detection_logs.values_list('emp_id', flat=True)
+       
+#         # Count statuses from Employee model for the emp_ids found
+#         white_count = Employee.objects.filter(status='white', id__in=emp_ids).count()
+#         black_count = Employee.objects.filter(status='black', id__in=emp_ids).count()
+#         unknown_count = Employee.objects.filter(status='unkown',id__in=emp_ids).count()
+        
+#         # Prepare response data in the specified format
+#         response_data = {
+#             'white': white_count,
+#             'black': black_count,
+#             'unknown': unknown_count,
+#         }
+        
+#         return JsonResponse(response_data)
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'}, status=400)
+def facestatus_count(request):
+    if request.method == 'GET':
+        date_str = request.GET.get('date')
+        if date_str:
+            query_date = parse_date(date_str)
+        else:
+            query_date = date.today()
+        
+        # Filter DetectionLog entries for the given date
+        detection_logs = DetectionLog.objects.filter(time__date=query_date)
+        
+        # Aggregate emp_ids and count occurrences
+        emp_id_counts = detection_logs.values('emp_id').annotate(count=Count('emp_id'))
+        
+        # Initialize counts
+        white_count = 0
+        black_count = 0
+        unknown_count = 0
+        
+        # Iterate over emp_id_counts to count statuses
+        for entry in emp_id_counts:
+            emp_id = entry['emp_id']
+            count = entry['count']
+            
+            # Count statuses from Employee model for the emp_id
+            white_count += Employee.objects.filter(status='white', id=emp_id).count() * count
+            black_count += Employee.objects.filter(status='black', id=emp_id).count() * count
+            unknown_count += Employee.objects.filter(status='unknown', id=emp_id).count() * count
+        
+        # Prepare response data in the specified format
+        response_data = {
+            'white': white_count,
+            'black': black_count,
+            'unknown': unknown_count,
+        }
+        
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 
@@ -697,11 +915,14 @@ def signout(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
     
-
+    
+   
 # Dania's code
-cap = cv2.VideoCapture('12.mp4')
 model_road = YOLO("models/moi2-m.pt")
+
 model_vehicles = YOLO("models/yolov8l-seg.pt")
+print(model_vehicles.names)  # Print class names to confirm IDs
+
 Capacity_number = 20
 all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": None}
 trigg = 1
@@ -737,11 +958,11 @@ def Calculate_crowding_rate(number_of_vehicles):
 
     final_result = "---"
     if number_of_vehicles >= traffic:
-        final_result = "Heavy Traffic"
+        final_result = "Heavy"
     elif number_of_vehicles <= moderate_traffic and number_of_vehicles >= no_traffic:
-        final_result = "Moderate Traffic"
+        final_result = "Moderate"
     elif number_of_vehicles <= no_traffic:
-        final_result = "Light Traffic"
+        final_result = "Light"
 
     return final_result
 
@@ -749,7 +970,7 @@ class_colors = {
     1: (255, 0, 0),  # Blue
     2: (13, 169, 29),  # Green
     3: (0, 0, 255),  # Red
-    5: (255, 255, 0),  # Cyan
+    # 5: (255, 255, 0),  # Cyan
 }
 
 @csrf_exempt
@@ -757,7 +978,8 @@ class_colors = {
 def video_feed_html(request):
     frame_skip = 5
     resize_scale = 0.5
-    
+    cap = cv2.VideoCapture('10.mp4')
+
     def generate_frames():
         global all_data, trigg
         print_device_info()
@@ -789,7 +1011,7 @@ def video_feed_html(request):
                 frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
 
                 # Vehicle detection
-                detect_results = model_vehicles.track(frame_with_mask, conf=0.2, classes=[1, 2, 3, 5], save=False, save_conf=False, verbose=False, persist=True)
+                detect_results = model_vehicles.track(frame_with_mask, conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
                 vehicle_classes = []
                 for detect_result in detect_results:
                     boxes = detect_result.boxes
@@ -814,6 +1036,7 @@ def video_feed_html(request):
                 
                 total_current_vehicles_count = len(vehicle_classes)
                 final_result = Calculate_crowding_rate(total_current_vehicles_count)
+
                 print(unique_track_ids)
                 total_vehicles_count = len(unique_track_ids)
                 all_data = {
@@ -839,8 +1062,8 @@ def get_value(request):
         return JsonResponse({'error': 'Data not available yet'}, status=404)
     return JsonResponse({'value': all_data})
 
-from django.views.decorators.http import require_http_methods
-@require_http_methods(["POST"])
+
+# @require_http_methods(["POST"])
 def add_drone(request):
     # Extract data from request
     total = request.POST.get('total')

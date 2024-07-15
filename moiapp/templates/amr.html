@@ -20,64 +20,7 @@
   <title>وزارة الداخلية</title>
   <link rel="stylesheet" href="{% static 'assets/libs/magnific-popup/dist/magnific-popup.css' %}">
 
-  <style>
-
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 2px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: #00AB67;
-      border-radius: 10px;
-    }
-    
-    .custom-scrollbar {
-      max-height: 350px;
-      overflow-y: auto;
-    }
-    
-    
-    .image-container {
-        position: relative;
-        display: inline-block;
-        overflow: hidden; /* Ensure the overlay doesn't overflow outside the container */
-    }
-    
-    .image-container img {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-    
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50%; /* Set the width to half of the container */
-        height: 90px; /* Set the height to around 20px */
-        background: rgba(255, 255, 255, 0.6);
-        padding: 0; /* Remove padding to fit the image exactly */
-        box-sizing: border-box;
-        opacity: 1; /* Initially visible */
-        transition: opacity 0.5s ease; /* Smooth transition */
-        border-radius: 12px;
-        overflow: hidden; /* Ensure the overlay image doesn't overflow outside the overlay */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-        background-image: url("{% url 'amr_back' %}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-    
-    
-      
-      
-        </style>
+  
 </head>
 
 <body>
@@ -244,6 +187,12 @@
                   <a class="sidebar-link" href="/addface/" aria-expanded="false">
                     <iconify-icon class="ti ti-user"></iconify-icon>
                     <span class="hide-menu">Face Registration</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/editemp/" aria-expanded="false">
+                    <iconify-icon class="ti ti-user"></iconify-icon>
+                    <span class="hide-menu">Edit Employee</span>
                   </a>
                 </li>
 <!-- 
@@ -1844,7 +1793,7 @@
             <div class="col-lg-12 pb-0 mb-0">
               <div class="row">
                 <!-- Column -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                   <div class="card overflow-hidden">
                     <div class="d-flex flex-row">
                       <div class="p-3 bg-info d-flex align-items-center">
@@ -1854,14 +1803,14 @@
                       </div>
                       <div class="p-3">
                         <h6 class="text-info mb-0 fs-4 fw-bold" data-lang-key="scanVehicles">إجمالي المركبات</h6>
-                        <span id="scaned_count" class="text-info fw-bold mb-0 fs-6">0</span>
+                        <span id="scaned_count" class="text-info fw-bold mb-0 fs-6">2</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- Column -->
                 <!-- Column -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                   <div class="card overflow-hidden">
                     <div class="d-flex flex-row">
                       <div class="p-3 bg-danger-subtle d-flex align-items-center">
@@ -1870,7 +1819,7 @@
                         </h3>
                       </div>
                       <div class="p-3">
-                        <h3 class="text-danger mb-0 fs-6" id="wrongpark-count">0</h3>
+                        <h3 class="text-danger mb-0 fs-6" id="wrongpark-counts">2</h3>
                         <span data-lang-key="wronglyParked">موقف بشكل خاطئ</span>
                       </div>
                     </div>
@@ -1878,7 +1827,7 @@
                 </div>
                 <!-- Column -->
                 <!-- Column -->
-                <div class="col-lg-3 col-md-6">
+                <!-- <div class="col-lg-3 col-md-6">
                   <div class="card overflow-hidden">
                     <div class="d-flex flex-row">
                       <div class="p-3 bg-primary-subtle d-flex align-items-center">
@@ -1892,10 +1841,10 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <!-- Column -->
                 <!-- Column -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                   <div class="card bg-danger overflow-hidden">
                     <div class="d-flex flex-row">
                       <div class="p-3 bg-info-subtle d-flex align-items-center">
@@ -1914,7 +1863,7 @@
               </div>
             </div>
         
-            <div class="col-lg-5">
+            <div class="col-lg-8">
               <div class="card w-100">
                 <div class="card-body">
                   <div class="mb-2">
@@ -1925,7 +1874,83 @@
                       </div>
                     </div>
                   </div>
-                  <div class="accordion accordion-flush" id="accordionFlushExample">
+                  <div class="table-responsive mb-4 border rounded-1 overflow-hidden">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                        <tr>
+                          <th>
+                            <h6 class="fs-4 fw-semibold mb-0"data-lang-key="carOwner">مالك السيارة</h6>
+                          </th>
+                          <th>
+                            <h6 class="fs-4 fw-semibold mb-0"data-lang-key="plateText">نص اللوحة</h6>
+                          </th>
+                          <th>
+                            <h6 class="fs-4 fw-semibold mb-0"data-lang-key="image">صورة</h6>
+                          </th>
+                          <th>
+                            <h6 class="fs-4 fw-semibold mb-0"data-lang-key="time">الوقت</h6>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              
+                              <img src="{% static 'assets/images/employee/عبدالرحمن_سعيد_الجهني.jpg' %}" class="rounded-circle" width="40" height="40" />
+                              <div class="ms-3">
+                                <h6 class="fs-4 fw-semibold mb-0">عبدالرحمن سعيد الجهني</h6>
+                                <span class="fw-normal">Visitor</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <p class="mb-0 fw-normal fs-4">GI9 EMJ</p>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <a class="image-popup-vertical-fit" href="{% static 'assets/images/wrong/car_known.jpg' %}">
+                                <img src="{% static 'assets/images/wrong/car_known.jpg' %}" class="rounded-circle" width="40" height="40" />
+                              </a>
+                             
+                            </div>
+                          </td>
+                          <td>
+                            <span class="text-info">2024-07-07 09:55</span>
+                          </td>
+                         
+                        </tr>
+                       
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <img src="{% static 'assets/images/employee/unknown.jpg' %}" class="rounded-circle" width="40" height="40" />
+                              <div class="ms-3">
+                                <h6 class="fs-4 fw-semibold mb-0">Unkown</h6>
+                                <span class="fw-normal">Unkown</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <p class="mb-0 fw-normal fs-4">VN63 LYJ</p>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <a class="image-popup-vertical-fit" href="{% static 'assets/images/wrong/car_unknown.jpg' %}">
+                                <img src="{% static 'assets/images/wrong/car_unknown.jpg' %}" class="rounded-circle" width="40" height="40" />
+                              </a>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="text-info">12 Jul 2024 9:27 AM</span>
+                          </td>
+                         
+                        </tr>
+                      
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -1939,7 +1964,7 @@
                         <div class="accordion-body">
                           <div class="card" style="box-shadow:none !important">
                             <div class="comment-widgets scrollable mb-2 common-widget" style="height: 275px;overflow-y: auto !important;" id="carplatepanel">
-                              <!-- Content dynamically loaded -->
+                             
                             </div>
                           </div>
                         </div>
@@ -1947,7 +1972,7 @@
                     </div>
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="flush-headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                           <span data-lang-key="wrongParkingPanel">لوحة مواقف خاطئة</span>
                         </button>
                       </h2>
@@ -1955,22 +1980,24 @@
                         <div class="accordion-body">
                           <div class="card" style="box-shadow:none !important">
                             <div class="comment-widgets scrollable mb-2 common-widget" style="height: 230px;overflow-y: auto !important;" id="wrongpanels">
-                              <!-- Content dynamically loaded -->
+                            
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
         
-            <div class="col-lg-7">
+            <div class="col-lg-4">
               <div class="row card">
                 <div class="col-lg-12 py-2">
-                  <div class="image-container" style="min-height: 59vh;">
+                  <div class="" style="min-height: 30vh;">
                     <!-- Content dynamically loaded -->
+                    <img src="{% url 'amr_back' %}" alt="Image" class=" rounded img-fluid" style="height: 320px;">
+                   
                   </div>
                 </div>
               </div>

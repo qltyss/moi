@@ -70,6 +70,7 @@ def dronestream(request):
     return render(request, 'dronestream.html')
 
 import time
+#
 
 
 

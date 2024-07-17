@@ -243,6 +243,33 @@ function updatefaceChartValues(chartInstance, seriesValues) {
 
               }
               
+              
+              if(response.drone_latest_status  === "Heavy"){
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("مزدحم");
+                }
+               
+
+              }else if(response.drone_latest_status  === "Moderate"){
+
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("معتدل");
+                }
+
+              }else if(response.drone_latest_status  === "Light"){
+
+                if (dir === "ltr") {
+                  $("#dashboard_traffic_status").text(response.drone_latest_status);
+                }if(dir === "rtl"){
+                  $("#dashboard_traffic_status").text("طبيعي");
+                }
+
+              }
+              
               var series = [response.white, response.black, response.unknown];
               updatefaceChartValues(face_analysis_chart, series);
           },
@@ -382,6 +409,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
+          console.log("Live Detection: ",response)
           console.log("Live Detection: ",response)
             if (response.length > 0) {
                 console.log(response.length);

@@ -214,7 +214,7 @@ $(document).ready(function() {
         // empId ="1720966263795";
    
         $.ajax({
-            url: 'http://192.168.100.161:3005/edit_face/',  // Replace with your actual URL
+            url: 'http://172.20.10.2:3005/edit_face/',  // Replace with your actual URL
             // url: 'http://localhost:3000/update-employee',  // Replace with your actual URL
             method: 'POST',
             data: {
@@ -290,7 +290,7 @@ $(document).ready(function() {
         $.ajax({
            
             // url: ` http://localhost:3000/delete-employee`,
-            url: `http://192.168.100.161:3005/delete_face/`,
+            url: `http://172.20.10.2:3005/delete_face/`,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({

@@ -29,7 +29,7 @@ DEBUG = True
 LOGIN_URL = '/' 
 ALLOWED_HOSTS = ['*']
 
-
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Application definition
 
 INSTALLED_APPS = [

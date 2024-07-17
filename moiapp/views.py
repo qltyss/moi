@@ -66,6 +66,9 @@ def facedetection(request):
 def editemp(request):
     return render(request, 'editEmp.html')
 
+def dronestream(request):
+    return render(request, 'dronestream.html')
+
 import time
 
 
@@ -346,7 +349,7 @@ def process_stream(rtsp_url, api_endpoint):
 
 def run_face_detection(request):
     rtsp_url = "rtsp://admin:QSS2030QSS@192.168.100.208/Streaming/Channels/101/"
-    api_endpoint = "http://192.168.100.161:3005/face_recognition"
+    api_endpoint = "http://172.20.10.2:3005/face_recognition"
     process_stream(rtsp_url, api_endpoint)
 
 
@@ -1011,7 +1014,7 @@ def video_feed_html(request):
                 frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
 
                 # Vehicle detection
-                detect_results = model_vehicles.track(frame_with_mask, conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
+                detect_results = model_vehicles.track(frame_with_mask,device="cuda:0", conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
                 vehicle_classes = []
                 for detect_result in detect_results:
                     boxes = detect_result.boxes

@@ -10,6 +10,7 @@
             FaceRegistration: "Face Registration",
             Drone: "Drone",
             Congested: "Congested",
+            EditEmployee:"Edit Employee",
             CurrentTrafficStatus: "Current Traffic Status",
             Home: "Home",
             TotalTraffic: "Total Traffic",

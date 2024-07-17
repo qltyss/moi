@@ -92,7 +92,7 @@ $(document).ready(function(){
         });
     
         // Proceed with sending data if all fields are filled
-        fetch('http://192.168.100.161:3005/new_face', {
+        fetch('http://172.20.10.2:3005/new_face', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

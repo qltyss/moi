@@ -928,8 +928,12 @@ model_vehicles = YOLO("models/yolov8l-seg.pt")
 print(model_vehicles.names)  # Print class names to confirm IDs
 
 Capacity_number = 20
-all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": None}
-trigg = 1
+total_current_vehicles_count =0
+final_result = ""
+total_vehicles_count = 0
+all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": final_result, "Number_of_total_vehicles": total_vehicles_count}
+trigg = 0
+
 
 
 def print_device_info():
@@ -1047,7 +1051,7 @@ def video_feed_html(request):
                     "Capacity": Capacity_number, 
                     "Number_of_Current_Vehicles": total_current_vehicles_count, 
                     "final_result": final_result,
-                    "Number_of_total_vehicles": total_vehicles_count,  # Add the unique track IDs to all_data
+                    "Number_of_total_vehicles": total_vehicles_count, 
                 }
 
             # Always encode and send the frame

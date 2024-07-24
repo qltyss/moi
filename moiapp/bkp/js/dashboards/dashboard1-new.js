@@ -171,10 +171,10 @@ face_analysis_chart.render();
 
 // Generic Function To Update Charts
 function updatefaceChartValues(chartInstance, seriesValues) {
-    
+
     if (seriesValues.every(value => value === 0)) {
   
-      chartInstance.updateSeries(seriesValues);
+      chartInstance.destroy();
       if (dir === "ltr") {
         $("#no_faceData").text('No data found');
         $("#face_analysis").css("min-height","128.7px");
@@ -186,8 +186,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
       return;
     }
     if (chartInstance) {
-        console.log(seriesValues)
-        $("#no_faceData").text('');
+        // Update series values using updateSeries method
         chartInstance.updateSeries(seriesValues);
     } else {
         console.error("Chart instance is undefined.");
@@ -212,7 +211,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
           method: 'GET',
           contentType: 'application/json',
           success: function(response) {
-              // console.log(response);
+              console.log(response);
               $("#loaderrow").addClass("d-none");
               $("#wrongparking_card_text").text(response.wrongparking);
               $("#person_card_text").text(response.person);
@@ -315,7 +314,29 @@ function updatefaceChartValues(chartInstance, seriesValues) {
       }
     }
 
-
+  // function updateChartValues(chartid, chartInstance, categories, seriesValues, chartOptions) {
+  //   // Check if chart instance is defined
+  
+  //   if (chartInstance) {
+  //       // console.log(chartOptions)
+  //       // Update series data and x-axis categories in options
+  //       chartOptions.series[0].data = seriesValues;
+  //       chartOptions.xaxis.categories = categories;
+  
+  //       // Destroy the existing chart
+  //       chartInstance.destroy();
+  
+  //       // Create a new chart instance with updated options
+  //       var updatedChart = new ApexCharts(
+  //         document.querySelector(`#${chartid}`), 
+  //         chartOptions
+  //       );
+  //       updatedChart.render();
+      
+  //   } else {
+  //       console.error("Chart instance is undefined.");
+  //   }
+  // }
 
 
     function dashboard_traffic() {
@@ -328,7 +349,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
           contentType: 'application/json',
           success: function(response) {
             // console.log(typeof(response))
-            console.log("traffic",response)
+            // console.log(response)
         
    
           updateChartValues("traffic_analysis", traffic_chart, response.time, response.traffic, traffic_options);
@@ -340,7 +361,45 @@ function updatefaceChartValues(chartInstance, seriesValues) {
     }
 
 
+  //   function latest_record() {
+  //     let url = '/dashboard_latest_records/';
   
+  //     $.ajax({
+  //         url: url,
+  //         method: 'GET',
+  //         contentType: 'application/json',
+  //         success: function(response) {
+  //             if (response.length > 0) {
+  //                 console.log(response);
+  //                 updateLiveDetection(response)
+  //             } else {
+                
+  //               if(dir === "ltr"){
+                
+  //                 $("#live_detection").empty().append('<h6 style="text-align: center; color: #adb5bd;">No detections recorded today</h6>').css({
+  //                   "display": "flex",
+  //                   "align-items": "center",
+  //                   "justify-content": "center",
+  //                   "min-height": "140px"
+  //               });
+  //             }
+  //             else{
+  //               $("#live_detection").empty().append('<h6 style="text-align: center; color: #adb5bd;">لم يتم تسجيل أي اكتشافات اليوم</h6>').css({
+  //                 "display": "flex",
+  //                 "align-items": "center",
+  //                 "justify-content": "center",
+  //                 "min-height": "140px"
+  //             });
+  //             } 
+  //                 console.log('No records found');
+  //                 // Display a message indicating no records found
+  //             }
+  //         },
+  //         error: function(xhr) {
+  //             console.log(xhr.responseJSON.message);
+  //         }
+  //     });
+  // }
   // update this funtion to call every 5 second
   function latest_record() {
     let url = '/dashboard_latest_records/';
@@ -350,21 +409,10 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
-          // console.log("Live Detection: ",response)
-          $("#live_detection").css(
-                  
-                  
-            "justify-content", "left"
-          
-        );
+          console.log("Live Detection: ",response)
+          console.log("Live Detection: ",response)
             if (response.length > 0) {
-                // console.log(response.length);
-                $("#live_detection").css(
-                  
-                  
-                  "justify-content", "left"
-                
-              );
+                console.log(response.length);
                 updateLiveDetection(response);
             } else {
                 let message;
@@ -392,7 +440,48 @@ function updatefaceChartValues(chartInstance, seriesValues) {
     });
 }
 
+//   function updateLiveDetection(response) {
+//     // Sort the response array based on the time property
+    
+//     response.sort(function(a, b) {
+//         // Split the time strings into hours, minutes, and seconds
+//         var timeA = a.time.split(':');
+//         var timeB = b.time.split(':');
+        
+//         // Convert the time strings to integers for comparison
+//         var hourA = parseInt(timeA[0]);
+//         var minuteA = parseInt(timeA[1]);
+//         var secondA = parseInt(timeA[2]);
+//         var hourB = parseInt(timeB[0]);
+//         var minuteB = parseInt(timeB[1]);
+//         var secondB = parseInt(timeB[2]);
+        
+//         // Compare the time components
+//         if (hourA !== hourB) {
+//             return hourA - hourB;
+//         } else if (minuteA !== minuteB) {
+//             return minuteA - minuteB;
+//         } else {
+//             return secondA - secondB;
+//         }
+//     });
 
+//     // Iterate over the sorted response array
+//     response.forEach(function(record) {
+//         // Determine the image file name
+//         var img = record.status == "unknown" ? 'unknown.jpg' : record.name.replace(/ /g, '_') + '.jpg';
+
+//         // Create the HTML for the record
+//         var html = `<div class="col-4 text-center">
+//                         <img src="../static/assets/images/employee/${img}" alt="${record.name}" class="img-fluid rounded" />
+//                         <h6 class="fs-2 mt-1">${record.name}</h6>
+//                         <p class="fs-2 mt-1">${record.time}</p>
+//                     </div>`;
+
+//         // Append the HTML to the live_detection div
+//         $('#live_detection').append(html);
+//     });
+// }
 
 function updateLiveDetection(response) {
   // Sort the response array based on the time property
@@ -439,16 +528,19 @@ function updateLiveDetection(response) {
     }
     var model = record.car_model
     model = model.split(' ')[0]
-    // console.log(model)
+    console.log(model)
       // Create the HTML for the record
       var html = `<div class="col-4 text-center">
                       <img src="../static/assets/images/employee/${img}" alt="${record.employee_name}" class="img-fluid rounded" />
                       <h6 class="fs-2 mt-1">${record.employee_name}</h6>
-                      <h6 class="badge ${badgeClass} ">${record.time}</h6>
+                      <h6 class="badge ${badgeClass} ">${record.employee_status}</h6>
                       
-                      
+                      <div class="comment-text w-100 border-top">
                        
-                       
+                        <h7 class="fw-medium mt-1">${record.plate_text}</h7>
+                        <p class=" fs-2 text-secondary fw-bold mt-1" style="margin-bottom: 0px;">${model}</p>
+                         <p class=" fs-2 text-info fw-bold mt-1" style="margin-bottom: 1px;">${record.car_color}</p>
+                         <p class="fs-2 ">${record.time}</p>
                   </div>`;
 
       // Append the HTML to the live_detection div

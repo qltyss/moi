@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //****************************
     // This is for show menu
     //****************************
-
+    var elements = document.querySelector("nav[class^=sidebar-nav");
     var closestNav = elements.closest("nav[class^=sidebar-nav");
     var menuid = (closestNav && closestNav.id) || "menu-right-mini-1";
     var menu = menuid[menuid.length - 1];

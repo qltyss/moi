@@ -1,7 +1,7 @@
 
 {% load static %}
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-bs-theme="light" data-color-theme="Green_Theme" data-layout="vertical">
+<html lang="ar" dir="ltr" data-bs-theme="light" data-color-theme="Green_Theme" data-layout="vertical">
 
 <head>
   <!-- Required meta tags -->
@@ -13,23 +13,61 @@
   <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/favicon.png' %}" />
 
   <!-- Core Css -->
-  <link rel="stylesheet" href="{% static 'assets/css/moi.css' %}"/>
+  <link rel="stylesheet" href="{% static 'assets/css/login.css' %}" />
   <link rel="stylesheet" href="{% static 'assets/css/time.css' %}" />
-  <link rel="stylesheet" href="{% static 'assets/css/loader.css' %}" />
 
   <title>وزارة الداخلية</title>
+  <style>
+/* .image-container {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 98%;
+    min-width: 98%;
+    max-width: 400px; 
+    background: rgba(255, 255, 255, 0.6);
+    color: white;
+ 
+    padding: 4px;
+    box-sizing: border-box;
+ 
+    opacity: 0; 
+    transition: bottom 0.5s ease, opacity 0.5s ease; 
+    border-radius: 12px;
+}
+
+.image-container:hover .overlay {
+    bottom: 10px; 
+    opacity: 1; 
+}
+
+.text {
+    font-size: 1.2em;
+    font-weight: bold;
+} */
+
+
+  </style>
 </head>
 
 <body>
-  <div class="preloader">
-    <img src="{% static 'assets/images/moi/moiseng.png' %}" alt="loader" class="lds-ripple w-25" />
-  </div>
+
   <!-- Preloader -->
-  <div class="row " id="loaderrow">
-    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 rounded d-flex flex-column justify-content-center  align-items-center " >
-        <div class="loader" role="alert" aria-live="assertive"></div>
-       
-    </div>
+  <div class="preloader">
+    <img src="{% static 'assets/images/logos/favicon.png' %}" alt="loader" class="lds-ripple img-fluid" />
   </div>
   <div id="main-wrapper">
     <!-- Sidebar Start -->
@@ -45,187 +83,1089 @@
                 <iconify-icon icon="solar:hamburger-menu-line-duotone" class="fs-7"></iconify-icon>
               </a>
             </div>
-            <!--Mini Sidebar -->
             <ul class="mini-nav-ul" data-simplebar>
 
               <!-- --------------------------------------------------------------------------------------------------------- -->
-              <!-- Dashboard Mini -->
+              <!-- Dashboards -->
               <!-- --------------------------------------------------------------------------------------------------------- -->
               <li class="mini-nav-item" id="mini-1">
-                <a href="/dashboard/" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Dashboard">
+                <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Dashboards">
                   <iconify-icon icon="solar:layers-line-duotone" class="fs-7"></iconify-icon>
                 </a>
               </li>
-               <!-- --------------------------------------------------------------------------------------------------------- -->
-              <!-- Drone Mini -->
-              <!-- --------------------------------------------------------------------------------------------------------- -->
-              <li class="mini-nav-item" id="mini-2">
-                <a href="/drone/" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Drone">
-                  <iconify-icon icon="carbon:drone-delivery" class="fs-7"></iconify-icon>
-                </a>
-              </li>
 
-                <!-- --------------------------------------------------------------------------------------------------------- -->
-              <!-- Detection Mini -->
-              <!-- --------------------------------------------------------------------------------------------------------- -->
-              <li class="mini-nav-item" id="mini-5">
-                <a href="/facedetection/" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Employees">
-                  <iconify-icon icon="material-symbols:tamper-detection-on-outline" class="fs-7"></iconify-icon>
-                </a>
-              </li>
-               <!-- --------------------------------------------------------------------------------------------------------- -->
-              <!-- Parking Mini -->
-              <!-- --------------------------------------------------------------------------------------------------------- -->
-              <li class="mini-nav-item" id="mini-3">
-                <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Parking">
-                  <iconify-icon icon="icon-park-twotone:parking" class="fs-7"></iconify-icon>
-                </a>
-              </li>
-               <!-- --------------------------------------------------------------------------------------------------------- -->
-              <!-- Employee Mini -->
-              <!-- --------------------------------------------------------------------------------------------------------- -->
-              <li class="mini-nav-item" id="mini-4">
-                <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Employees">
-                  <iconify-icon icon="raphael:employee" class="fs-7"></iconify-icon>
-                </a>
-              </li>
-           
-
-           
+              
             </ul>
 
           </div>
           <div class="sidebarmenu">
             <div class="brand-logo d-flex align-items-center nav-logo">
               <a href="/dashboard/" class="text-nowrap logo-img" >
-                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75 " id="main_logo"/>
+                <img src="{% static 'assets/images/moi/mois.png' %}" alt="Logo" class="w-75" id="main_logo"/>
               </a>
+
             </div>
-              <!--Expanded Sidebar -->
-            <!-- ------------------------------------>
-            <!-- Dashboard Expanded-->
-            <!-- ------------------------------------>
+            <!-- ---------------------------------- -->
+            <!-- Dashboard -->
+            <!-- ---------------------------------- -->
             <nav class="sidebar-nav" id="menu-right-mini-1" data-simplebar>
               <ul class="sidebar-menu" id="sidebarnav">
                 <!-- ---------------------------------- -->
                 <!-- Home -->
                 <!-- ---------------------------------- -->
                 <li class="nav-small-cap">
-                  <!-- <span class="hide-menu" data-lang-key="Dashboard">لوحة المعلومات</span> -->
+                  <span class="hide-menu" >Dashboards</span>
                 </li>
                 <!-- ---------------------------------- -->
                 <!-- Dashboard -->
                 <!-- ---------------------------------- -->
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="/dashboard/" aria-expanded="false">
-                    <!-- <iconify-icon icon="solar:atom-line-duotone"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="Dashboard">الرئيسية</span> -->
+                    <iconify-icon icon="solar:atom-line-duotone"></iconify-icon>
+                    <span class="hide-menu" data-lang-key="Dashboard">لوحة المعلومات</span>
                   </a>
                 </li>
-              </ul>
-            </nav>
-            <!-- ------------------------------------>
-            <!-- Drone Expanded-->
-            <!-- ------------------------------------>
-            <nav class="sidebar-nav" id="menu-right-mini-2" data-simplebar>
-              <ul class="sidebar-menu" id="sidebarnav">
-                <!-- ---------------------------------- -->
-                <!-- Home -->
-                <!-- ---------------------------------- -->
-                <li class="nav-small-cap">
-                  <!-- <span class="hide-menu"data-lang-key="Drone">لوحة الدرون</span> -->
-                </li>
-                <!-- ---------------------------------- -->
-                <!-- Dashboard -->
-                <!-- ---------------------------------- -->
-            
-                <li class="sidebar-item">
-                  <a class="sidebar-link" href="/drone/" aria-expanded="false">
-                    <!-- <iconify-icon icon="solar:plain-2-broken"></iconify-icon>
-                    <span class="hide-menu"data-lang-key="Drone">الدرون</span> -->
-                  </a>
-                </li>
-              </ul>
-            </nav>
-             <!-- ---------------------------------- -->
-            <!-- Parking Expanded-->
-            <!-- ---------------------------------- -->
-            <nav class="sidebar-nav" id="menu-right-mini-3" data-simplebar>
-              <ul class="sidebar-menu" id="sidebarnav">
-                <!-- ---------------------------------- -->
-                <!-- Home -->
-                <!-- ---------------------------------- -->
-                <li class="nav-small-cap">
-                  <span class="hide-menu"data-lang-key="ParkingSystems">نظام مواقف السيارات</span>
-                </li>
-                <!-- ---------------------------------- -->
-                <!-- Dashboard -->
-                <!-- ---------------------------------- -->
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="/amr/" aria-expanded="false">
-                    <iconify-icon icon="solar:atom-line-duotone"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="WrongParking">الوقوف الخاطيء</span>
-                  </a>
-                </li>
-                <li class="sidebar-item">
-                  <a class="sidebar-link" href="#" aria-expanded="false">
                     <iconify-icon icon="solar:screencast-2-line-duotone"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="SmartParking">نظام الوقوف الذكي</span>
+                    <span class="hide-menu" data-lang-key="AMR">AMR</span>
                   </a>
                 </li>
-              </ul>
-            </nav>
-            <!-- ---------------------------------- -->
-            <!-- Employee Expanded-->
-            <!-- ---------------------------------- -->
-            <nav class="sidebar-nav" id="menu-right-mini-4" data-simplebar>
-              <ul class="sidebar-menu" id="sidebarnav">
-                <!-- ---------------------------------- -->
-                <!-- Home -->
-                <!-- ---------------------------------- -->
-                <li class="nav-small-cap">
-                  <span class="hide-menu"data-lang-key="EmployeesPanel">لوحةالموظفين</span>
+
+               
+
+
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/drone/" aria-expanded="false">
+                    <iconify-icon icon="solar:plain-2-broken"></iconify-icon>
+                    <span class="hide-menu" data-lang-key="Drone">الدرون</span>
+                  </a>
                 </li>
-                <!-- ---------------------------------- -->
-                <!-- Dashboard -->
-                <!-- ---------------------------------- -->
+
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="/facedetection/" aria-expanded="false">
+                    <iconify-icon icon="solar:plain-2-broken"></iconify-icon>
+                    <span class="hide-menu" data-lang-key="FaceDetection">سجل الكشف</span>
+                  </a>
+                </li>
+                
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="/addface/" aria-expanded="false">
                     <iconify-icon class="ti ti-user"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="FaceRegistration">اضافة موظف</span>
+                    <span class="hide-menu" data-lang-key="FaceRegistration">اضافة الموظفين</span>
                   </a>
                 </li>
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="/editemp/" aria-expanded="false">
                     <iconify-icon class="ti ti-user"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="EditEmployee">ادارة الموظفين</span>
+                    <span class="hide-menu" data-lang-key="EditEmployee">تعديل الموظفين</span>
+                  </a>
+                </li>
+<!-- 
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/index2.html" aria-expanded="false">
+                    <iconify-icon icon="solar:chart-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Dashboard 2</span>
+                  </a>
+                </li> -->
+
+                <!-- <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/index3.html" aria-expanded="false">
+                    <iconify-icon icon="solar:screencast-2-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Dashboard 3</span>
                   </a>
                 </li>
 
+                <li>
+                  <span class="sidebar-divider"></span>
+                </li>
+
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Apps</span>
+                </li>
+
+                <li class="sidebar-item">
+                  <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                    <iconify-icon icon="solar:cart-3-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Ecommerce</span>
+                  </a>
+                  <ul aria-expanded="false" class="collapse first-level">
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/eco-shop.html">
+                        <span class="icon-small"></span> Shop
+                      </a>
+                    </li>
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/eco-shop-detail.html">
+                        <span class="icon-small"></span>Details
+                      </a>
+                    </li>
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/eco-product-list.html">
+                        <span class="icon-small"></span>List
+                      </a>
+                    </li>
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/eco-checkout.html">
+                        <span class="icon-small"></span>Checkout
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                
+                <li class="sidebar-item">
+                  <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                    <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Blog</span>
+                  </a>
+                  <ul aria-expanded="false" class="collapse first-level">
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/blog-posts.html">
+                        <span class="icon-small"></span>Blog
+                        Posts
+                      </a>
+                    </li>
+                    <li class="sidebar-item">
+                      <a class="sidebar-link" href="../main/blog-detail.html">
+                        <span class="icon-small"></span>Blog
+                        Details
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/page-user-profile.html" aria-expanded="false">
+                    <iconify-icon icon="solar:shield-user-line-duotone"></iconify-icon>
+                    User Profile
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-email.html"><iconify-icon icon="solar:letter-line-duotone"></iconify-icon>Email</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-calendar.html"><iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>Calendar</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-kanban.html"><iconify-icon icon="solar:airbuds-case-minimalistic-line-duotone"></iconify-icon>Kanban</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-chat.html"><iconify-icon icon="solar:chat-round-line-line-duotone"></iconify-icon>Chat</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-notes.html"><iconify-icon icon="solar:document-text-line-duotone"></iconify-icon>Notes</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-contact.html"><iconify-icon icon="solar:iphone-line-duotone"></iconify-icon>Contact Table</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-contact2.html"><iconify-icon icon="solar:phone-line-duotone"></iconify-icon>Contact List</a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/app-invoice.html"><iconify-icon icon="solar:bill-list-line-duotone"></iconify-icon>Invoice</a>
+                </li> -->
               </ul>
             </nav>
+
             <!-- ---------------------------------- -->
-            <!-- Detection Expanded-->
+            <!-- Pages -->
             <!-- ---------------------------------- -->
-            <nav class="sidebar-nav" id="menu-right-mini-5" data-simplebar>
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-3" data-simplebar>
               <ul class="sidebar-menu" id="sidebarnav">
                 <!-- ---------------------------------- -->
                 <!-- Home -->
                 <!-- ---------------------------------- -->
                 <li class="nav-small-cap">
-                  <!-- <span class="hide-menu" data-lang-key="DetectionPanel">لوحة الكشف</span> -->
+                  <span class="hide-menu">Pages</span>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../landingpage/index.html" class="sidebar-link">
+                    <iconify-icon icon="solar:notes-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Landingpage</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-animation.html" class="sidebar-link">
+                    <iconify-icon icon="solar:accessibility-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Animation</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-search-result.html" class="sidebar-link">
+                    <iconify-icon icon="solar:card-search-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Search Result</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-gallery.html" class="sidebar-link">
+                    <iconify-icon icon="solar:gallery-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Gallery</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-treeview.html" class="sidebar-link">
+                    <iconify-icon icon="solar:mask-happly-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Treeview</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-block-ui.html" class="sidebar-link">
+                    <iconify-icon icon="solar:quit-full-screen-square-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Block-Ui</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/pages-session-timeout.html" class="sidebar-link">
+                    <iconify-icon icon="solar:sort-by-time-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Session Timeout</span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
+                  <a href="../main/page-pricing.html" class="sidebar-link">
+                    <iconify-icon icon="solar:dollar-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Pricing</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/page-faq.html" class="sidebar-link">
+                    <iconify-icon icon="solar:question-circle-line-duotone"></iconify-icon>
+                    <span class="hide-menu">FAQ</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/page-account-settings.html" class="sidebar-link">
+                    <iconify-icon icon="solar:settings-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Account Setting</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/starter.html" class="sidebar-link">
+                    <iconify-icon icon="solar:file-text-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Starter</span>
+                  </a>
+                </li>
+                <li>
+                  <span class="sidebar-divider lg"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Icons</span>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link sidebar-link" href="../main/icon-tabler.html" aria-expanded="false">
+                    <iconify-icon icon="solar:sticker-smile-circle-2-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Tabler Icon</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link sidebar-link" href="../main/icon-solar.html" aria-expanded="false">
+                    <iconify-icon icon="solar:sticker-smile-circle-2-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Solar Icon</span>
+                  </a>
+                </li>
+                <li>
+                  <span class="sidebar-divider lg"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Widgets</span>
+                </li>
+
+                <!-- ---------------------------------- -->
+                <!-- Widgets -->
+                <!-- ---------------------------------- -->
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-cards.html">
+                    <iconify-icon icon="solar:cardholder-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Cards</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-banners.html">
+                    <iconify-icon icon="solar:align-vertical-spacing-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Banner</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-charts.html">
+                    <iconify-icon icon="solar:chart-square-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Charts</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-feeds.html">
+                    <iconify-icon icon="solar:feed-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Feeds</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-apps.html">
+                    <iconify-icon icon="solar:clapperboard-text-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Apps</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="../main/widgets-data.html">
+                    <iconify-icon icon="solar:database-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Data</span>
+                  </a>
+                </li>
+
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Forms -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-4" data-simplebar>
+              <div>
+                <ul class="sidebar-menu" id="sidebarnav">
+                  <!-- ---------------------------------- -->
+                  <!-- Home -->
+                  <!-- ---------------------------------- -->
+                  <li class="nav-small-cap">
+                    <span class="hide-menu">Forms</span>
+                  </li>
+                  <!-- ---------------------------------- -->
+                  <!-- Form elements -->
+                  <!-- ---------------------------------- -->
+                  <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                      <iconify-icon icon="solar:text-selection-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Forms Elements</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                      <li class="sidebar-item">
+                        <a href="../main/form-inputs.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Forms Input</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-input-groups.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Input Groups</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-input-grid.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Input Grid</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-checkbox-radio.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Checks & Radios</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-bootstrap-switch.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">BT Switch</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-select2.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Select2</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- ---------------------------------- -->
+                  <!-- Form Input -->
+                  <!-- ---------------------------------- -->
+                  <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                      <iconify-icon icon="solar:password-minimalistic-input-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Forms Inputs</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                      <li class="sidebar-item">
+                        <a href="../main/form-basic.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Basic Form</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-vertical.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Form Vertical</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-horizontal.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Form Horizontal</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-actions.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Form Actions</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-row-separator.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Row Separator</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-bordered.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Form Bordered</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-detail.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Form Detail</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-striped-row.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Striped Rows</span>
+                        </a>
+                      </li>
+                      <li class="sidebar-item">
+                        <a href="../main/form-floating-input.html" class="sidebar-link">
+                          <span class="icon-small"></span>
+                          <span class="hide-menu">Floating Input</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-wizard.html" class="sidebar-link">
+                      <iconify-icon icon="solar:archive-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Form Wizard</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-repeater.html" class="sidebar-link">
+                      <iconify-icon icon="solar:repeat-one-minimalistic-bold-duotone"></iconify-icon>
+                      <span class="hide-menu">Form Repeater</span>
+                    </a>
+                  </li>
+                  <li>
+                    <span class="sidebar-divider lg"></span>
+                  </li>
+                  <li class="nav-small-cap">
+                    <span class="hide-menu">Addons</span>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-dropzone.html" class="sidebar-link">
+                      <iconify-icon icon="solar:flip-horizontal-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Dropzone</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-mask.html" class="sidebar-link">
+                      <iconify-icon icon="solar:mask-happly-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Form Mask</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-typeahead.html" class="sidebar-link">
+                      <iconify-icon icon="solar:high-quality-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Form Typehead</span>
+                    </a>
+                  </li>
+                  <li>
+                    <span class="sidebar-divider lg"></span>
+                  </li>
+                  <li class="nav-small-cap">
+                    <span class="hide-menu">Validation</span>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-bootstrap-validation.html" class="sidebar-link">
+                      <iconify-icon icon="solar:shield-warning-line-duotone"></iconify-icon>
+                      <span class="hide-menu">BT Validation</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-custom-validation.html" class="sidebar-link">
+                      <iconify-icon icon="solar:shield-warning-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Custom Validation</span>
+                    </a>
+                  </li>
+                  <li>
+                    <span class="sidebar-divider lg"></span>
+                  </li>
+                  <li class="nav-small-cap">
+                    <span class="hide-menu">Pickers</span>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-picker-colorpicker.html" class="sidebar-link">
+                      <iconify-icon icon="solar:waterdrop-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Colorpicker</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-picker-bootstrap-rangepicker.html" class="sidebar-link">
+                      <iconify-icon icon="solar:square-transfer-horizontal-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Rangepicker</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-picker-bootstrap-datepicker.html" class="sidebar-link">
+                      <iconify-icon icon="solar:calendar-date-line-duotone"></iconify-icon>
+                      <span class="hide-menu">BT Datepicker</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-picker-material-datepicker.html" class="sidebar-link">
+                      <iconify-icon icon="solar:smartphone-update-line-duotone"></iconify-icon>
+                      <span class="hide-menu">MT Datepicker</span>
+                    </a>
+                  </li>
+                  <li>
+                    <span class="sidebar-divider lg"></span>
+                  </li>
+                  <li class="nav-small-cap">
+                    <span class="hide-menu">Editors</span>
+                  </li>
+
+                  <li class="sidebar-item">
+                    <a href="../main/form-editor-quill.html" class="sidebar-link">
+                      <iconify-icon icon="solar:clapperboard-edit-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Quill Editor</span>
+                    </a>
+                  </li>
+                  <li class="sidebar-item">
+                    <a href="../main/form-editor-tinymce.html" class="sidebar-link">
+                      <iconify-icon icon="solar:clapperboard-edit-line-duotone"></iconify-icon>
+                      <span class="hide-menu">Tinymce Edtor</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Tables -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-5" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Bootstrap Tables</span>
                 </li>
                 <!-- ---------------------------------- -->
                 <!-- Dashboard -->
                 <!-- ---------------------------------- -->
 
                 <li class="sidebar-item">
-                  <a class="sidebar-link" href="/facedetection/" aria-expanded="false">
-                    <!-- <iconify-icon icon="solar:plain-2-broken"></iconify-icon>
-                    <span class="hide-menu" data-lang-key="Detections">تاريخ الكشف</span> -->
+                  <a href="../main/table-basic.html" class="sidebar-link">
+                    <iconify-icon icon="solar:tablet-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Basic Table</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-dark-basic.html" class="sidebar-link">
+                    <iconify-icon icon="solar:tablet-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Dark Table</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-sizing.html" class="sidebar-link">
+                    <iconify-icon icon="solar:tablet-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Sizing Table</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-layout-coloured.html" class="sidebar-link">
+                    <iconify-icon icon="solar:tablet-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Coloured Table</span>
+                  </a>
+                </li>
+                <li>
+                  <span class="sidebar-divider lg"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Datatables</span>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-datatable-basic.html" class="sidebar-link">
+                    <iconify-icon icon="solar:align-horizonta-spacing-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Basic</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-datatable-api.html" class="sidebar-link">
+                    <iconify-icon icon="solar:align-horizonta-spacing-line-duotone"></iconify-icon>
+                    <span class="hide-menu">API</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/table-datatable-advanced.html" class="sidebar-link">
+                    <iconify-icon icon="solar:align-horizonta-spacing-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Advanced</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Charts -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-6" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Charts</span>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- Dashboard -->
+                <!-- ---------------------------------- -->
+
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-line.html" class="sidebar-link">
+                    <iconify-icon icon="solar:chart-square-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Line Chart</span>
                   </a>
                 </li>
 
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-area.html" class="sidebar-link">
+                    <iconify-icon icon="solar:pie-chart-3-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Area Chart</span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-bar.html" class="sidebar-link">
+                    <iconify-icon icon="solar:chart-2-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Bar Chart</span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-pie.html" class="sidebar-link">
+                    <iconify-icon icon="solar:pie-chart-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Pie Chart</span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-radial.html" class="sidebar-link">
+                    <iconify-icon icon="solar:chart-square-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Radial Chart</span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
+                  <a href="../main/chart-apex-radar.html" class="sidebar-link">
+                    <iconify-icon icon="solar:round-graph-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Radar Chart</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Ui Components -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-7" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Ui</span>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- Dashboard -->
+                <!-- ---------------------------------- -->
+
+                <li class="sidebar-item">
+                  <a href="../main/ui-accordian.html" class="sidebar-link">
+                    <iconify-icon icon="solar:waterdrops-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Accordian</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-badge.html" class="sidebar-link">
+                    <iconify-icon icon="solar:tag-horizontal-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Badge</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-buttons.html" class="sidebar-link">
+                    <iconify-icon icon="solar:airbuds-case-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Buttons</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-dropdowns.html" class="sidebar-link">
+                    <iconify-icon icon="solar:airbuds-case-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Dropdowns</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-modals.html" class="sidebar-link">
+                    <iconify-icon icon="solar:bolt-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Modals</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-tab.html" class="sidebar-link">
+                    <iconify-icon icon="solar:box-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Tab</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-tooltip-popover.html" class="sidebar-link">
+                    <iconify-icon icon="solar:feed-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Tooltip & Popover</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-notification.html" class="sidebar-link">
+                    <iconify-icon icon="solar:flag-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Notification</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-progressbar.html" class="sidebar-link">
+                    <iconify-icon icon="solar:programming-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Progressbar</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-pagination.html" class="sidebar-link">
+                    <iconify-icon icon="solar:waterdrops-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Pagination</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-typography.html" class="sidebar-link">
+                    <iconify-icon icon="solar:text-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Typography</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-bootstrap-ui.html" class="sidebar-link">
+                    <iconify-icon icon="solar:balloon-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Bootstrap UI</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-breadcrumb.html" class="sidebar-link">
+                    <iconify-icon icon="solar:slider-minimalistic-horizontal-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Breadcrumb</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-offcanvas.html" class="sidebar-link">
+                    <iconify-icon icon="solar:laptop-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Offcanvas</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-lists.html" class="sidebar-link">
+                    <iconify-icon icon="solar:checklist-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Lists</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-grid.html" class="sidebar-link">
+                    <iconify-icon icon="solar:layers-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Grid</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-carousel.html" class="sidebar-link">
+                    <iconify-icon icon="solar:align-horizonta-spacing-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Carousel</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-scrollspy.html" class="sidebar-link">
+                    <iconify-icon icon="solar:multiple-forward-right-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Scrollspy</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-spinner.html" class="sidebar-link">
+                    <iconify-icon icon="solar:soundwave-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Spinner</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-link.html" class="sidebar-link">
+                    <iconify-icon icon="solar:link-round-angle-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Link</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Comoponents -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-8" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Components</span>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- Dashboard -->
+                <!-- ---------------------------------- -->
+                <li class="sidebar-item">
+                  <a href="../main/component-sweetalert.html" class="sidebar-link">
+                    <iconify-icon icon="solar:star-fall-minimalistic-2-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Sweet Alert</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/component-nestable.html" class="sidebar-link">
+                    <iconify-icon icon="solar:speaker-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Nestable</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/component-noui-slider.html" class="sidebar-link">
+                    <iconify-icon icon="solar:watch-square-minimalistic-charge-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Noui slider</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/component-rating.html" class="sidebar-link">
+                    <iconify-icon icon="solar:stars-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Rating</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/component-toastr.html" class="sidebar-link">
+                    <iconify-icon icon="solar:station-minimalistic-bold-duotone"></iconify-icon>
+                    <span class="hide-menu">Toastr</span>
+                  </a>
+                </li>
+                <li>
+                  <span class="sidebar-divider lg"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Cards</span>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-cards.html" class="sidebar-link">
+                    <iconify-icon icon="solar:bookmark-square-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Basic Cards</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-card-customs.html" class="sidebar-link">
+                    <iconify-icon icon="solar:bookmark-square-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Custom Cards</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-card-weather.html" class="sidebar-link">
+                    <iconify-icon icon="solar:cloud-snowfall-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Weather Cards</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/ui-card-draggable.html" class="sidebar-link">
+                    <iconify-icon icon="solar:password-minimalistic-input-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Draggable Cards</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Auth Pages -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-9" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Auth</span>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- Dashboard -->
+                <!-- ---------------------------------- -->
+
+                <li class="sidebar-item">
+                  <a href="../main/authentication-error.html" class="sidebar-link">
+                    <iconify-icon icon="solar:bug-minimalistic-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Error</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-login.html" class="sidebar-link">
+                    <iconify-icon icon="solar:login-3-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Side Login</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-login2.html" class="sidebar-link">
+                    <iconify-icon icon="solar:login-3-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Boxed Login</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-register.html" class="sidebar-link">
+                    <iconify-icon icon="solar:user-plus-rounded-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Side Register</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-register2.html" class="sidebar-link">
+                    <iconify-icon icon="solar:user-plus-rounded-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Boxed Register</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-forgot-password.html" class="sidebar-link">
+                    <iconify-icon icon="solar:password-outline"></iconify-icon>
+                    <span class="hide-menu">Side Forgot Pwd</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-forgot-password2.html" class="sidebar-link">
+                    <iconify-icon icon="solar:password-outline"></iconify-icon>
+                    <span class="hide-menu">Boxed Forgot Pwd</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-two-steps.html" class="sidebar-link">
+                    <iconify-icon icon="solar:siderbar-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Side Two Steps</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-two-steps2.html" class="sidebar-link">
+                    <iconify-icon icon="solar:siderbar-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Boxed Two Steps</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../main/authentication-maintenance.html" class="sidebar-link">
+                    <iconify-icon icon="solar:settings-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Maintenance</span>
+                  </a>
+                </li>
+
+              </ul>
+            </nav>
+
+            <!-- ---------------------------------- -->
+            <!-- Docs & Other -->
+            <!-- ---------------------------------- -->
+            <nav class="sidebar-nav scroll-sidebar" id="menu-right-mini-10" data-simplebar>
+              <ul class="sidebar-menu" id="sidebarnav">
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Documentation</span>
+                </li>
+                <li class="sidebar-item">
+                  <a href="../docs/index.html" class="sidebar-link">
+                    <iconify-icon icon="solar:settings-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Getting Started</span>
+                  </a>
+                </li>
+                <li>
+                  <span class="sidebar-divider"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">Multi level</span>
+                </li>
+                <li class="sidebar-item">
+                  <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <iconify-icon icon="solar:align-left-line-duotone"></iconify-icon>
+                    <span class="hide-menu">Menu Level</span>
+                  </a>
+                  <ul aria-expanded="false" class="collapse first-level">
+                    <li class="sidebar-item">
+                      <a href="javascript:void(0)" class="sidebar-link">
+                        <span class="icon-small"></span>
+                        <span class="hide-menu">Level 1</span>
+                      </a>
+                    </li>
+                    <li class="sidebar-item">
+                      <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <span class="icon-small"></span>
+                        <span class="hide-menu">Level 1.1</span>
+                      </a>
+                      <ul aria-expanded="false" class="collapse two-level">
+                        <li class="sidebar-item">
+                          <a href="javascript:void(0)" class="sidebar-link">
+                            <span class="icon-small"></span>
+                            <span class="hide-menu">Level 2</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <span class="icon-small"></span>
+                            <span class="hide-menu">Level 2.1</span>
+                          </a>
+                          <ul aria-expanded="false" class="collapse three-level">
+                            <li class="sidebar-item">
+                              <a href="javascript:void(0)" class="sidebar-link">
+                                <span class="icon-small"></span>
+                                <span class="hide-menu">Level 3</span>
+                              </a>
+                            </li>
+                            <li class="sidebar-item">
+                              <a href="javascript:void(0)" class="sidebar-link">
+                                <span class="icon-small"></span>
+                                <span class="hide-menu">Level 3.1</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="sidebar-divider"></span>
+                </li>
+                <li class="nav-small-cap">
+                  <span class="hide-menu">More Options</span>
+                </li>
+                <li class="sidebar-item">
+                  <div class="sidebar-link">
+                    <span class="round-10 rounded-circle d-block bg-primary"></span>
+                    <span class="hide-menu">Applications</span>
+                  </div>
+                </li>
+                <li class="sidebar-item">
+                  <div class="sidebar-link">
+                    <span class="round-10 rounded-circle d-block bg-secondary"></span>
+                    <span class="hide-menu">Form Options</span>
+                  </div>
+                </li>
+                <li class="sidebar-item">
+                  <div class="sidebar-link">
+                    <span class="round-10 rounded-circle d-block bg-danger"></span>
+                    <span class="hide-menu">Table Variations</span>
+                  </div>
+                </li>
+                <li class="sidebar-item">
+                  <div class="sidebar-link">
+                    <span class="round-10 rounded-circle d-block bg-warning"></span>
+                    <span class="hide-menu">Charts Selection</span>
+                  </div>
+                </li>
+                <li class="sidebar-item">
+                  <div class="sidebar-link">
+                    <span class="round-10 rounded-circle d-block bg-success"></span>
+                    <span class="hide-menu">Widgets</span>
+                  </div>
+                </li>
               </ul>
             </nav>
           </div>
@@ -1494,7 +2434,7 @@
             <div class="row align-items-center">
               <div class="col-12">
                 <div class="d-sm-flex align-items-center justify-space-between">
-                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="Dashboard">لوحة القيادة</h4>
+                  <h4 class="mb-4 mb-md-0 card-title" data-lang-key="DronePanel">لوحة الطائرة بدون طيار</h4>
                   <nav aria-label="breadcrumb" class="ms-auto">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item d-flex align-items-center">
@@ -1503,9 +2443,7 @@
                         </a>
                       </li>
                       <li class="breadcrumb-item" aria-current="page">
-                          <span class="badge fw-medium fs-2 bg-primary-subtle text-primary" data-lang-key="Home">
-                              الصفحة الرئيسية
-                            </span>
+                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary" data-lang-key="Drn">طائرة</span>
                       </li>
                     </ol>
                   </nav>
@@ -1514,237 +2452,149 @@
             </div>
           </div>
           <div class="row">
-      
-            <!-- Traffic Status -->
-            <div class="col-lg-3 col-md-6">
-              <div class="card  text-dark border-bottom " id="congestion_card_background">
-                <div class="card-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                      <h4 class="fs-7 text-dark"  data-lang-key="dashboard_traffic_staus" id="dashboard_traffic_status"></h4>
-                            <h6 class="fw-medium text-dark mb-0" data-lang-key="CurrentTraficStatus">حالة المرور </h6>
-                    </div>
-                    <span class="text-dark display-6">
-                      <i class="ti ti-tdesign-vehicle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M0 5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v2h-2V5H2v7h6v2H2v4h6v2H5.414L3.5 21.914L2.086 20.5l.5-.5H2a2 2 0 0 1-2-2zm11.323 3h10.354L24 13.807V21.5h-2V20H11v1.5H9v-7.693zM11 18h11v-3.807L21.923 14H11.077l-.077.193zm.877-6h9.246l-.8-2h-7.646zM3 15h2.004v2.004H3zm9 0h2.004v2.004H12zm7 0h2.004v2.004H19z"></path></svg></i>
-                     
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Total Traffic -->
-            <div class="col-lg-3 col-md-6">
-              <div class="card border-bottom border-info">
-                <div class="card-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                      <h4 class="fs-7" id="traffic_card_text">0</h4>
-                      <h6 class="fw-medium text-info mb-0" data-lang-key="TotalTrafic">إجمالي حركة المرور</h6>
-                    </div>
-                    <span class="text-info display-6">
-                      <i class="ti ti-drone"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Total Face Detections -->
-            <div class="col-lg-3 col-md-6">
-              <div class="card border-bottom border-success">
-                <div class="card-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                      <h4 class="fs-7" id="person_card_text">0</h4>
-                      <h6 class="fw-medium text-success mb-0" data-lang-key="TotalFaceDetections">إجمالي اكتشاف الوجوه</h6>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="text-success display-6">
-                        <i class="ti ti-face-id"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Total Wrong Parking -->
-            <div class="col-lg-3 col-md-6">
-              <div class="card border-bottom border-danger">
-                <div class="card-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                      <h4 class="fs-7" id="wrongparking_card_text">0</h4>
-                      <h6 class="fw-medium text-danger mb-0" data-lang-key="TotalWrongParkings">إجمالي الوقوف الخاطئ</h6>
-                    </div>
-                    <span class="text-danger display-6">
-                      <i class="ti ti-parking-off"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Filter and Face Analysis -->
-            <div class="col-lg-4">
-      
-           <!-- Filter by Date -->
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-3 ">
-                    <h4 class="card-title mb-0" data-lang-key="FilterByDate">تصفية حسب التاريخ</h4>
-                    <button class="btn bg-info-subtle text-primary btn-sm" id="reset">
-                      <i class="ti ti-refresh fs-5 d-flex "></i>
-                    </button>
-                  </div>
-                  <div class="row ">
-                    <div class="col-md-12  text-center">
-                      <div class="col-md-10">
-                        <input class="form-control getdate" type="date" placeholder="Start " id="startDate" />
-                      </div>
-                    </div>
-                    <div class="col-md-12 pt-3 text-center mb-2 mt-md-0">
-                      <div class="col-md-10">
-                        <input class="form-control getdate" type="date" placeholder="End " id="endDate" />
-                      </div>
-                    </div>
-                 
-
-                  </div>
-                  
-                </div>
-              </div>
-              <!-- Face Analysis Chart -->
-              <div class="card w-100 position-relative">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-8  pt-0 mb-4">
-                      <h4 class="card-title" data-lang-key="TotalFaceAnalysis">إجمالي تحليل الوجوه
-                        <span class="me-1 rounded-circle bg-success-subtle round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-face-id text-success fs-6"></i>
-                         </span>
-                      </h4>
-                      <h6 class="fw-semibold mb-2 text-danger" id="no_faceData"></h6>
-                     
-                    
-                    </div>
-                    <div class="col-4">
-                      <div class="d-flex justify-content-center">
-                        <div id="face_analysis" class="me-2"></div>
-                      </div>
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="hstack gap-9 mt-4 mt-md-0" dir="ltr">
-      
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="d-block flex-shrink-0 round-10 bg-primary rounded-circle"></span>
-                          <span class="text-nowrap text-muted" data-lang-key="WhiteList">القائمة البيضاء</span>
-                        
+            <div class="col-lg-7">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="card border-end border-danger">
+                    <div class="card-body">
+                      <div class="d-flex  align-items-center">
+                        <div>
+                          <span class="text-danger display-4">
+                            <i class="ti ti-drone"></i>
+                          </span>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="d-block flex-shrink-0 round-10 bg-danger rounded-circle"></span>
-                          <span class="text-nowrap text-muted"data-lang-key="BlackList">القائمة السوداء</span>
+                        <div class="ms-auto text-danger">
+                          <h2 class="fs-7 text-danger" data-lang-key="OFF" id="current_drone_status">OFF</h2>
+                          <p class="fw-medium  mb-0" data-lang-key="Drone">درون</p>
                         </div>
-      
-      
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="d-block flex-shrink-0 round-10 bg-warning rounded-circle"></span>
-                          <span class="text-nowrap text-muted"data-lang-key="Unknown">غير معروف</span>
-                        </div>
-                      
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <!-- Traffic Analysis Chart -->
-            <div class="col-lg-4">
-              
-              <div class="card bg-primary-subtle">
-                <div class="card-body">
-                  <div class="hstack align-items-center gap-3 mb-4">
-                    <span class="d-flex align-items-center justify-content-center round-48 bg-white rounded flex-shrink-0">
-                      <iconify-icon icon="mdi:car" class="fs-7 text-primary"></iconify-icon>
-                    </span>
-                    <div>
-                      <p class="mb-2 text-dark fw-semibold"data-lang-key="TodaysTrafficAnalysis">تحليل حركة المرور</p>
-                      <p id="today_Date"></p>
+                <div class="col-lg-4 col-md-6">
+                  <div class="card border-end border-info">
+                    <div class="card-body">
+                      <div class="d-flex  align-items-center">
+                        <div>
+                          <span class="text-info display-4">
+                            <i class="ti "><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7h1a2 2 0 0 1 2 2v.5a.5.5 0 0 0 .5.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5a.5.5 0 0 0-.5.5v.5a2 2 0 0 1-2 2h-2M8 7H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1m5-9l-2 4h3l-2 4"/></svg></i>
+                          </span>
+                        </div>
+                        <div class="ms-auto">
+                          <h2 class="fs-7 text-info" id="drone_battery">%</h2>
+                          <p class="fw-medium text-info mb-0" data-lang-key="Battery">بطارية</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div style="height: 310px;">
-                    <div id="traffic_analysis"></div>
-                  </div>
-                 
                 </div>
-              </div>
-      
-            </div>
-            <!-- Status and Detection -->
-            <div class="col-lg-4">
-               <!-- Robotic Status -->
-               <div class="card w-100 position-relative overflow-hidden">
-                <div class="p-2">
-                  <h4 class="card-title mb-0" data-lang-key="LiveRoboticStatus">حالة الروبوتات الآن</h4>
-                  <div class="row align-items-center">
-                    <div class="col-md-12">
-                      <div class="pt-2 my-3 border-top">
-                        <div class="row pt-3">
-                          <div class="col-sm-6">
-                            <div class="hstack gap-6 mb-3 mb-md-0">
-                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-danger-subtle rounded">
-                                <iconify-icon icon="mdi:power" class="fs-7 text-danger"></iconify-icon>
-                              </span>
-                              <div>
-                                  <span class="text-muted fw-bold" data-lang-key="AMR">السيارة  </span>
-                                  <h6 class="fw-bolder mb-0 text-danger" data-lang-key="OFF">متوقفة</h6>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="hstack gap-6">
-                              <span class="d-flex align-items-center justify-content-center round-48 flex-shrink-0 bg-primary-subtle rounded">
-                                <iconify-icon icon="mdi:power-on" class="fs-7 text-primary"></iconify-icon>
-                              </span>
-                              <div>
-                                  <span class="text-muted fw-bold" data-lang-key="Drone">الدرون</span>
-                                  <h6 class="fw-bolder mb-0 text-success" data-lang-key="ON">تعمل</h6>
-                              </div>
-                            </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="card border-end border-warning">
+                    <div class="card-body">
+                      <div class="d-flex  align-items-center">
+                        <div>
+                          <span class="text-warning display-4">
+                            <i class="ti ti"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 22q-.625 0-.9-.55t.1-1.05l4-5.325q.15-.2.363-.3t.437-.1t.438.1t.362.3l3.1 4.125q.25.35.65.4t.75-.2t.413-.663t-.213-.762L10.7 15.6q-.2-.275-.2-.6t.2-.6l2.5-3.325q.15-.2.363-.3t.437-.1t.438.1t.362.3l7 9.325q.375.5.1 1.05T21 22zm16-10q-.425 0-.712-.288T18 11V7.8l-.925.9q-.275.275-.675.288t-.7-.288q-.275-.275-.275-.7t.275-.7l2.6-2.6q.3-.3.7-.3t.7.3l2.6 2.6q.3.3.3.7t-.3.7t-.712.3t-.713-.3L20 7.825V11q0 .425-.287.713T19 12"/></svg></i>
+                          </span>
+                        </div>
+                        <div class="ms-auto">
+                          <h2 class="fs-7 text-warning" id="drone_alt">0</h2>
+                          <p class="fw-medium text-warning mb-0" data-lang-key="Altitude">ارتفاع</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-md-flex align-items-center justify-content-between mb-4">
+                        <div class="hstack align-items-center gap-3">
+                          <span class="d-flex align-items-center justify-content-center round-48 bg-primary-subtle rounded flex-shrink-0">
+                            <iconify-icon icon="solar:layers-linear" class="fs-7 text-primary"></iconify-icon>
+                          </span>
+                          <div>
+                            <h5 class="card-title" data-lang-key="TraficAnalysis">تحليل المرور</h5>
+                            <p class="card-subtitle mb-0" id="drone_error">03 يونيو 2024</p>
                           </div>
                         </div>
+                        <div>
+                          <input class="form-control" type="date" placeholder="End " id="drone_filter"/>
+                        </div>
+                      </div>
+                      <div style="min-height: 322px;" class="me-n7">
+                        <div id="drone_trafic_analysis"></div>
                       </div>
                     </div>
-                  
                   </div>
                 </div>
               </div>
-              <!-- Live Detection -->
-              <div class="card social-widget overflow-hidden">
-                <div class="card-body text-bg-primary p-1">
-                  <div class="d-flex align-items-center text-white">
-                   
-                      <h5 class="mb-0 text-white" data-lang-key="LiveDetectionPanel"> لوحة الكشف الحي</h5>
-                   
-                   
-                  </div>
-                
-                </div>
-                <div class="card-body" >
-                  <!-- <div class="row " id="live_detection" dir="ltr" style="height:140px; overflow-x: auto; overflow-y: hidden;white-space: nowrap"> -->
-                    <div class="row " id="live_detection" dir="ltr" style="height:170px; overflow-x: auto; overflow-y: hidden;white-space: nowrap">
-                   
-                    
-                  </div>
-              
-                </div>
-              </div>
-      
             </div>
-          
-            
-      
-          </div>
-        </div>
+            <div class="col-lg-5 card">
+              <div class="row">
+                <div class="col-lg-12 pt-2">
+                  <div class="image-container" style="min-height: 220px;">
+                  <!-- Dania's Code start -->
+                  <img src="{% url 'video_feed_html' %}" alt="Image" class="img-fluid rounded">   
+                  <!-- Dania's Code end -->
+                  <!-- <div class="overlay">
+                      <img src="{% static 'assets/images/profile/user-2.jpg' %}" alt="matdash-img" class="rounded-circle" style="width: 15%;">
+                    </div> -->
+                  </div>
+                </div>
+                <div class="col-lg-12 ">
+                  <div class="d-flex align-items-center gap-3 py-3 border-bottom mb-3">
+                    <div class="d-flex align-items-center">
+                      <div class="btn btn-danger rounded-1 d-flex align-items-center justify-content-center p-6" style="cursor: pointer;" id="lunchDrone">
+                        <i class="ti ti-power text-danger-subtle fs-7"></i>
+                      </div>
+                    </div>
+                    <div class="position-relative w-100 d-flex align-items-center justify-content-between">
+                      <div>
+                        <h6 class="mb-2 fw-semibold fs-4" data-lang-key="DroneStatus">حالة الطائرة بدون طيار</h6>
+                        <span class="fs-2" data-lang-key="ClickPowerIcon">انقر على رمز الطاقة لبدء المهمة</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12  p-4">
+                  <div class="position-relative w-100 d-flex align-items-center justify-content-between">
+                    <div>
+                      <h6 class="mb-2 fw-semibold fs-4" data-lang-key="TraficAnalysis">تحليل حركة المرور</h6>
+                      <span class="fs-2" dir="ltr" id="drone_latest_Time"> </span>
+                    </div>  
+                                             
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between mt-3">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-info-subtle rounded-1 me-8 p-8 d-flex align-items-center justify-content-center">
+                        <i class="ti  fs-6 text-info"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M0 5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v2h-2V5H2v7h6v2H2v4h6v2H5.414L3.5 21.914L2.086 20.5l.5-.5H2a2 2 0 0 1-2-2zm11.323 3h10.354L24 13.807V21.5h-2V20H11v1.5H9v-7.693zM11 18h11v-3.807L21.923 14H11.077l-.077.193zm.877-6h9.246l-.8-2h-7.646zM3 15h2.004v2.004H3zm9 0h2.004v2.004H12zm7 0h2.004v2.004H19z"></path></svg></i>
+                      </div>
+                      <div>
+                        <p class="fs-3 mb-0 fw-normal text-info" data-lang-key="TotalTrafic">إجمالي حركة المرور</p>
+                        <h6 class="fw-semibold text-info fs-4 mb-0" id="drone_traffic_value"></h6>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="bg-danger-subtle rounded-1 me-8 p-8 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-grid-dots text-danger fs-6"></i>
+                      </div>
+                      <div>
+                        <p class="fs-3 mb-0 fw-normal text-danger" data-lang-key="status" >الحالة</p>
+                        <h6 class="fw-semibold text-danger fs-4 mb-0" data-lang-key="trafic_status" id="drone_traffic_status_values">..</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </div>
-    
+      <button class="btn btn-danger p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        <i class="icon ti ti-settings fs-7"></i>
+      </button>
 
       <div class="offcanvas customizer offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
@@ -1995,8 +2845,8 @@
 
   </div>
   <div class="dark-transparent sidebartoggler"></div>
+  <script src="{% static 'assets/js/vendor.min.js' %}"></script>
   <!-- Import Js Files -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'assets/libs/simplebar/dist/simplebar.min.js' %}"></script>
   <script src="{% static 'assets/js/theme/app.init.js' %}"></script>
@@ -2007,28 +2857,79 @@
   <!-- solar icons -->
   <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
   <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
-  <script src="{% static 'assets/js/dashboard.js' %}"></script>
+  <script src="{% static 'assets/js/drone.js' %}"></script>
+
+
+
+
+  <div class="dark-transparent sidebartoggler"></div>
+ 
+
+
+  <!-- solar icons -->
+
+  <script src="{% static 'assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/meg.init.js' %}"></script>
   <script src="{% static 'assets/js/auth.js' %}"></script>
 
-</body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    console.log("hi");
 
-<script>
-    // Open the page in fullscreen mode
-    function openFullscreen() {
-        var elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) { /* Firefox */
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { /* IE/Edge */
-            elem.msRequestFullscreen();
-        }
+    function updateValue() {
+        $.ajax({
+            url: '/get_value/', 
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var all_data = response.value;
+                console.log(all_data);
+            $("#drone_traffic_value").text(response.value.Number_of_total_vehicles);
+            $("#drone_traffic_status_values").text(response.value.final_result);
+            $("#drone_latest_Time").text(response.value.time);
+            var dir = sessionStorage.getItem('dir');
+            if(response.value.final_result  === "Heavy"){
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.value.final_result);
+                
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("مزدحم");
+              }
+             
+
+            }else if(response.final_result  === "Moderate"){
+
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.final_result);
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").text("معتدل");
+              }
+
+            }else if(response.value.final_result  === "Light"){
+              
+              if (dir === "ltr") {
+                $("#drone_traffic_status_values").text(response.value.final_result);
+                $("#drone_traffic_status_values").removeClass('text-danger');
+                $("#drone_traffic_status_values").removeClass('text-warning');
+                $("#drone_traffic_status_values").addClass('text-success');
+              
+              }if(dir === "rtl"){
+                $("#drone_traffic_status_values").removeClass('text-danger');
+                $("#drone_traffic_status_values").removeClass('text-warning');
+                $("#drone_traffic_status_values").addClass('text-success');
+                $("#drone_traffic_status_values").text("غير مزدحم");
+               
+              }
+
+            }
+          
+            }
+        });
     }
-
-   
+    setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
 </script>
 
+
+</body>
 
 </html>

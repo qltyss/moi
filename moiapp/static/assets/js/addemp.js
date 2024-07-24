@@ -46,6 +46,7 @@ $(document).ready(function(){
                 var name = $("#name").val().trim();
                 var position = $("#position").val().trim();
                 var status = $("#status").val();
+                var numplate = $("#numplate").val();
 
                 // Validate input values
                 if (!name) {
@@ -58,6 +59,12 @@ $(document).ready(function(){
                     $('#error_div').removeClass('text-success');
                     $('#error_div').addClass('text-danger');
                     $("#error_div").text("Please fill in  Position field");
+                    return;
+                }
+                if (!numplate) {
+                    $('#error_div').removeClass('text-success');
+                    $('#error_div').addClass('text-danger');
+                    $("#error_div").text("Please fill in  numplate field");
                     return;
                 }
 
@@ -89,7 +96,8 @@ $(document).ready(function(){
                     name: name,
                     images: [img1Base64, img2Base64, img3Base64,img4Base64, img5Base64, img6Base64],
                     position: position,
-                    status: status
+                    status: status,
+                    numplate:numplate
                 });
                 $(this).find('i').hide();
                 $("#submitText").text('');

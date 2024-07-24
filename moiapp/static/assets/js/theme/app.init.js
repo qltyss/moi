@@ -1,6 +1,6 @@
 var userSettings = {
   Layout: "vertical",
-  SidebarType: "full", 
+  SidebarType: "mini-sidebar", 
   BoxedLayout: false, 
   Direction: "rtl", 
   Theme: "light", 

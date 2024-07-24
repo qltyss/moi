@@ -12,13 +12,11 @@ $(document).ready(function(){
     var today = new Date();
     var options = { day: '2-digit', month: 'short', year: 'numeric' };
     var formattedDate = today.toLocaleDateString('en-US', options);
-    $("#today_Date").text(formattedDate)
+    // $("#today_Date").text(formattedDate)
     
   }
 
-  $("#reset").on('click', function() {
-    location.reload();
-});
+
   
 //   change date start here
   $('.getdate').on('change', function (e) {
@@ -212,14 +210,16 @@ function updatefaceChartValues(chartInstance, seriesValues) {
           method: 'GET',
           contentType: 'application/json',
           success: function(response) {
-              // console.log(response);
+              console.log("dashboard data:",response);
               $("#loaderrow").addClass("d-none");
               $("#wrongparking_card_text").text(response.wrongparking);
               $("#person_card_text").text(response.person);
               $("#traffic_card_text").text(response.drone.toFixed(0));
               
               if(response.drone_latest_status  === "Heavy"){
+                $("#congestion_card_background").addClass('bg-danger')
                 if (dir === "ltr") {
+                 
                   $("#dashboard_traffic_status").text(response.drone_latest_status);
                 }if(dir === "rtl"){
                   $("#dashboard_traffic_status").text("مزدحم");
@@ -227,7 +227,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
                
 
               }else if(response.drone_latest_status  === "Moderate"){
-
+                $("#congestion_card_background").addClass('bg-warning')
                 if (dir === "ltr") {
                   $("#dashboard_traffic_status").text(response.drone_latest_status);
                 }if(dir === "rtl"){
@@ -235,7 +235,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
                 }
 
               }else if(response.drone_latest_status  === "Light"){
-
+                $("#congestion_card_background").addClass('bg-success')
                 if (dir === "ltr") {
                   $("#dashboard_traffic_status").text(response.drone_latest_status);
                 }if(dir === "rtl"){
@@ -245,31 +245,32 @@ function updatefaceChartValues(chartInstance, seriesValues) {
               }
               
               
-              if(response.drone_latest_status  === "Heavy"){
-                if (dir === "ltr") {
-                  $("#dashboard_traffic_status").text(response.drone_latest_status);
-                }if(dir === "rtl"){
-                  $("#dashboard_traffic_status").text("مزدحم");
-                }
+              // if(response.drone_latest_status  === "Heavy"){
+
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("مزدحم");
+              //   }
                
 
-              }else if(response.drone_latest_status  === "Moderate"){
+              // }else if(response.drone_latest_status  === "Moderate"){
 
-                if (dir === "ltr") {
-                  $("#dashboard_traffic_status").text(response.drone_latest_status);
-                }if(dir === "rtl"){
-                  $("#dashboard_traffic_status").text("معتدل");
-                }
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("معتدل");
+              //   }
 
-              }else if(response.drone_latest_status  === "Light"){
+              // }else if(response.drone_latest_status  === "Light"){
 
-                if (dir === "ltr") {
-                  $("#dashboard_traffic_status").text(response.drone_latest_status);
-                }if(dir === "rtl"){
-                  $("#dashboard_traffic_status").text("طبيعي");
-                }
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("طبيعي");
+              //   }
 
-              }
+              // }
               
               var series = [response.white, response.black, response.unknown];
               updatefaceChartValues(face_analysis_chart, series);
@@ -319,7 +320,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
 
 
     function dashboard_traffic() {
-      let url = '/dashboard_trafic/';
+      let url = '/drone_trafic/';
 
       $("#loaderrow").addClass("d-none");
         $.ajax({
@@ -329,7 +330,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
           success: function(response) {
             // console.log(typeof(response))
             console.log("traffic",response)
-        
+            $("#today_Date").text(response.date)
    
           updateChartValues("traffic_analysis", traffic_chart, response.time, response.traffic, traffic_options);
         },
@@ -350,7 +351,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
-          // console.log("Live Detection: ",response)
+          console.log("Live Detection: ",response)
           $("#live_detection").css(
                   
                   
@@ -394,70 +395,110 @@ function updatefaceChartValues(chartInstance, seriesValues) {
 
 
 
-function updateLiveDetection(response) {
-  // Sort the response array based on the time property
-  response.sort(function(a, b) {
-      var timeA = a.time.split(':');
-      var timeB = b.time.split(':');
-      var hourA = parseInt(timeA[0]);
-      var minuteA = parseInt(timeA[1]);
-      var secondA = parseInt(timeA[2]);
-      var hourB = parseInt(timeB[0]);
-      var minuteB = parseInt(timeB[1]);
-      var secondB = parseInt(timeB[2]);
-      
-      if (hourA !== hourB) {
-          return hourA - hourB;
-      } else if (minuteA !== minuteB) {
-          return minuteA - minuteB;
+  function updateLiveDetection(response) {
+   
+    response.sort(function(a, b) {
+        var timeA = a.time.split(':');
+        var timeB = b.time.split(':');
+        var hourA = parseInt(timeA[0]);
+        var minuteA = parseInt(timeA[1]);
+        var secondA = parseInt(timeA[2]);
+        var hourB = parseInt(timeB[0]);
+        var minuteB = parseInt(timeB[1]);
+        var secondB = parseInt(timeB[2]);
+        
+        if (hourA !== hourB) {
+            return hourA - hourB;
+        } else if (minuteA !== minuteB) {
+            return minuteA - minuteB;
+        } else {
+            return secondA - secondB;
+        }
+    });
+
+    // Clear the live_detection div before updating
+    $('#live_detection').empty();
+
+    // Iterate over the sorted response array
+    response.forEach(function(record) {
+        // Create a unique identifier for each record based on name and time
+        let recordId = `${record.name}-${record.time}`;
+        
+        // Determine the image file name
+        var img = record.employee_status == "unknown" ? 'unknown.jpg' : record.employee_name.replace(/ /g, '_') + '.jpg';
+
+        // Determine the badge class based on employee status
+      var badgeClass;
+      if (record.employee_status === 'white') {
+          badgeClass = 'bg-success-subtle text-success';
+      } else if (record.employee_status === 'black') {
+          badgeClass = 'bg-danger-subtle text-danger';
+      } else if (record.employee_status === 'unknown') {
+          badgeClass = 'bg-warning-subtle text-warning';
       } else {
-          return secondA - secondB;
+          badgeClass = 'bg-secondary-subtle text-secondary'; // Default class
       }
-  });
+      var model = record.car_model
+      model = model.split(' ')[0]
+      // console.log(model)
+        // Create the HTML for the record
+        var html = `<div class="col-4 text-center">
+                        <img src="../static/assets/images/employee/${record.employee_image}" alt="${record.employee_name}" class="img-fluid rounded" />
+                        <h6 class="fs-2 mt-1">${truncateName(record.employee_name)}</h6>
+                        <h6 class="badge ${badgeClass} ">${record.time}</h6>
+                        
+                        
+                        
+                        
+                    </div>`;
 
-  // Clear the live_detection div before updating
-  $('#live_detection').empty();
+        // Append the HTML to the live_detection div
+        $('#live_detection').append(html);
 
-  // Iterate over the sorted response array
-  response.forEach(function(record) {
-      // Create a unique identifier for each record based on name and time
-      let recordId = `${record.name}-${record.time}`;
-      
-      // Determine the image file name
-      var img = record.employee_status == "unknown" ? 'unknown.jpg' : record.employee_name.replace(/ /g, '_') + '.jpg';
+    });
+    removeDuplicatesAndKeepLatest()
+  }
 
-      // Determine the badge class based on employee status
-    var badgeClass;
-    if (record.employee_status === 'white') {
-        badgeClass = 'bg-success-subtle text-success';
-    } else if (record.employee_status === 'black') {
-        badgeClass = 'bg-danger-subtle text-danger';
-    } else if (record.employee_status === 'unknown') {
-        badgeClass = 'bg-warning-subtle text-warning';
-    } else {
-        badgeClass = 'bg-secondary-subtle text-secondary'; // Default class
+  function truncateName(name) {
+    var nameParts = name.split(' ');
+    if (nameParts.length > 2) {
+        return nameParts[0] + ' ' + nameParts[1];
     }
-    var model = record.car_model
-    model = model.split(' ')[0]
-    // console.log(model)
-      // Create the HTML for the record
-      var html = `<div class="col-4 text-center">
-                      <img src="../static/assets/images/employee/${img}" alt="${record.employee_name}" class="img-fluid rounded" />
-                      <h6 class="fs-2 mt-1">${record.employee_name}</h6>
-                      <h6 class="badge ${badgeClass} ">${record.time}</h6>
-                      
-                      
-                       
-                       
-                  </div>`;
-
-      // Append the HTML to the live_detection div
-      $('#live_detection').append(html);
-  });
+    return name; // If there are less than or equal to 2 parts, return the name as is
 }
+      function removeDuplicatesAndKeepLatest() {
+        var nameTimeMap = {};
 
+        // Step 1: Identify all .col-4 elements inside #live_detection
+        $('#live_detection .col-4').each(function() {
+            var name = $(this).find('h6.fs-2').text();
+            var time = $(this).find('h6.badge').text();
 
+            // Parse the time string into a Date object for comparison
+            var timeParts = time.split(':');
+            var timeDate = new Date();
+            timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
 
+            // Step 2: Update the map with the latest time for each name
+            if (!nameTimeMap[name] || nameTimeMap[name] < timeDate) {
+                nameTimeMap[name] = timeDate;
+            }
+        });
+
+        // Step 3: Iterate again to remove elements that are not the latest
+        $('#live_detection .col-4').each(function() {
+            var name = $(this).find('h6.fs-2').text();
+            var time = $(this).find('h6.badge').text();
+            var timeParts = time.split(':');
+            var timeDate = new Date();
+            timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
+
+            // If the current time is not the latest, remove the element
+            if (nameTimeMap[name] > timeDate) {
+                $(this).remove();
+            }
+        });
+    }
 });
 
 

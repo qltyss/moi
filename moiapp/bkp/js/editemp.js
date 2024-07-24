@@ -4,28 +4,28 @@ $(document).ready(function() {
     get_empInfo();
 
 
-    // setInterval(() => {
-    //     const selectedDate = $('#vehicle_filter').val();
-    //     const todayDate = getTodayDate();
+    setInterval(() => {
+        const selectedDate = $('#vehicle_filter').val();
+        const todayDate = getTodayDate();
     
-    //     console.log("Selected Date:", selectedDate);
-    //     console.log("Today's Date:", todayDate);
+        console.log("Selected Date:", selectedDate);
+        console.log("Today's Date:", todayDate);
     
-    //     if (selectedDate) {
-    //         if (selectedDate === todayDate) {
-    //             console.log("Selected date is today. Calling functions.");
-    //             //carplate('');
-    //             get_empInfo();
-    //         } else {
-    //             console.log("Selected date is not today.");
-    //         }
-    //     } else {
-    //         // No date selected, call the functions with empty date
-    //         console.log("No date selected. Calling functions.");
-    //         //carplate('');
-    //         get_empInfo();
-    //     }
-    // }, 5000);
+        if (selectedDate) {
+            if (selectedDate === todayDate) {
+                console.log("Selected date is today. Calling functions.");
+                //carplate('');
+                get_empInfo();
+            } else {
+                console.log("Selected date is not today.");
+            }
+        } else {
+            // No date selected, call the functions with empty date
+            console.log("No date selected. Calling functions.");
+            //carplate('');
+            get_empInfo();
+        }
+    }, 5000);
     var dir = sessionStorage.getItem('dir');
    
     $('#vehicle_filter').on('change', function(){
@@ -60,69 +60,38 @@ $(document).ready(function() {
 
 
 
-    //   function get_empInfo(date = ''){
+      function get_empInfo(date = ''){
      
  
-    //     let url = '/employees/';
-    //     if (date) {
-    //         url += `?date=${date}`;
-    //     }
-    //     $.ajax({
-    //               url:  url, 
-    //               method: 'GET',                    
-    //               contentType: 'application/json',
-    //               success: function(response) {
-    //                 console.log("Emp-info:",response)
-    //                 appendEditEmp(response)
-    //               },
-    //               error: function() {
-    //                  console.log("error")
-    //               }
-    //           });
-    //   }
-    $(".pagination").on("click", "a", function(event) {
-        event.preventDefault();
-        var page_url = $(this).attr("href");
-        var page_number = page_url.split('page=')[1].trim();  // Extract page number from URL
-        // console.log("typeofpage:", typeof(page_number));
-        // console.log("page:", page_number);
-        get_empInfo(page_number);  // Fetch data for the clicked page
-    });
-
-
-    function get_empInfo(pageNumber, date = '') {
-
-        
         let url = '/employees/';
-        if (pageNumber) {
-            url += `?page=${pageNumber}`;
-        }
         if (date) {
             url += `?date=${date}`;
         }
-    
-    
-        $.ajax({
-            url: url,
-            method: 'GET',
-            contentType: 'application/json',
-            success: function(response) {
-                appendEditEmp(response.results);  // Append employee data to table
-                
-                renderPagination(response.pagination_html);  // Render pagination links
-            },
-            error: function() {
-                console.log("Error fetching data.");
-            }
-        });
-    }
-    function renderPagination(pagination_html) {
-        var pagination = $(".pagination .step-links");
-        pagination.html(pagination_html);
-        updateLang()
-    }
-
+        // console.log(url)
        
+        $.ajax({
+                  url:  url, 
+                  method: 'GET',                    
+                  contentType: 'application/json',
+                  success: function(response) {
+                    console.log("Emp-info:",response)
+                   
+                                          
+                    appendEditEmp(response)
+              
+                        
+                    
+                      
+                 
+                    
+                  },
+                  error: function() {
+             
+                     console.log("error")
+                  }
+              });
+  
+      }
 
     $('#signout').on('click',function(event) {
         event.preventDefault();
@@ -130,38 +99,13 @@ $(document).ready(function() {
        
        window.location.href = '/'; 
     });
-
-
-    function updateLang(){
-        let languageFile = {
-
-            first:"First",
-            next:"Next",
-            previous:"Previous",
-            last:"Last",
-            page:"Page",
-            numplate:"Numplate",
-            delete:"Delete",
-            edit:"Edit",
-            editemployee:"Edit Employee",
-            addemployee:"Add Employee",
-            eemp:"Edit-Emp",
-            of:'of'
-            
-          }
-          var dir = sessionStorage.getItem('dir');
-          
-            if(dir == "ltr"){
-             
-                  $('[data-lang-key]').each(function() {
-                    var key = $(this).attr('data-lang-key');
-                    if (languageFile[key]) {
-                        $(this).text(languageFile[key]);
-                    }
-                })
     
-            }
-        }
+   
+
+
+
+
+
     function appendEditEmp(entries) {
         console.log("now enteres", entries)
         var panel = $("#editEmpanels");
@@ -186,57 +130,46 @@ $(document).ready(function() {
                       Sign Up Modal
                     </button>`
      
-            if(entry.id == 14){
-                
-            }else{
-                var html = `
-                    <tr data-id="${entry.id}">    
-                            <td class="d-none">
-                            <p id="counter" data-emp-id="${entry.id}"></p>
-                            <input type="hidden" id="emp_id" value="${entry.id}" />
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                <a class="image-popup-vertical-fit" href="../static/assets/images/employee/${entry.image}">
-                                <img src="../static/assets/images/employee/${entry.image}" class="rounded-circle" width="40" height="40" />
-                                </a>
-                                <div class="ms-3">
-                                    <h6 class="fs-4 fw-semibold mb-0 emp_name" >${entry.name}</h6>
-                                    <span class="fw-normal emp_position">${entry.position}</span>
-                                </div>
-                                </div>
-                            </td>
-                            <td>
+    
+            var html = `
+                <tr data-id="${entry.id}">    
+                        <td>
+                        <p id="counter" data-emp-id="${entry.id}">${counter}</p>
+                        <input type="hidden" id="emp_id" value="${entry.id}" />
+                        </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <img src="../static/assets/images/employee/${entry.image}" class="rounded-circle" width="40" height="40" />
                             
+                              <div class="ms-3">
+                                <h6 class="fs-4 fw-semibold mb-0 emp_name" >${entry.name}</h6>
+                                <span class="fw-normal emp_position">${entry.position}</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                           
 
-                                
-                                <p class="fw-bold emp_Status text-capitalize">
-                                        ${entry.status}
-                                    </p>
-                            </td>
-                                <td>
                             
+                            <p class="fw-bold emp_Status text-capitalize">
+                                     ${entry.status}
+                                </p>
+                          </td>
+                           
+                         <td>
+                                <p class="btn bg-warning-subtle text-warning" id="edit_emp" data-bs-toggle="modal" data-bs-target="#editemp-modal" ><i class="ti ti-pencil fs-5"></i></p>
+                         </td>
+                         <td>
+                                <p class="btn bg-danger-subtle text-danger" id="del_emp"><i class="ti ti-trash fs-5"></i></p>
+                         </td>
+                         
+                        </tr>
+            `;
 
-                                
-                                <p class="fw-bold emp_numplate text-capitalize">
-                                        ${entry.numplate}
-                                    </p>
-                            </td>
-                            <td>
-                                    <p class="btn bg-warning-subtle text-warning" id="edit_emp" data-bs-toggle="modal" data-bs-target="#editemp-modal" ><i class="ti ti-pencil fs-5"></i></p>
-                            </td>
-                            <td>
-                                    <p class="btn bg-danger-subtle text-danger" id="del_emp"><i class="ti ti-trash fs-5"></i></p>
-                            </td>
-                            
-                            </tr>
-                `;
-            }
 
             panel.append(html);
             counter++;
         });
-        initializeMagnificPopup()
     }
 
     $(document).on('click', '#edit_emp', function() {
@@ -250,13 +183,11 @@ $(document).ready(function() {
        
         var empName = row.find('.emp_name').text();
         var empPosition = row.find('.emp_position').text();
-        var numplate = row.find('.emp_numplate').text().trim().toLowerCase(); 
         var empStatus = row.find('.emp_Status').text().trim().toLowerCase(); // Make sure it's in lowercase
 
         // Populate the modal fields with extracted data
         $('#editemp-modal').find('#name').val(empName);
         $('#editemp-modal').find('#position').val(empPosition);
-        $('#editemp-modal').find('#numplate').val(numplate);
         console.log("staths",empStatus)
         // Set the status dropdown value
         $('#editemp-modal').find('#empstatus').val(empStatus);
@@ -274,14 +205,12 @@ $(document).ready(function() {
         var empName = $('#editemp-modal').find('#name').val();
         var empPosition = $('#editemp-modal').find('#position').val();
         var empStatus = $('#editemp-modal').find('#empstatus').val();
-        var numplate = $('#editemp-modal').find('#numplate').val();
     
         // Log the details (can be removed later)
         console.log('Employee ID:', empId);
         console.log('Name:', empName);
         console.log('Position:', empPosition);
         console.log('Status:', empStatus);
-        console.log('numplate:', numplate);
         // empId ="1720966263795";
    
         $.ajax({
@@ -292,8 +221,7 @@ $(document).ready(function() {
                 id: empId,
                 name: empName,
                 position: empPosition,
-                status: empStatus,
-                numplate:numplate
+                status: empStatus
             },
             success: function(response) {
                 // Handle success response
@@ -445,23 +373,12 @@ $(document).ready(function() {
             panel.append(html);
      
         });
-        
     }
 
     function formatDate(timestamp) {
         var date = new Date(timestamp);
         var options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
         return date.toLocaleString('en-US', options).replace(',', '');
-    }
-    function initializeMagnificPopup() {
-        $(".image-popup-vertical-fit").magnificPopup({
-            type: "image",
-            closeOnContentClick: true,
-            mainClass: "mfp-img-mobile",
-            image: {
-                verticalFit: true,
-            },
-        });
     }
 
 });

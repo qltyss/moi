@@ -34,10 +34,7 @@ urlpatterns = [
     path('update_settings/<str:direction>/', views.update_settings, name='update_settings'),
     path('get_drone_status/', views.get_drone_status, name='get_drone_status'),
     path('add_drone/', views.add_drone, name='add_drone'),
-    path('drone/', views.drone, name='drone'),
     # path('update_theme/<str:newtheme>/', views.update_theme, name='update_theme'),
-     path('update_wrongpakring/<int:pk>/', views.update_wrongpakring, name='update_wrongpakring'),
-     path('current_face_detection/', views.current_face_detection, name='current_face_detection'),
     
     # Dania's urls
     path('video_feed_html/', views.video_feed_html, name='video_feed_html'),

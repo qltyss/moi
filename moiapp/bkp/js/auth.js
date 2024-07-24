@@ -1,18 +1,13 @@
 
   
     $(document).ready(function(){
-      
-        $("#reset").on('click', function() {
-            location.reload();
-          });
 
         let languageFile = {
             // General Dashboard related terms
             Dashboard: "Dashboard",
-            Detection:"Detection History",
             AMR: "AMR",
             FaceDetection: "Face Detection",
-            FaceRegistration: "Add Employee",
+            FaceRegistration: "Face Registration",
             Drone: "Drone",
             Congested: "Congested",
             EditEmployee:"Edit Employee",
@@ -26,7 +21,7 @@
             LiveRoboticStatus: "Live Robotic Status",
             OFF: "OFF",
             ON: "ON",
-            TodaysTrafficAnalysis: "Traffic Analysis",
+            TodaysTrafficAnalysis: "Today's Traffic Analysis",
             TotalFaceAnalysis: "Total Face Analysis",
             WhiteList: "White List",
             BlackList: "Black List",
@@ -60,9 +55,7 @@
             carOwner:"Car Owner",
             plateText:"Plate Text",
             image:"Image",
-            unreported:"Un-Reported",
-            reported:"Reported",
-            action:"Action",
+          
             // Face Detection Panel related terms
             faceDetectionPanel: "Face Detection Panel",
             detectionPanel: "Detection Panel",
@@ -99,28 +92,15 @@
             WhiteLists: "White List",
             BlackLists: "Black List",
 
-
-            // employee
-            editemployee:"Edit Employee",
-            addemployee:"Add Employee",
-            Employee:"Employee",
-
-            WrongParking:"Wrong Parking",
-            SmartParking:"Smart Parking"
-           
+            // edit emp
+            delete :"delete",
+            edit:"edit",
+            srno:"SrNo",
           };
     
         var dir = sessionStorage.getItem('dir');
-       
+        console.log(dir)
         if(dir == "ltr"){
-            updateTooltips({
-                'mini-1': 'Dashboard',
-                'mini-2': 'Drone',
-                'mini-3': 'Parking',
-                'mini-4': 'Employee',
-                'mini-5': 'Detection'
-              });
-                // console.log("direction is checked now", dir)
               $('[data-lang-key]').each(function() {
                 var key = $(this).attr('data-lang-key');
                 if (languageFile[key]) {
@@ -128,46 +108,49 @@
                 }
             })
 
-        } else if (dir === 'rtl') {
-           
-            updateTooltips({
-                'mini-1': 'الرئيسية',
-                'mini-2': 'الدرون',
-                'mini-3': 'موقف سيارات',
-                'mini-4': 'موظف',
-                'mini-5': 'كشف'
-              });
-        } 
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        }
         if(dir){
-            // console.log("now direc",dir)
+            console.log("now direc",dir)
             $('.next-lang').attr('src', dir === 'ltr' ? "../static/assets/images/flag/icon-flag-sa.svg" : "../static/assets/images/flag/icon-flag-en.svg");
             $('html').attr('lang', dir === 'ltr' ? 'en' : 'ar').attr('dir', dir);
             $('#main_logo').attr('src', dir === 'ltr' ? "../static/assets/images/moi/moiseng.png" : "../static/assets/images/moi/mois.png");
            
         }
-        function updateTooltips(titles) {
-            // Iterate over the titles object and update the tooltips
-            $.each(titles, function(id, title) {
-              var $element = $('#' + id + ' a');
-              $element.attr('data-bs-title', title);
-        
-              // Dispose of any existing tooltip instance
-              var tooltipInstance = bootstrap.Tooltip.getInstance($element[0]);
-              if (tooltipInstance) {
-                tooltipInstance.dispose();
-              }
-        
-              // Initialize the tooltip again
-              new bootstrap.Tooltip($element[0]);
-            });
-          }
+
       var userString = sessionStorage.getItem("user");
       var userObject = JSON.parse(userString); 
     //   console.log(userObject)           
       $(".uname").text(userObject.first_name);
       $(".uemail").text(userObject.email);
 
+    //   var direction = localStorage.getItem('direction');
+    //   if (direction) {
+    //       // If direction preference is found, set it
+    //       userSettings.Direction = direction;
+    //       applyDirection(direction);
+    //   }
+  
+    //   $('.lang_change').on('click', function() {
+    //       var lang = $(this).data('lang');
+    //       if (lang === 'en') {
+    //           userSettings.Direction = 'ltr';
+    //           applyDirection('ltr');
+    //           localStorage.setItem('direction', 'ltr'); // Store direction preference in local storage
+    //           console.log(userSettings);
+    //       } else if (lang === 'ar') {
+    //           userSettings.Direction = 'rtl';
+    //           applyDirection('rtl');
+    //           localStorage.setItem('direction', 'rtl'); // Store direction preference in local storage
+    //           console.log(userSettings);
+    //       }
+    //   });
+  
+    //   // Function to apply direction
+    //   function applyDirection(direction) {
+    //       $('.next-lang').attr('src', direction === 'ltr' ? "../static/assets/images/flag/icon-flag-sa.svg" : "../static/assets/images/flag/icon-flag-en.svg");
+    //       $('html').attr('lang', direction === 'ltr' ? 'en' : 'ar').attr('dir', direction);
+    //       $('#main_logo').attr('src', direction === 'ltr' ? "../static/assets/images/moi/moiseng.png" : "../static/assets/images/moi/mois.png");
+    //   }
 
   
     $('.lang_change').click(function() {
@@ -184,7 +167,7 @@
             url: '/update_settings/' + direction + '/',
             method: 'GET',
             success: function(data) {
-                // console.log(data)
+                console.log(data)
                 sessionStorage.setItem('dir', direction);
             
                 location.reload();
@@ -240,5 +223,24 @@
       });
       // prev lang change before implement change permanent
 
+    //   $('.lang_change').on('click',function() {
+    //     var lang = $(this).data('lang');
+    //     if (lang === 'en') {
+    //         userSettings.Direction = 'ltr';
+    //         $('.next-lang').attr('src', "../static/../static/assets/images/flag/icon-flag-sa.svg");
+          
+    //         $('html').attr('lang', 'en').attr('dir', 'ltr');
+    //         $('#main_logo').attr('src', "../static/assets/images/moi/moiseng.png");
+    //         console.log(userSettings);
+    //     } else if (lang === 'ar') {
+    //         userSettings.Direction = 'rtl';
+        //     $('.next-lang').attr('src', "../static/assets/images/flag/icon-flag-en.svg");
+          
+          
+        //   $('html').attr('lang', 'ar').attr('dir', 'rtl');
+        //   $('#main_logo').attr('src', "../static/assets/images/moi/mois.png");
+    //         console.log(userSettings);
+    //     }
+    //   });
   });
 

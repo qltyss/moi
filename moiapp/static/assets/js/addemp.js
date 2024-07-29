@@ -2,6 +2,23 @@ $(document).ready(function(){
     
 
     var video = document.getElementById('videoElement');
+    var loader = document.getElementById('loader');
+
+    // Check if getUserMedia is supported by the browser
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+            loader.classList.add('d-none');
+            video.classList.remove('d-none');
+        })
+        .catch(function(error) {
+            console.error('Error accessing the webcam:', error);
+        });
+    } else {
+        console.error('getUserMedia is not supported by this browser.');
+    }
     
        // Get the canvas element for capturing the image
        var canvas = document.createElement('canvas');
@@ -225,18 +242,18 @@ $(document).ready(function(){
     
     
            // Check if getUserMedia is supported by the browser
-           if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-               navigator.mediaDevices.getUserMedia({ video: true })
-               .then(function(stream) {
-                   var video = document.getElementById('videoElement');
-                   video.srcObject = stream;
-                   video.play();
-               })
-               .catch(function(error) {
-                   console.error('Error accessing the webcam:', error);
-               });
-           } else {
-               console.error('getUserMedia is not supported by this browser.');
-           }
+        //    if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        //        navigator.mediaDevices.getUserMedia({ video: true })
+        //        .then(function(stream) {
+        //            var video = document.getElementById('videoElement');
+        //            video.srcObject = stream;
+        //            video.play();
+        //        })
+        //        .catch(function(error) {
+        //            console.error('Error accessing the webcam:', error);
+        //        });
+        //    } else {
+        //        console.error('getUserMedia is not supported by this browser.');
+        //    }
       
     });

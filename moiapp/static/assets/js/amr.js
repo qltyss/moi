@@ -261,7 +261,7 @@ function updateLang(){
         var textfile = $(this).text().trim();
         var todaydate = getnowdate();
        
-        if((filterddate === "" || filterddate === todaydate) && textfile === "Report"){
+        if(textfile === "Report"){
             // alert("You can report it.");
        
              // Find the closest row to the clicked element
@@ -316,10 +316,8 @@ function updateLang(){
                     );
                 }
             });
-        }else if (filterddate !== todaydate && textfile === "Reported") {
+        }else if (textfile === "Reported") {
             alert("Report has been done already..");
-        }else if (filterddate !== todaydate) {
-            alert("You can't report it now.");
         }
     });
 

@@ -63,6 +63,7 @@
             unreported:"Un-Reported",
             reported:"Reported",
             action:"Action",
+            Beta:"Beta",
             // Face Detection Panel related terms
             faceDetectionPanel: "Face Detection Panel",
             detectionPanel: "Detection Panel",

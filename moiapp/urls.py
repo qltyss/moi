@@ -47,7 +47,7 @@ urlpatterns = [
     
     
     
-    path('dronestream/', views.dronestream, name='dronestream')
+    # path('dronestream/', views.dronestream, name='dronestream')
     
     
     

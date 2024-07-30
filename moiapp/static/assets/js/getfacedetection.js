@@ -8,38 +8,39 @@ $(document).ready(function() {
     fetchLatestDetection()
 
     // console.log("initial page status",isPageUpdate)
-    // setInterval(() => {
-    //     const selectedDate = $('#face_filter').val();
-    //     const todayDate = getTodayDate();
+    setInterval(() => {
+        const selectedDate = $('#face_filter').val();
+        const todayDate = getTodayDate();
     
 
        
-    //     if (selectedDate) {
-    //         if (selectedDate === todayDate) {
-    //             if(isPageUpdate){
-    //                 console.log("Selected date is today. Calling functions.");
+        if (selectedDate) {
+            if (selectedDate === todayDate) {
+                if(isPageUpdate){
+                    console.log("Selected date is today. Calling functions.");
                
-    //                 getEmp('');
-                   
-    //                 fetchLatestDetection()
-    //             }
+                                       
+                    fetchLatestDetection()
+                    getEmp('');
+                    fetchStatusCounts('');
+                }
                 
-    //         } else {
-    //             console.log("Selected date is not today.");
+            } else {
+                console.log("Selected date is not today.");
                 
-    //         }
-    //     } else {
-    //         // No date selected, call the functions with empty date
-    //         console.log("now page status",isPageUpdate)
-    //         if(isPageUpdate){
-    //             console.log("m updating2 ")
-    //             // console.log("No date selected. Calling functions.");
-    //             getEmp('');
-               
-    //             fetchLatestDetection()
-    //         }
-    //     }
-    // }, 3000);
+            }
+        } else {
+            // No date selected, call the functions with empty date
+            console.log("now page status",isPageUpdate)
+            if(isPageUpdate){
+                console.log("m updating2 ")
+                // console.log("No date selected. Calling functions.");
+                fetchLatestDetection()
+                getEmp('');
+                fetchStatusCounts('');
+            }
+        }
+    }, 3000);
 
 
 

@@ -504,7 +504,7 @@ def get_employee_info(request):
         logs = logs.select_related('emp').values(
             'emp_id', 'emp__name', 'emp__status', 'emp__image', 'emp__position',
             'plate_text', 'time', 'car_color', 'car_model'
-        )
+        ).order_by('-time')
 
         # Pagination
         paginator = Paginator(logs, 3)  # Show 3 logs per page

@@ -218,23 +218,32 @@ function updateLang(){
 
 
 
+    let previousSeriesValues = [0, 0, 0];
     function fetchStatusCounts(date = '') {
         let url = '/facestatus_count/';
         if (date) {
             url += `?date=${date}`;
         }
-    
+
         $.ajax({
             url: url,
             type: 'GET',
             success: function(response) {
-
                 const newSeriesValues = [response.white, response.black, response.unknown];
-                console.log("new",newSeriesValues)
-                updatedata(response);
-                updateChartValues(facedetection, newSeriesValues);
-              
-     
+                console.log("new values", newSeriesValues);
+
+                // Check if there's any change in newSeriesValues compared to previousSeriesValues
+                const isUpdated = newSeriesValues.some((value, index) => value !== previousSeriesValues[index]);
+
+                if (!isUpdated) {
+                    console.log("No update needed. Status:", isUpdated);
+                } else {
+                    console.log("Update needed. Status:", isUpdated);
+                    updatedata(response);
+                    updateChartValues(facedetection, newSeriesValues);
+                    // Update previousSeriesValues with new values
+                    previousSeriesValues = [...newSeriesValues];
+                }
             },
             error: function(error) {
                 console.error("Error fetching status counts:", error);

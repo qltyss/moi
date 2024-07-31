@@ -121,7 +121,7 @@ $(document).ready(function(){
   // =====================================
   var face_options = {
     color: "#adb5bd",
-    series: [40, 40, 10],
+    series: [300, 100, 125],
     labels: ["white-list", "black-list", "unknown"],
     chart: {
         width: 180,
@@ -273,7 +273,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
               // }
               
               var series = [response.white, response.black, response.unknown];
-              updatefaceChartValues(face_analysis_chart, series);
+              //updatefaceChartValues(face_analysis_chart, series);
           },
           error: function() {
               console.log("error");

@@ -464,39 +464,55 @@ function updatefaceChartValues(chartInstance, seriesValues) {
     }
     return name; // If there are less than or equal to 2 parts, return the name as is
 }
-      function removeDuplicatesAndKeepLatest() {
-        var nameTimeMap = {};
+  function removeDuplicatesAndKeepLatest() {
+    var nameTimeMap = {};
+    var unknownEntries = [];
 
-        // Step 1: Identify all .col-4 elements inside #live_detection
-        $('#live_detection .col-4').each(function() {
-            var name = $(this).find('h6.fs-2').text();
-            var time = $(this).find('h6.badge').text();
+    // Step 1: Identify all .col-4 elements inside #live_detection
+    $('#live_detection .col-4').each(function() {
+        var name = $(this).find('h6.fs-2').text();
+        var time = $(this).find('h6.badge').text();
 
-            // Parse the time string into a Date object for comparison
-            var timeParts = time.split(':');
-            var timeDate = new Date();
-            timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
+        // Parse the time string into a Date object for comparison
+        var timeParts = time.split(':');
+        var timeDate = new Date();
+        timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
 
-            // Step 2: Update the map with the latest time for each name
+        if (name.toLowerCase() === "unknown") {
+            // Collect all "unknown" entries with their time
+            unknownEntries.push({ element: $(this), time: timeDate });
+        } else {
+            // Update the map with the latest time for each name
             if (!nameTimeMap[name] || nameTimeMap[name] < timeDate) {
                 nameTimeMap[name] = timeDate;
             }
-        });
+        }
+    });
 
-        // Step 3: Iterate again to remove elements that are not the latest
-        $('#live_detection .col-4').each(function() {
-            var name = $(this).find('h6.fs-2').text();
-            var time = $(this).find('h6.badge').text();
-            var timeParts = time.split(':');
-            var timeDate = new Date();
-            timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
+    // Step 2: Iterate again to remove elements that are not the latest
+    $('#live_detection .col-4').each(function() {
+        var name = $(this).find('h6.fs-2').text();
+        var time = $(this).find('h6.badge').text();
+        var timeParts = time.split(':');
+        var timeDate = new Date();
+        timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
 
-            // If the current time is not the latest, remove the element
-            if (nameTimeMap[name] > timeDate) {
-                $(this).remove();
-            }
-        });
-    }
+        if (name.toLowerCase() === "unknown") {
+            // Do not remove "unknown" entries
+            return;
+        }
+
+        // If the current time is not the latest, remove the element
+        if (nameTimeMap[name] > timeDate) {
+            $(this).remove();
+        }
+    });
+
+    // Step 3: Sort unknown entries by time and append them back to the container
+    unknownEntries.sort((a, b) => a.time - b.time);
+
+    // Optionally, clear existing "unknown" entries before
+  } 
 });
 
 

@@ -75,6 +75,163 @@ from .models import Employee, WrongParking, Drone  # Adjust import according to 
 
 
 from datetime import datetime, timedelta
+# def dashboard_data(request):
+#     # Get start and end dates from request parameters
+#     start_date_str = request.GET.get('start_date', '')
+#     end_date_str = request.GET.get('end_date', '')
+
+#     # Parse dates and add one day to end_date to include it fully
+#     if start_date_str:
+#         start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+#     else:
+#         start_date = None
+
+#     if end_date_str:
+#         end_date = datetime.strptime(end_date_str, '%Y-%m-%d') + timedelta(days=1)
+#     else:
+#         end_date = None
+
+#     # Construct the response data
+#     response_data = {
+#         'person': 0,
+#         'wrongparking': 0,
+#         'drone': 0,
+#         'white': 0,
+#         'black': 0,
+#         'unknown': 0,
+#         'drone_latest_status': None  # Initialize drone_latest_status
+#     }
+#     emp_ids = []
+
+    
+#     if start_date and end_date:
+#         # Perform filtering based on start and end dates
+#         total_employees = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date).count()
+#         wrongparking_count = WrongParking.objects.filter(time__gte=start_date, time__lt=end_date).count()
+#         drone_total = Drone.objects.filter(time__gte=start_date, time__lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
+        
+#         # Count occurrences of each emp_id
+#         emp_id_counts = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date) \
+#             .values('emp_id') \
+#             .annotate(count=Count('emp_id')) \
+#             .order_by('emp_id')
+        
+#         # Print the emp_id counts
+#         for record in emp_id_counts:
+#             emp_id = record['emp_id']
+#             count = record['count']
+#             print(f'{emp_id} id, count {count}')
+        
+#         # Extract emp_ids and their counts
+#         emp_ids = [record['emp_id'] for record in emp_id_counts]
+#         emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
+        
+#         # Retrieve statuses from Employee model for the emp_ids found
+#         status_counts = Employee.objects.filter(id__in=emp_ids) \
+#             .values('status') \
+#             .annotate(count=Count('id'))
+
+#         # Prepare a dictionary to count statuses
+#         status_summary = {
+#             'black': 0,
+#             'white': 0,
+#             'unknown': 0
+#         }
+        
+#         # Populate the status_summary dictionary with counts
+#         for record in status_counts:
+#             status = record['status']
+#             count = record['count']
+#             if status in status_summary:
+#                 status_summary[status] += count
+        
+#         # Correct the status_summary by multiplying with the number of occurrences
+#         corrected_status_summary = {
+#             'black': 0,
+#             'white': 0,
+#             'unknown': 0
+#         }
+        
+#         for emp_id, count in emp_id_count_map.items():
+#             employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
+#             if employee_status in corrected_status_summary:
+#                 corrected_status_summary[employee_status] += count
+        
+#         # Print the corrected status summary
+#         print(f"now Status Counts:")
+#         for status, count in corrected_status_summary.items():
+#             response_data[status] = count
+#             print(f"{status}: {count}")
+        
+         
+
+#     else:
+#         # If no dates are provided, get overall counts
+#         total_employees = DetectionLog.objects.count()
+#         wrongparking_count = WrongParking.objects.count()
+#         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
+        
+#         # Get all emp_ids from DetectionLog entries
+#         # emp_ids = DetectionLog.objects.values_list('emp_id', flat=True)
+#         emp_id_counts = DetectionLog.objects.values('emp_id').annotate(count=Count('emp_id')).order_by('emp_id')
+#         emp_ids = [record['emp_id'] for record in emp_id_counts]
+#         emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
+
+
+#         # Count statuses from Employee model for all emp_ids
+#         # status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
+#         status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('id'))
+#         status_summary = {
+#                     'black': 0,
+#                     'white': 0,
+#                     'unknown': 0
+#                 }
+#         # Populate the status_summary dictionary with counts
+#         for record in status_counts:
+#             status = record['status']
+#             count = record['count']
+#             if status in status_summary:
+#                 status_summary[status] += count
+        
+#         # Correct the status_summary by multiplying with the number of occurrences
+#         corrected_status_summary = {
+#             'black': 0,
+#             'white': 0,
+#             'unknown': 0
+#         }
+        
+#         for emp_id, count in emp_id_count_map.items():
+#             employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
+#             if employee_status in corrected_status_summary:
+#                 corrected_status_summary[employee_status] += count
+        
+#         # Print the corrected status summary
+#         print(f"now Status Counts:")
+#         for status, count in corrected_status_summary.items():
+#             response_data[status] = count
+#             print(f"{status}: {count}")
+
+#     # Update the response dictionary with actual counts from the queries
+#     response_data['person'] = total_employees
+#     response_data['wrongparking'] = wrongparking_count
+#     response_data['drone'] = drone_total or 0
+#     print(response_data)
+#     # for entry in status_counts:
+#     #     response_data[entry['status']] = entry['count']
+
+#     # Get today's date
+#     today = datetime.today().date()
+
+#     # Get the latest drone status for today
+#     latest_drone_entry = Drone.objects.order_by('-time').first()
+    
+#     # Update drone_latest_status in the response data
+#     if latest_drone_entry:
+#         response_data['drone_latest_status'] = latest_drone_entry.status
+
+#     return JsonResponse(response_data)
+
+
 def dashboard_data(request):
     # Get start and end dates from request parameters
     start_date_str = request.GET.get('start_date', '')
@@ -95,129 +252,25 @@ def dashboard_data(request):
     response_data = {
         'person': 0,
         'wrongparking': 0,
-        'drone': 0,
-        'white': 0,
-        'black': 0,
-        'unknown': 0,
-        'drone_latest_status': None  # Initialize drone_latest_status
+        'drone': 0,        
+        'drone_latest_status': None  
     }
-    emp_ids = []
 
-    
     if start_date and end_date:
         # Perform filtering based on start and end dates
         total_employees = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date).count()
         wrongparking_count = WrongParking.objects.filter(time__gte=start_date, time__lt=end_date).count()
         drone_total = Drone.objects.filter(time__gte=start_date, time__lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
-        
-        # Count occurrences of each emp_id
-        emp_id_counts = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date) \
-            .values('emp_id') \
-            .annotate(count=Count('emp_id')) \
-            .order_by('emp_id')
-        
-        # Print the emp_id counts
-        for record in emp_id_counts:
-            emp_id = record['emp_id']
-            count = record['count']
-            print(f'{emp_id} id, count {count}')
-        
-        # Extract emp_ids and their counts
-        emp_ids = [record['emp_id'] for record in emp_id_counts]
-        emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
-        
-        # Retrieve statuses from Employee model for the emp_ids found
-        status_counts = Employee.objects.filter(id__in=emp_ids) \
-            .values('status') \
-            .annotate(count=Count('id'))
-
-        # Prepare a dictionary to count statuses
-        status_summary = {
-            'black': 0,
-            'white': 0,
-            'unknown': 0
-        }
-        
-        # Populate the status_summary dictionary with counts
-        for record in status_counts:
-            status = record['status']
-            count = record['count']
-            if status in status_summary:
-                status_summary[status] += count
-        
-        # Correct the status_summary by multiplying with the number of occurrences
-        corrected_status_summary = {
-            'black': 0,
-            'white': 0,
-            'unknown': 0
-        }
-        
-        for emp_id, count in emp_id_count_map.items():
-            employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
-            if employee_status in corrected_status_summary:
-                corrected_status_summary[employee_status] += count
-        
-        # Print the corrected status summary
-        print(f"now Status Counts:")
-        for status, count in corrected_status_summary.items():
-            response_data[status] = count
-            print(f"{status}: {count}")
-        
-         
-
     else:
         # If no dates are provided, get overall counts
         total_employees = DetectionLog.objects.count()
         wrongparking_count = WrongParking.objects.count()
         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
-        
-        # Get all emp_ids from DetectionLog entries
-        # emp_ids = DetectionLog.objects.values_list('emp_id', flat=True)
-        emp_id_counts = DetectionLog.objects.values('emp_id').annotate(count=Count('emp_id')).order_by('emp_id')
-        emp_ids = [record['emp_id'] for record in emp_id_counts]
-        emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
-
-
-        # Count statuses from Employee model for all emp_ids
-        # status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
-        status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('id'))
-        status_summary = {
-                    'black': 0,
-                    'white': 0,
-                    'unknown': 0
-                }
-        # Populate the status_summary dictionary with counts
-        for record in status_counts:
-            status = record['status']
-            count = record['count']
-            if status in status_summary:
-                status_summary[status] += count
-        
-        # Correct the status_summary by multiplying with the number of occurrences
-        corrected_status_summary = {
-            'black': 0,
-            'white': 0,
-            'unknown': 0
-        }
-        
-        for emp_id, count in emp_id_count_map.items():
-            employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
-            if employee_status in corrected_status_summary:
-                corrected_status_summary[employee_status] += count
-        
-        # Print the corrected status summary
-        print(f"now Status Counts:")
-        for status, count in corrected_status_summary.items():
-            response_data[status] = count
-            print(f"{status}: {count}")
 
     # Update the response dictionary with actual counts from the queries
     response_data['person'] = total_employees
     response_data['wrongparking'] = wrongparking_count
     response_data['drone'] = drone_total or 0
-    print(response_data)
-    # for entry in status_counts:
-    #     response_data[entry['status']] = entry['count']
 
     # Get today's date
     today = datetime.today().date()
@@ -231,9 +284,56 @@ def dashboard_data(request):
 
     return JsonResponse(response_data)
 
+def dashboard_face_count(request):
+    if request.method == 'GET':
+        start_date_str = request.GET.get('start_date', '')
+        end_date_str = request.GET.get('end_date', '')
 
+        # Parse dates and add one day to end_date to include it fully
+        if start_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+        else:
+            start_date = None
 
+        if end_date_str:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d') + timedelta(days=1)
+        else:
+            end_date = None
 
+        # Filter DetectionLog entries for the given date range
+        detection_logs = DetectionLog.objects.all()
+
+        if start_date and end_date:
+            detection_logs = detection_logs.filter(time__range=(start_date, end_date))
+
+        # Aggregate emp_ids and count occurrences
+        emp_id_counts = detection_logs.values('emp_id').annotate(count=Count('emp_id'))
+
+        # Initialize counts
+        white_count = 0
+        black_count = 0
+        unknown_count = 0
+
+        # Iterate over emp_id_counts to count statuses
+        for entry in emp_id_counts:
+            emp_id = entry['emp_id']
+            count = entry['count']
+
+            # Count statuses from Employee model for the emp_id
+            white_count += Employee.objects.filter(status='white', id=emp_id).count() * count
+            black_count += Employee.objects.filter(status='black', id=emp_id).count() * count
+            unknown_count += Employee.objects.filter(status='unknown', id=emp_id).count() * count
+
+        # Prepare response data in the specified format
+        response_data = {
+            'white': white_count,
+            'black': black_count,
+            'unknown': unknown_count,
+        }
+
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 api_response = None

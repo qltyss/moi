@@ -7,7 +7,7 @@ $(document).ready(function(){
   dashboardData('');
   dashboard_traffic();
   latest_record();
-  dashboard_fetchface_count('');
+  
   function today(){
     var today = new Date();
     var options = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -15,33 +15,7 @@ $(document).ready(function(){
     // $("#today_Date").text(formattedDate)
     
   }
-  function dashboard_fetchface_count(startDate = '', endDate = '') {
-    let url = '/dashboard_face_count/';
 
-    // Check if both start and end dates are provided
-    if (startDate && endDate) {
-        url += `?start_date=${startDate}&end_date=${endDate}`;
-    } else if (startDate) { // If only start date is provided, use it as the end date
-        endDate = new Date().toISOString().split('T')[0]; // Get current date as end date
-        url += `?start_date=${startDate}&end_date=${endDate}`;
-    }
-    
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function(response) {
-
-            const newSeriesValues = [response.white, response.black, response.unknown];
-            console.log("face detection status",newSeriesValues)
-           
-            updatefaceChartValues(face_analysis_chart, newSeriesValues);   
-
-        },
-        error: function(error) {
-            console.error("Error fetching status counts:", error);
-        }
-    });
-}
 
   
 //   change date start here
@@ -271,7 +245,35 @@ function updatefaceChartValues(chartInstance, seriesValues) {
               }
               
               
-             
+              // if(response.drone_latest_status  === "Heavy"){
+
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("مزدحم");
+              //   }
+               
+
+              // }else if(response.drone_latest_status  === "Moderate"){
+
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("معتدل");
+              //   }
+
+              // }else if(response.drone_latest_status  === "Light"){
+
+              //   if (dir === "ltr") {
+              //     $("#dashboard_traffic_status").text(response.drone_latest_status);
+              //   }if(dir === "rtl"){
+              //     $("#dashboard_traffic_status").text("طبيعي");
+              //   }
+
+              // }
+              
+              var series = [response.white, response.black, response.unknown];
+              //updatefaceChartValues(face_analysis_chart, series);
           },
           error: function() {
               console.log("error");

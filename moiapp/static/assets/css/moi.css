@@ -8,7 +8,7 @@
     src:url(../fonts/tabler-icons/fonts/tabler-icons.eot?v2.11.0);
     src:url(../fonts/tabler-icons/fonts/tabler-icons.eot?#iefix-v2.11.0) format("embedded-opentype"),url(../fonts/tabler-icons/fonts/tabler-icons.woff2?v2.11.0) format("woff2"),url(../fonts/tabler-icons/fonts/tabler-icons.woff?) format("woff"),url(../fonts/tabler-icons/fonts/tabler-icons.ttf?v2.11.0) format("truetype")
 }
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@import url(https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap);
 .ti{
     font-family:tabler-icons !important;
     speak:none;
@@ -13281,7 +13281,7 @@
     --bs-dark-border-subtle:#5a6a85;
     --bs-white-rgb:255,255,255;
     --bs-black-rgb:0,0,0;
-    --bs-font-sans-serif:"Manrope",sans-serif;
+    --bs-font-sans-serif:"Cario",sans-serif;
     --bs-font-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
     --bs-gradient:linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
     --bs-body-font-family:var(--bs-font-sans-serif);

@@ -436,13 +436,19 @@ function updatefaceChartValues(chartInstance, seriesValues) {
       } else {
           badgeClass = 'bg-secondary-subtle text-secondary'; // Default class
       }
+      var displayName;
+      if(truncateName(record.employee_name) === "unknown" && dir === "rtl"){
+        displayName =  "مجهول" ;
+       }else{
+         displayName = truncateName(record.employee_name)
+       } 
       var model = record.car_model
       model = model.split(' ')[0]
       // console.log(model)
         // Create the HTML for the record
         var html = `<div class="col-4 text-center">
                         <img src="../static/assets/images/employee/${record.employee_image}" alt="${record.employee_name}" class="img-fluid rounded" />
-                        <h6 class="fs-2 mt-1">${truncateName(record.employee_name)}</h6>
+                        <h6 class="fs-2 mt-1" data-lang-key="unknownchange">${displayName}</h6>
                         <h6 class="badge ${badgeClass} ">${record.time}</h6>
                         
                         
@@ -478,7 +484,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         var timeDate = new Date();
         timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
 
-        if (name.toLowerCase() === "unknown") {
+        if (name.toLowerCase() === "unknown"  || name === "مجهول") {
             // Collect all "unknown" entries with their time
             unknownEntries.push({ element: $(this), time: timeDate });
         } else {
@@ -497,7 +503,7 @@ function updatefaceChartValues(chartInstance, seriesValues) {
         var timeDate = new Date();
         timeDate.setHours(timeParts[0], timeParts[1], timeParts[2], 0);
 
-        if (name.toLowerCase() === "unknown") {
+        if (name.toLowerCase() === "unknown" || name === "مجهول") {
             // Do not remove "unknown" entries
             return;
         }

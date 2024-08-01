@@ -2,7 +2,7 @@
 @import url(https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap);
 /*! * Tabler Icons 2.11.0 by tabler - https://tabler.io * License - https://github.com/tabler/tabler-icons/blob/master/LICENSE */
 @font-face{
-    font-family:Cairo;
+     font-family:tabler-icons;
     font-style:normal;
     font-weight:400;
     src:url(../fonts/tabler-icons/fonts/tabler-icons.eot?v2.11.0);
@@ -10,7 +10,7 @@
 }
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
 .ti{
-    font-family:Cairo !important;
+    font-family:tabler-icons !important;
     speak:none;
     font-style:normal;
     font-weight:400;
@@ -13281,7 +13281,7 @@
     --bs-dark-border-subtle:#5a6a85;
     --bs-white-rgb:255,255,255;
     --bs-black-rgb:0,0,0;
-    --bs-font-sans-serif:"Cairo",sans-serif;
+    --bs-font-sans-serif:"Manrope",sans-serif;
     --bs-font-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
     --bs-gradient:linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
     --bs-body-font-family:var(--bs-font-sans-serif);
@@ -33154,7 +33154,7 @@ body .datepicker table tr td.day.focused,body .datepicker table tr td.day:hover,
     background:var(--bs-gray-100)
 }
 body .daterangepicker{
-    font-family:Cairo,sans-serif;
+     font-family:tabler-icons,sans-serif;
     border:1px solid var(--bs-border-color)
 }
 body .daterangepicker td.active{
@@ -34653,7 +34653,7 @@ circle.jvectormap-marker{
 }
 .dd3-handle:before{
     content:"\ec42";
-    font-family:Cairo;
+     font-family:tabler-icons;
     display:block;
     position:absolute;
     left:0;

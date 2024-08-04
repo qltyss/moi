@@ -13,44 +13,44 @@ $(document).ready(function(){
     });
     // saveDroneData()
 
-    function saveDroneData() {
-      var csrftoken = getCookie('csrftoken'); 
-      var total = $('#drone_traffic_value').text();
-      var status = $('#drone_traffic_status_values').text();
+  //   function saveDroneData() {
+  //     var csrftoken = getCookie('csrftoken'); 
+  //     var total = $('#drone_traffic_value').text();
+  //     var status = $('#drone_traffic_status_values').text();
   
-      if (status === "Heavy" || status === "ثقيل") {
-          status = "Heavy";
-      } else if (status === "Moderate" || status === "معتدل") {
-          status = "Moderate";
-      } else if (status === "Light" || status === "طبيعي") {
-          status = "Light";
-      }
+  //     if (status === "Heavy" || status === "ثقيل") {
+  //         status = "Heavy";
+  //     } else if (status === "Moderate" || status === "معتدل") {
+  //         status = "Moderate";
+  //     } else if (status === "Light" || status === "طبيعي") {
+  //         status = "Light";
+  //     }
   
-      $.ajax({
-          url: '/add_drone/',  // Adjust this if your URL is different
-          method: 'POST',
-          data: {
-              'total': total,
-              'status': status,
-              'csrfmiddlewaretoken': csrftoken
-          },
-          success: function (response) {
-              //console.log('Success:', response.message);
-              // Optionally alert the user
-          },
-          error: function (xhr, status, error) {
-              console.error('Error:', error);
-              // Optionally alert the user
-          },
-          complete: function () {
-              // Clear the interval after saving data
-              if (droneStatusInterval) {
-                  clearInterval(droneStatusInterval);
-                  droneStatusInterval = null; // Clear the reference
-              }
-          }
-      });
-  }
+  //     $.ajax({
+  //         url: '/add_drone/',  // Adjust this if your URL is different
+  //         method: 'POST',
+  //         data: {
+  //             'total': total,
+  //             'status': status,
+  //             'csrfmiddlewaretoken': csrftoken
+  //         },
+  //         success: function (response) {
+  //             //console.log('Success:', response.message);
+  //             // Optionally alert the user
+  //         },
+  //         error: function (xhr, status, error) {
+  //             console.error('Error:', error);
+  //             // Optionally alert the user
+  //         },
+  //         complete: function () {
+  //             // Clear the interval after saving data
+  //             if (droneStatusInterval) {
+  //                 clearInterval(droneStatusInterval);
+  //                 droneStatusInterval = null; // Clear the reference
+  //             }
+  //         }
+  //     });
+  // }
 //     function saveDroneData() {
       
 //       var csrftoken = getCookie('csrftoken'); 
@@ -248,7 +248,7 @@ $("#lunchDrone").on('click', function () {
             $("#drone_battery").text(jsonObject.battery_percentage);
             if(jsonObject.mission_status === "stop"){
               $("#current_drone_status").text("OFF");
-              saveDroneData();
+              // saveDroneData();
             }
             // console.log(typeof(jsonObject));
             // console.log(jsonObject);

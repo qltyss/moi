@@ -1,36 +1,45 @@
-
 import json
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from django.http import JsonResponse
-import cv2
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
-from django.http import JsonResponse
-from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import os
 import random
 import string
-from .models import Employee, DetectionLog
-from .models import WrongParking
-# from .models import CarPlate
-from .models import Drone
-
-from django.http import StreamingHttpResponse
-from django.views.decorators import gzip
-import requests
 import base64
-from django.utils.dateparse import parse_date
 from datetime import date
-from django.db.models import Count, Avg
-import os
 
+import cv2
+import numpy as np
+import requests
+import torch
+from ultralytics import YOLO
+
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count, Avg
+from django.http import JsonResponse, StreamingHttpResponse
+from django.middleware.csrf import get_token
+from django.shortcuts import render
+from django.utils.dateparse import parse_date
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators import gzip
 
+from .models import Employee, DetectionLog, WrongParking, Drone
+from django.http import HttpResponse
+import re
+import time
 
-
-
+from django.http import JsonResponse
+from django.db.models import Count, Sum
+from .models import Employee, WrongParking, Drone  # Adjust import according to your project structure
+from datetime import datetime, timedelta
+from django.db.models import F
+from django.shortcuts import get_object_or_404, redirect
+from django.db.models import Q
+from django.db.models import Max
+from django.core.files.base import ContentFile
+from django.conf import settings
+from django.http import HttpResponse
+import re
 def index(request):
     return render(request, 'signin.html')
 
@@ -60,176 +69,6 @@ def facedetection(request):
 @login_required
 def editemp(request):
     return render(request, 'editEmp.html')
-
-import time
-
-
-
-
-
-
-from django.http import JsonResponse
-from django.db.models import Count, Sum
-from .models import Employee, WrongParking, Drone  # Adjust import according to your project structure
-
-
-
-from datetime import datetime, timedelta
-# def dashboard_data(request):
-#     # Get start and end dates from request parameters
-#     start_date_str = request.GET.get('start_date', '')
-#     end_date_str = request.GET.get('end_date', '')
-
-#     # Parse dates and add one day to end_date to include it fully
-#     if start_date_str:
-#         start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-#     else:
-#         start_date = None
-
-#     if end_date_str:
-#         end_date = datetime.strptime(end_date_str, '%Y-%m-%d') + timedelta(days=1)
-#     else:
-#         end_date = None
-
-#     # Construct the response data
-#     response_data = {
-#         'person': 0,
-#         'wrongparking': 0,
-#         'drone': 0,
-#         'white': 0,
-#         'black': 0,
-#         'unknown': 0,
-#         'drone_latest_status': None  # Initialize drone_latest_status
-#     }
-#     emp_ids = []
-
-    
-#     if start_date and end_date:
-#         # Perform filtering based on start and end dates
-#         total_employees = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date).count()
-#         wrongparking_count = WrongParking.objects.filter(time__gte=start_date, time__lt=end_date).count()
-#         drone_total = Drone.objects.filter(time__gte=start_date, time__lt=end_date).aggregate(total_sum=Sum('total'))['total_sum']
-        
-#         # Count occurrences of each emp_id
-#         emp_id_counts = DetectionLog.objects.filter(time__gte=start_date, time__lt=end_date) \
-#             .values('emp_id') \
-#             .annotate(count=Count('emp_id')) \
-#             .order_by('emp_id')
-        
-#         # Print the emp_id counts
-#         for record in emp_id_counts:
-#             emp_id = record['emp_id']
-#             count = record['count']
-#             print(f'{emp_id} id, count {count}')
-        
-#         # Extract emp_ids and their counts
-#         emp_ids = [record['emp_id'] for record in emp_id_counts]
-#         emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
-        
-#         # Retrieve statuses from Employee model for the emp_ids found
-#         status_counts = Employee.objects.filter(id__in=emp_ids) \
-#             .values('status') \
-#             .annotate(count=Count('id'))
-
-#         # Prepare a dictionary to count statuses
-#         status_summary = {
-#             'black': 0,
-#             'white': 0,
-#             'unknown': 0
-#         }
-        
-#         # Populate the status_summary dictionary with counts
-#         for record in status_counts:
-#             status = record['status']
-#             count = record['count']
-#             if status in status_summary:
-#                 status_summary[status] += count
-        
-#         # Correct the status_summary by multiplying with the number of occurrences
-#         corrected_status_summary = {
-#             'black': 0,
-#             'white': 0,
-#             'unknown': 0
-#         }
-        
-#         for emp_id, count in emp_id_count_map.items():
-#             employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
-#             if employee_status in corrected_status_summary:
-#                 corrected_status_summary[employee_status] += count
-        
-#         # Print the corrected status summary
-#         print(f"now Status Counts:")
-#         for status, count in corrected_status_summary.items():
-#             response_data[status] = count
-#             print(f"{status}: {count}")
-        
-         
-
-#     else:
-#         # If no dates are provided, get overall counts
-#         total_employees = DetectionLog.objects.count()
-#         wrongparking_count = WrongParking.objects.count()
-#         drone_total = Drone.objects.aggregate(total_sum=Sum('total'))['total_sum']
-        
-#         # Get all emp_ids from DetectionLog entries
-#         # emp_ids = DetectionLog.objects.values_list('emp_id', flat=True)
-#         emp_id_counts = DetectionLog.objects.values('emp_id').annotate(count=Count('emp_id')).order_by('emp_id')
-#         emp_ids = [record['emp_id'] for record in emp_id_counts]
-#         emp_id_count_map = {record['emp_id']: record['count'] for record in emp_id_counts}
-
-
-#         # Count statuses from Employee model for all emp_ids
-#         # status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('status'))
-#         status_counts = Employee.objects.filter(id__in=emp_ids).values('status').annotate(count=Count('id'))
-#         status_summary = {
-#                     'black': 0,
-#                     'white': 0,
-#                     'unknown': 0
-#                 }
-#         # Populate the status_summary dictionary with counts
-#         for record in status_counts:
-#             status = record['status']
-#             count = record['count']
-#             if status in status_summary:
-#                 status_summary[status] += count
-        
-#         # Correct the status_summary by multiplying with the number of occurrences
-#         corrected_status_summary = {
-#             'black': 0,
-#             'white': 0,
-#             'unknown': 0
-#         }
-        
-#         for emp_id, count in emp_id_count_map.items():
-#             employee_status = Employee.objects.filter(id=emp_id).values_list('status', flat=True).first()
-#             if employee_status in corrected_status_summary:
-#                 corrected_status_summary[employee_status] += count
-        
-#         # Print the corrected status summary
-#         print(f"now Status Counts:")
-#         for status, count in corrected_status_summary.items():
-#             response_data[status] = count
-#             print(f"{status}: {count}")
-
-#     # Update the response dictionary with actual counts from the queries
-#     response_data['person'] = total_employees
-#     response_data['wrongparking'] = wrongparking_count
-#     response_data['drone'] = drone_total or 0
-#     print(response_data)
-#     # for entry in status_counts:
-#     #     response_data[entry['status']] = entry['count']
-
-#     # Get today's date
-#     today = datetime.today().date()
-
-#     # Get the latest drone status for today
-#     latest_drone_entry = Drone.objects.order_by('-time').first()
-    
-#     # Update drone_latest_status in the response data
-#     if latest_drone_entry:
-#         response_data['drone_latest_status'] = latest_drone_entry.status
-
-#     return JsonResponse(response_data)
 
 
 def dashboard_data(request):
@@ -335,9 +174,7 @@ def dashboard_face_count(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
 api_response = None
-
 
 def process_stream(rtsp_url, api_endpoint):
     cap = cv2.VideoCapture(rtsp_url)
@@ -374,7 +211,6 @@ def process_stream(rtsp_url, api_endpoint):
             api_response = None  # Set api_response to None in case of error
 
 # rtsp_url = "rtsp://admin:QSS2030QSS@192.168.100.208/Streaming/Channels/101/"
-
 
 def run_face_detection(request):
     rtsp_url = "rtsp://admin:QSS2030QSS@192.168.100.208/Streaming/Channels/101/"
@@ -437,10 +273,6 @@ def amr_back(request):
     return StreamingHttpResponse(stream(), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
-
-from django.db.models import F
-
-    
 def wrongparking(request):
     if request.method == 'GET':
         date_str = request.GET.get('date')
@@ -499,7 +331,6 @@ def wrongparking(request):
         return JsonResponse({'error': 'Invalid request method'},status=400)
 
 
-from django.shortcuts import get_object_or_404, redirect
 def update_wrongpakring(request, pk):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.method == 'POST':
@@ -516,8 +347,6 @@ def update_wrongpakring(request, pk):
             return JsonResponse({'error': 'Invalid request method'}, status=400)
     else:
         return JsonResponse({'error': 'Forbidden'}, status=403)  
-
-
 
 
 def get_employee_info_old(request):
@@ -561,9 +390,6 @@ def get_pagination_html(employees):
 
     return pagination_html
 
-
-    
-from django.db.models import Q
 
 def current_face_detection(request):
     if request.method == 'GET':
@@ -627,11 +453,6 @@ def get_employee_info(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
 
-
-
-
-
-from django.db.models import Max
 def dashboard_latest_records(request):
     # Get the maximum times for today from DetectionLog
     max_times_today = DetectionLog.objects.filter(
@@ -661,6 +482,7 @@ def dashboard_latest_records(request):
         return JsonResponse(serialized_records, safe=False)
     else:
         return JsonResponse({'message': 'No records found for today'})
+
 def dashboard_latest_records_old(request):
     # Get the maximum times for today
     max_times_today = Employee.objects.filter(
@@ -682,7 +504,6 @@ def dashboard_latest_records_old(request):
     else:
         return JsonResponse({'message': 'No records found for today'})
 
-# now we get the latest record if today record is empty
 
 def dashboard_trafic(request):
     if request.method == 'GET':
@@ -715,7 +536,6 @@ def dashboard_trafic(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-    
 
 def get_drone_status(request):
     if request.method == 'GET':
@@ -745,17 +565,16 @@ def get_drone_status(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
 # @require_http_methods(["POST"])
-def add_drone(request):
-    # Extract data from request
-    total = request.POST.get('total')
-    status = request.POST.get('status')
-    drone = Drone(total=total, status=status)
-    drone.save()
-    # Return a response
-    return JsonResponse({'message': 'Drone added successfully', 'id': drone.id})
+# def add_drone(request):
+#     # Extract data from request
+#     total = request.POST.get('total')
+#     status = request.POST.get('status')
+#     drone = Drone(total=total, status=status)
+#     drone.save()
+#     # Return a response
+#     return JsonResponse({'message': 'Drone added successfully', 'id': drone.id})
 
 # lateste day record
-
 
 def drone_trafic(request):
     if request.method == 'GET':
@@ -812,8 +631,7 @@ def drone_trafic(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-from django.core.files.base import ContentFile
-from django.conf import settings
+
 
 def save_emp_image(request):
     if request.method == 'POST':
@@ -836,12 +654,6 @@ def save_emp_image(request):
             print("Error saving image:", e)
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False})
-
-from django.http import HttpResponse
-import re
-
-
-
 
 
 def update_settings(request, direction):
@@ -877,11 +689,6 @@ def update_settings(request, direction):
         return JsonResponse({'status': 'success', 'message': 'Successfully updated app.init.js'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': f'Error updating file: {e}'}, status=500)
-
-
-    
-
-
 
 
 def facestatus_count_old(request):
@@ -948,8 +755,6 @@ def facestatus_count(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
-
 def create_user_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -969,12 +774,6 @@ def create_user_view(request):
             return JsonResponse({'message': str(e)}, status=500)
 
     return JsonResponse({'message': 'Method not allowed'}, status=405)
-
-
-
-
-
-
 
 @csrf_exempt
 def signin_view(request):
@@ -1013,27 +812,24 @@ def signout(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
-# Dania' Lib
-from ultralytics.utils.plotting import Annotator
-from ultralytics import YOLO
-import numpy as np
-import torch    
-import json
-import os   
-   
+
 # Dania's code
 model_road = YOLO("models/moi2-m.pt")
 model_vehicles = YOLO("models/yolov8l-seg.pt")
-# print(model_vehicles.names)  # Print class names to confirm IDs
 
+# Global variables
 Capacity_number = 20
-total_current_vehicles_count =0
+total_current_vehicles_count = 0
 final_result = ""
 total_vehicles_count = 0
-allTrafficData = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": total_current_vehicles_count, "final_result": final_result, "Number_of_total_vehicles": total_vehicles_count}
-trigg = 1
+allTrafficData = {
+    "Capacity": Capacity_number,
+    "Number_of_Current_Vehicles": total_current_vehicles_count,
+    "final_result": final_result,
+    "Number_of_total_vehicles": total_vehicles_count
+}
+trigg = 0  # Default state, detection is off
 TRAFFIC_DATA_FILE = 'traffic_data.json'
-
 
 
 def print_device_info():
@@ -1043,6 +839,7 @@ def print_device_info():
     except Exception as e:
         print(f"Failed to get device info: {e}")
 
+
 @csrf_exempt
 @gzip.gzip_page
 def turn_on(request):
@@ -1051,19 +848,21 @@ def turn_on(request):
     trigg = 1
     return JsonResponse({'value': trigg})
 
+
 @csrf_exempt
 @gzip.gzip_page
 def turn_off(request):
     global trigg  # Declare trigg as global to modify the global variable
     print("Endpoint '/off' was triggered!")
-    trigg = 0
+    trigg = 2
     return JsonResponse({'value': trigg})
+
 
 def Calculate_crowding_rate(number_of_vehicles):
     global Capacity_number
     traffic = 0.80 * Capacity_number
     moderate_traffic = 0.50 * Capacity_number
-    no_traffic = 0.25 * Capacity_number 
+    no_traffic = 0.25 * Capacity_number
 
     final_result = "---"
     if number_of_vehicles >= traffic:
@@ -1074,6 +873,7 @@ def Calculate_crowding_rate(number_of_vehicles):
         final_result = "Light"
 
     return final_result
+
 
 class_colors = {
     1: (255, 0, 0),  # Blue
@@ -1090,10 +890,12 @@ def video_feed_html(request):
     cap = cv2.VideoCapture('10.mp4')
 
     def generate_frames():
+        global trigg  # Declare trigg as global to modify it within this function
+
         print_device_info()
         frame_count = 0
         unique_track_ids = set()  # Set to store unique track IDs
-        
+
         while True:
             ret, frame = cap.read()
             if not ret:
@@ -1103,7 +905,7 @@ def video_feed_html(request):
             if frame_count % frame_skip != 0:
                 continue
 
-            if trigg == 1:
+            if trigg == 1:  # Start processing frames only when trigg is 1
                 frame = cv2.resize(frame, None, fx=resize_scale, fy=resize_scale, interpolation=cv2.INTER_LINEAR)
                 # Perform road segmentation
                 seg_results = model_road.predict(frame, device="cuda:0", classes=[0], save=False, save_conf=False, verbose=False)
@@ -1119,12 +921,12 @@ def video_feed_html(request):
                 frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
 
                 # Vehicle detection
-                detect_results = model_vehicles.track(frame_with_mask,device="cuda:0", conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
+                detect_results = model_vehicles.track(frame_with_mask, device="cuda:0", conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
                 vehicle_classes = []
                 for detect_result in detect_results:
                     boxes = detect_result.boxes
                     ids = boxes.id.cpu().numpy().astype(int) if boxes.id is not None else []
-                    
+
                     for box, id in zip(boxes, ids):
                         x1, y1, x2, y2 = map(int, box.xyxy[0])  # Extract coordinates
                         object_bbox = road_mask[y1:y2, x1:x2]  # Determine the mask intersection
@@ -1141,7 +943,7 @@ def video_feed_html(request):
                             label = f"{detect_result.names[class_id]}"
                             cv2.putText(frame_with_mask, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                             vehicle_classes.append(detect_result.names[class_id])
-                
+
                 total_current_vehicles_count = len(vehicle_classes)
                 final_result = Calculate_crowding_rate(total_current_vehicles_count)
                 total_vehicles_count = len(unique_track_ids)
@@ -1151,19 +953,14 @@ def video_feed_html(request):
                     "final_result": final_result,
                     "Number_of_total_vehicles": total_vehicles_count,
                 }
-                
+
                 # Write the traffic data to a JSON file
                 with open(TRAFFIC_DATA_FILE, 'w') as json_file:
                     json.dump(allTrafficData, json_file)
-                # global allTrafficData
-                # global Capacity_number
-                # allTrafficData = {
-                #     "Capacity": Capacity_number, 
-                #     "Number_of_Current_Vehicles": total_current_vehicles_count, 
-                #     "final_result": final_result,
-                #     "Number_of_total_vehicles": total_vehicles_count, 
-                # }
-                # print(allTrafficData)
+
+            elif trigg == 2:  # Send data to the database and stop detection
+                add_drone(total_vehicles_count, final_result)
+                trigg = 0  # Reset trigg to default state to stop detection
 
             # Always encode and send the frame
             ret, jpeg = cv2.imencode('.jpg', frame_with_mask if trigg == 1 else frame)
@@ -1172,10 +969,14 @@ def video_feed_html(request):
 
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+
     return StreamingHttpResponse(generate_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
-
+def add_drone(total_vehicles_count, final_result):
+    # Create a new Drone instance and save it to the database
+    drone = Drone(total=total_vehicles_count, status=final_result)
+    drone.save()
 
 def get_value(request):
     # Check if the JSON file exists
@@ -1187,15 +988,3 @@ def get_value(request):
         allTrafficData = json.load(json_file)
 
     return JsonResponse({'value': allTrafficData})
-
-
-
-# @require_http_methods(["POST"])
-def add_drone(request):
-    # Extract data from request
-    total = request.POST.get('total')
-    status = request.POST.get('status')
-    drone = Drone(total=total, status=status)
-    drone.save()
-    # Return a response
-    return JsonResponse({'message': 'Drone added successfully', 'id': drone.id})

@@ -1018,20 +1018,21 @@ from ultralytics.utils.plotting import Annotator
 from ultralytics import YOLO
 import numpy as np
 import torch    
-    
+import json
+import os   
    
 # Dania's code
 model_road = YOLO("models/moi2-m.pt")
-
 model_vehicles = YOLO("models/yolov8l-seg.pt")
-print(model_vehicles.names)  # Print class names to confirm IDs
+# print(model_vehicles.names)  # Print class names to confirm IDs
 
 Capacity_number = 20
 total_current_vehicles_count =0
 final_result = ""
 total_vehicles_count = 0
-all_data = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": 0, "final_result": final_result, "Number_of_total_vehicles": total_vehicles_count}
-trigg = 0
+allTrafficData = {"Capacity": Capacity_number, "Number_of_Current_Vehicles": total_current_vehicles_count, "final_result": final_result, "Number_of_total_vehicles": total_vehicles_count}
+trigg = 1
+TRAFFIC_DATA_FILE = 'traffic_data.json'
 
 
 
@@ -1059,6 +1060,7 @@ def turn_off(request):
     return JsonResponse({'value': trigg})
 
 def Calculate_crowding_rate(number_of_vehicles):
+    global Capacity_number
     traffic = 0.80 * Capacity_number
     moderate_traffic = 0.50 * Capacity_number
     no_traffic = 0.25 * Capacity_number 
@@ -1088,7 +1090,6 @@ def video_feed_html(request):
     cap = cv2.VideoCapture('10.mp4')
 
     def generate_frames():
-        global all_data, trigg
         print_device_info()
         frame_count = 0
         unique_track_ids = set()  # Set to store unique track IDs
@@ -1143,15 +1144,26 @@ def video_feed_html(request):
                 
                 total_current_vehicles_count = len(vehicle_classes)
                 final_result = Calculate_crowding_rate(total_current_vehicles_count)
-
-                print(unique_track_ids)
                 total_vehicles_count = len(unique_track_ids)
-                all_data = {
-                    "Capacity": Capacity_number, 
-                    "Number_of_Current_Vehicles": total_current_vehicles_count, 
+                allTrafficData = {
+                    "Capacity": Capacity_number,
+                    "Number_of_Current_Vehicles": total_current_vehicles_count,
                     "final_result": final_result,
-                    "Number_of_total_vehicles": total_vehicles_count, 
+                    "Number_of_total_vehicles": total_vehicles_count,
                 }
+                
+                # Write the traffic data to a JSON file
+                with open(TRAFFIC_DATA_FILE, 'w') as json_file:
+                    json.dump(allTrafficData, json_file)
+                # global allTrafficData
+                # global Capacity_number
+                # allTrafficData = {
+                #     "Capacity": Capacity_number, 
+                #     "Number_of_Current_Vehicles": total_current_vehicles_count, 
+                #     "final_result": final_result,
+                #     "Number_of_total_vehicles": total_vehicles_count, 
+                # }
+                # print(allTrafficData)
 
             # Always encode and send the frame
             ret, jpeg = cv2.imencode('.jpg', frame_with_mask if trigg == 1 else frame)
@@ -1162,12 +1174,20 @@ def video_feed_html(request):
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
     return StreamingHttpResponse(generate_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
 
+
+
+
 def get_value(request):
-    global all_data, trigg
-    print(trigg)
-    if not all_data:
+    # Check if the JSON file exists
+    if not os.path.exists(TRAFFIC_DATA_FILE):
         return JsonResponse({'error': 'Data not available yet'}, status=404)
-    return JsonResponse({'value': all_data})
+
+    # Read the traffic data from the JSON file
+    with open(TRAFFIC_DATA_FILE, 'r') as json_file:
+        allTrafficData = json.load(json_file)
+
+    return JsonResponse({'value': allTrafficData})
+
 
 
 # @require_http_methods(["POST"])

@@ -536,7 +536,7 @@ def dashboard_trafic(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
+# 
 def get_drone_status(request):
     if request.method == 'GET':
         today = date.today()

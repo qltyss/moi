@@ -816,7 +816,6 @@ def signout(request):
     
 
 # Dania's code
-
 # Dania's code
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, filename='traffic_analysis.log', filemode='a',

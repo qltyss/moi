@@ -1,46 +1,34 @@
 import json
 import os
-import random
-import string
+# import random
+# import string
 import base64
-from datetime import date
-
+from datetime import date, datetime, timedelta
+import time
+# import re
+import logging
+from queue import Queue
+from threading import Thread, Lock
 import cv2
 import numpy as np
 import requests
 import torch
 from ultralytics import YOLO
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Count, Avg
-from django.http import JsonResponse, StreamingHttpResponse
+from django.db.models import Count, Avg, Sum, F, Q, Max
+from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
 from django.middleware.csrf import get_token
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.dateparse import parse_date
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators import gzip
-
-from .models import Employee, DetectionLog, WrongParking, Drone
-from django.http import HttpResponse
-import re
-import time
-
-from django.http import JsonResponse
-from django.db.models import Count, Sum
-from .models import Employee, WrongParking, Drone  # Adjust import according to your project structure
-from datetime import datetime, timedelta
-from django.db.models import F
-from django.shortcuts import get_object_or_404, redirect
-from django.db.models import Q
-from django.db.models import Max
 from django.core.files.base import ContentFile
 from django.conf import settings
-from django.http import HttpResponse
-import re
-import logging
+from .models import Employee, DetectionLog, WrongParking, Drone, TriggState
+
 
 def index(request):
     return render(request, 'signin.html')
@@ -633,8 +621,6 @@ def drone_trafic(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-
-
 def save_emp_image(request):
     if request.method == 'POST':
         imgname = request.POST.get('name')
@@ -816,7 +802,6 @@ def signout(request):
     
 
 # Dania's code
-# Dania's code
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, filename='traffic_analysis.log', filemode='a',
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -828,16 +813,6 @@ model_vehicles = YOLO("models/yolov8l-seg.pt")
 
 # Global variables
 Capacity_number = 20
-total_current_vehicles_count = 0
-final_result = ""
-total_vehicles_count = 0
-allTrafficData = {
-    "Capacity": Capacity_number,
-    "Number_of_Current_Vehicles": total_current_vehicles_count,
-    "final_result": final_result,
-    "Number_of_total_vehicles": total_vehicles_count
-}
-trigg = 0  # Default state, detection is off
 TRAFFIC_DATA_FILE = 'traffic_data.json'
 
 def print_device_info():
@@ -850,48 +825,107 @@ def print_device_info():
     except Exception as e:
         logger.error(f"Failed to get device info: {e}")
 
-@csrf_exempt
-@gzip.gzip_page
-def turn_on(request):
-    global trigg  # Declare trigg as global to modify the global variable
-    logger.info("Endpoint '/on' was triggered!")
-    trigg = 1
-    logger.debug(f"Set trigg to {trigg}")
-    return JsonResponse({'value': trigg})
+def read_trigg_from_db():
+    """Read the trigg state from the database."""
+    return TriggState.get_value()
 
-@csrf_exempt
-@gzip.gzip_page
-def turn_off(request):
-    global trigg  # Declare trigg as global to modify the global variable
-    logger.info("Endpoint '/off' was triggered!")
-    trigg = 2
-    logger.debug(f"Set trigg to {trigg}")
-    return JsonResponse({'value': trigg})
+def write_trigg_to_db(value):
+    """Write the trigg state to the database."""
+    TriggState.set_value(value)
 
 def Calculate_crowding_rate(number_of_vehicles):
-    global Capacity_number
     logger.debug("Calculating crowding rate")
     traffic = 0.80 * Capacity_number
     moderate_traffic = 0.50 * Capacity_number
     no_traffic = 0.25 * Capacity_number
 
-    final_result = "---"
     if number_of_vehicles >= traffic:
-        final_result = "Heavy"
-    elif number_of_vehicles <= moderate_traffic and number_of_vehicles >= no_traffic:
-        final_result = "Moderate"
-    elif number_of_vehicles <= no_traffic:
-        final_result = "Light"
-
-    logger.info(f"Calculated crowding rate: {final_result} for {number_of_vehicles} vehicles")
-    return final_result
+        return "Heavy"
+    elif moderate_traffic >= number_of_vehicles >= no_traffic:
+        return "Moderate"
+    else:
+        return "Light"
 
 class_colors = {
     1: (255, 0, 0),  # Blue
     2: (13, 169, 29),  # Green
     3: (0, 0, 255),  # Red
-    # 5: (255, 255, 0),  # Cyan
 }
+
+def process_frame(frame, unique_track_ids, lock):
+    start_time = time.time()
+    
+    try:
+        logger.debug("Performing road segmentation")
+        seg_results = model_road.predict(frame, device="cuda:0", classes=[0], conf=0.5, save=False, save_conf=False, verbose=False)
+        road_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)
+        if seg_results and seg_results[0].masks is not None and seg_results[0].masks.data.numel() > 0:
+            road_mask_tensor = seg_results[0].masks.data[0]
+            road_mask = road_mask_tensor.cpu().numpy().astype(np.uint8)
+            road_mask = cv2.resize(road_mask, (frame.shape[1], frame.shape[0]))
+        logger.debug(f"Road segmentation took {time.time() - start_time} seconds")
+
+        segmentation_overlay = np.zeros_like(frame)
+        segmentation_overlay[:, :, 2] = road_mask * 255
+        alpha = 0.3
+        frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
+
+        logger.debug("Performing vehicle detection")
+        detect_results = model_vehicles.track(frame_with_mask, device="cuda:0", conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
+        vehicle_classes = []
+
+        for detect_result in detect_results:
+            boxes = detect_result.boxes
+            ids = boxes.id.cpu().numpy().astype(int) if boxes.id is not None else []
+            with lock:
+                for box, id in zip(boxes, ids):
+                    try:
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                        object_bbox = road_mask[y1:y2, x1:x2]
+
+                        if np.any(object_bbox):
+                            class_id = int(box.cls[0])
+                            color = class_colors.get(class_id, (0, 0, 0))
+                            unique_track_ids.add(id)
+
+                            cv2.rectangle(frame_with_mask, (x1, y1), (x2, y2), color, 2)
+                            label = f"{detect_result.names[class_id]}"
+                            cv2.putText(frame_with_mask, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                            vehicle_classes.append(detect_result.names[class_id])
+
+                    except Exception as e:
+                        logger.error(f"Error drawing detection on frame: {e}")
+                        continue
+            
+        # Calculate traffic data and write to JSON file
+        with lock:
+            total_current_vehicles_count = len(vehicle_classes)
+            
+        final_result = Calculate_crowding_rate(total_current_vehicles_count)
+        total_vehicles_count = len(unique_track_ids)
+        logger.info(f"Unique track IDs: {unique_track_ids}")
+        logger.info(f"Total number of unique track IDs: {len(unique_track_ids)}")
+        
+        allTrafficData = {
+            "Capacity": Capacity_number,
+            "final_result": final_result,
+            "Number_of_total_vehicles": total_vehicles_count,
+        }
+        logger.info(f"Traffic data: {allTrafficData}")  
+
+        try:
+            with open(TRAFFIC_DATA_FILE, 'w') as json_file:
+                json.dump(allTrafficData, json_file)
+            logger.info("Traffic data written to JSON file successfully")
+        except IOError as e:
+            logger.error(f"Failed to write traffic data to JSON file: {e}")
+        
+        logger.debug(f"Total frame processing time: {time.time() - start_time} seconds")
+    except Exception as e:
+        logger.error(f"Error during frame processing: {e}")
+        frame_with_mask = frame  # Fallback to original frame in case of error
+
+    return frame_with_mask
 
 @csrf_exempt
 @gzip.gzip_page
@@ -900,91 +934,44 @@ def video_feed_html(request):
     resize_scale = 0.5
     cap = cv2.VideoCapture('10.mp4')
     logger.info("Starting video feed")
+    unique_track_ids = set()
+    lock = Lock()  # Create a lock for managing access to unique_track_ids
 
     def generate_frames():
-        global trigg  # Declare trigg as global to modify it within this function
-
-        print_device_info()
         frame_count = 0
-        unique_track_ids = set()  # Set to store unique track IDs
+        print_device_info()
 
         while True:
+            trigg = read_trigg_from_db()
             ret, frame = cap.read()
             if not ret:
-                logger.error("Failed to grab frame from live feed.")
+                logger.error("Failed to grab frame from video.")
                 break
+
             frame_count += 1
             if frame_count % frame_skip != 0:
                 continue
 
-            if trigg == 1:  # Start processing frames only when trigg is 1
-                frame = cv2.resize(frame, None, fx=resize_scale, fy=resize_scale, interpolation=cv2.INTER_LINEAR)
-                logger.debug("Performing road segmentation")
-                # Perform road segmentation
-                seg_results = model_road.predict(frame, device="cuda:0", classes=[0],  conf=0.5, save=False, save_conf=False, verbose=False)
-                road_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)
-                if seg_results and seg_results[0].masks is not None and seg_results[0].masks.data.numel() > 0:
-                    road_mask_tensor = seg_results[0].masks.data[0]
-                    road_mask = road_mask_tensor.cpu().numpy().astype(np.uint8)
-                    road_mask = cv2.resize(road_mask, (frame.shape[1], frame.shape[0]))
+            frame = cv2.resize(frame, None, fx=resize_scale, fy=resize_scale, interpolation=cv2.INTER_LINEAR)
 
-                segmentation_overlay = np.zeros_like(frame)
-                segmentation_overlay[:, :, 2] = road_mask * 255
-                alpha = 0.3
-                frame_with_mask = cv2.addWeighted(frame, 1, segmentation_overlay, alpha, 0)
+            if trigg == 1:
+                frame_with_mask = process_frame(frame, unique_track_ids, lock)
+                
+            elif trigg == 2:
+                logger.info("Trigg is 2, sending data to the database")
+                # Process the data (e.g., save traffic data to the database)
+                save_traffic_data_to_database()
+                write_trigg_to_db(0)
+                logger.info("Trigg value reset to 0 after sending data to the database")
+                
+                # Use the original frame without processing
+                frame_with_mask = frame
 
-                logger.debug("Performing vehicle detection")
-                # Vehicle detection
-                detect_results = model_vehicles.track(frame_with_mask, device="cuda:0", conf=0.2, classes=[1, 2, 3], save=False, save_conf=False, verbose=False, persist=True)
-                vehicle_classes = []
-                for detect_result in detect_results:
-                    boxes = detect_result.boxes
-                    ids = boxes.id.cpu().numpy().astype(int) if boxes.id is not None else []
+            else:
+                # Use the original frame without processing
+                frame_with_mask = frame
 
-                    for box, id in zip(boxes, ids):
-                        x1, y1, x2, y2 = map(int, box.xyxy[0])  # Extract coordinates
-                        object_bbox = road_mask[y1:y2, x1:x2]  # Determine the mask intersection
-
-                        if np.any(object_bbox):  # If part of the box is within the mask
-                            class_id = int(box.cls[0])
-                            color = class_colors.get(class_id, (0, 0, 0))
-
-                            # Add the track ID to the set to ensure uniqueness
-                            unique_track_ids.add(id)
-
-                            # Draw and label the detected vehicle within the mask
-                            cv2.rectangle(frame_with_mask, (x1, y1), (x2, y2), color, 2)
-                            label = f"{detect_result.names[class_id]}"
-                            cv2.putText(frame_with_mask, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-                            vehicle_classes.append(detect_result.names[class_id])
-
-                total_current_vehicles_count = len(vehicle_classes)
-                final_result = Calculate_crowding_rate(total_current_vehicles_count)
-                total_vehicles_count = len(unique_track_ids)
-                allTrafficData = {
-                    "Capacity": Capacity_number,
-                    "Number_of_Current_Vehicles": total_current_vehicles_count,
-                    "final_result": final_result,
-                    "Number_of_total_vehicles": total_vehicles_count,
-                }
-
-                logger.debug(f"Detected {total_current_vehicles_count} vehicles, final result: {final_result}")
-
-                # Write the traffic data to a JSON file
-                try:
-                    with open(TRAFFIC_DATA_FILE, 'w') as json_file:
-                        json.dump(allTrafficData, json_file)
-                    logger.info("Traffic data written to JSON file successfully")
-                except IOError as e:
-                    logger.error(f"Failed to write traffic data to JSON file: {e}")
-
-            elif trigg == 2:  # Send data to the database and stop detection
-                add_drone(total_vehicles_count, final_result)
-                logger.info("Data sent to the database and detection stopped")
-                trigg = 0  # Reset trigg to default state to stop detection
-
-            # Always encode and send the frame
-            ret, jpeg = cv2.imencode('.jpg', frame_with_mask if trigg == 1 else frame)
+            ret, jpeg = cv2.imencode('.jpg', frame_with_mask)
             if not ret:
                 logger.error("Failed to encode frame as JPEG")
                 continue
@@ -994,27 +981,14 @@ def video_feed_html(request):
 
     return StreamingHttpResponse(generate_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
 
-def add_drone(total_vehicles_count, final_result):
-    try:
-        # Create a new Drone instance and save it to the database
-        drone = Drone(total=total_vehicles_count, status=final_result)
-        drone.save()
-        logger.info("Drone data saved to the database successfully")
-    except Exception as e:
-        logger.error(f"Failed to save drone data to the database: {e}")
 
-def get_value(request):
-    # Check if the JSON file exists
-    if not os.path.exists(TRAFFIC_DATA_FILE):
-        logger.warning("Traffic data file not found")
-        return JsonResponse({'error': 'Data not available yet'}, status=404)
-
-    # Read the traffic data from the JSON file
+def save_traffic_data_to_database():
     try:
         with open(TRAFFIC_DATA_FILE, 'r') as json_file:
             allTrafficData = json.load(json_file)
-        # logger.info("Traffic data read from JSON file successfully")
-        return JsonResponse({'value': allTrafficData})
-    except IOError as e:
-        logger.error(f"Failed to read traffic data from JSON file: {e}")
-        return JsonResponse({'error': 'Failed to read data'}, status=500)
+        # save this data to the Drone model
+        drone = Drone(total=allTrafficData["Number_of_total_vehicles"], status=allTrafficData["final_result"])
+        drone.save()
+        logger.info("Traffic data successfully saved to the database")
+    except Exception as e:
+        logger.error(f"Failed to save traffic data to the database: {e}")

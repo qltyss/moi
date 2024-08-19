@@ -1937,67 +1937,109 @@
   <script src="{% static 'assets/js/auth.js' %}"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script>
+
+
+
+   <script>
         function hidePreloader() {
             $('#drone_preloader').addClass("d-none");
             $('#drone_streams').removeClass("d-none");
           
         }
 
-    function updateValue() {
-        $.ajax({
-            url: '/get_value/', 
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                var all_data = response.value;
-                console.log(all_data);
-            $("#drone_traffic_value").text(response.value.Number_of_total_vehicles);
-            $("#drone_traffic_status_values").text(response.value.final_result);
-            $("#drone_latest_Time").text(response.value.time);
-            var dir = sessionStorage.getItem('dir');
-            if(response.value.final_result  === "Heavy"){
-              if (dir === "ltr") {
-                $("#drone_traffic_status_values").text(response.value.final_result);
+        function updateTrafficStatus(status, dir) {
+    const statusMap = {
+        'Heavy': { 'ltr': 'Heavy', 'rtl': 'مزدحم' },
+        'Moderate': { 'ltr': 'Moderate', 'rtl': 'معتدل' },
+        'Light': { 'ltr': 'Light', 'rtl': 'غير مزدحم' }
+    };
+    const statusText = statusMap[status][dir];
+    $("#drone_traffic_status_values").text(statusText);
+
+    if (status === 'Light') {
+        $("#drone_traffic_status_values").removeClass('text-danger text-warning').addClass('text-success');
+    } else if (status === 'Heavy') {
+        $("#drone_traffic_status_values").addClass('text-danger').removeClass('text-success text-warning');
+    } else {
+        $("#drone_traffic_status_values").addClass('text-warning').removeClass('text-success text-danger');
+    }
+}
+
+function updateValue() {
+    $.ajax({
+        url: 'http://127.0.0.1:8080/get_value', 
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            const data = response.value;
+            console.log(data)
+            $("#drone_traffic_value").text(data.Number_of_total_vehicles);
+            $("#drone_latest_Time").text(data.time);
+            const dir = sessionStorage.getItem('dir');
+            updateTrafficStatus(data.final_result, dir);
+        },
+        error: function(xhr, status, error) {
+            console.error("Failed to fetch data: " + error);
+        }
+    });
+}
+    // function updateValue() {
+    //     $.ajax({
+    //         url: 'http://localhost:8080/get_value', 
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function(response) {
+    //             var all_data = response.value;
+    //             console.log(all_data);
+    //         $("#drone_traffic_value").text(response.value.Number_of_total_vehicles);
+    //         $("#drone_traffic_status_values").text(response.value.final_result);
+    //         $("#drone_latest_Time").text(response.value.time);
+    //         var dir = sessionStorage.getItem('dir');
+    //         if(response.value.final_result  === "Heavy"){
+    //           if (dir === "ltr") {
+    //             $("#drone_traffic_status_values").text(response.value.final_result);
                 
-              }if(dir === "rtl"){
-                $("#drone_traffic_status_values").text("مزدحم");
-              }
+    //           }if(dir === "rtl"){
+    //             $("#drone_traffic_status_values").text("مزدحم");
+    //           }
              
 
-            }else if(response.final_result  === "Moderate"){
+    //         }else if(response.final_result  === "Moderate"){
 
-              if (dir === "ltr") {
-                $("#drone_traffic_status_values").text(response.final_result);
-              }if(dir === "rtl"){
-                $("#drone_traffic_status_values").text("معتدل");
-              }
+    //           if (dir === "ltr") {
+    //             $("#drone_traffic_status_values").text(response.final_result);
+    //           }if(dir === "rtl"){
+    //             $("#drone_traffic_status_values").text("معتدل");
+    //           }
 
-            }else if(response.value.final_result  === "Light"){
+    //         }else if(response.value.final_result  === "Light"){
               
-              if (dir === "ltr") {
-                $("#drone_traffic_status_values").text(response.value.final_result);
-                $("#drone_traffic_status_values").removeClass('text-danger');
-                $("#drone_traffic_status_values").removeClass('text-warning');
-                $("#drone_traffic_status_values").addClass('text-success');
+    //           if (dir === "ltr") {
+    //             $("#drone_traffic_status_values").text(response.value.final_result);
+    //             $("#drone_traffic_status_values").removeClass('text-danger');
+    //             $("#drone_traffic_status_values").removeClass('text-warning');
+    //             $("#drone_traffic_status_values").addClass('text-success');
               
-              }if(dir === "rtl"){
-                $("#drone_traffic_status_values").removeClass('text-danger');
-                $("#drone_traffic_status_values").removeClass('text-warning');
-                $("#drone_traffic_status_values").addClass('text-success');
-                $("#drone_traffic_status_values").text("غير مزدحم");
+    //           }if(dir === "rtl"){
+    //             $("#drone_traffic_status_values").removeClass('text-danger');
+    //             $("#drone_traffic_status_values").removeClass('text-warning');
+    //             $("#drone_traffic_status_values").addClass('text-success');
+    //             $("#drone_traffic_status_values").text("غير مزدحم");
                
-              }
+    //           }
 
-            }
+    //         }
           
-            }
-        });
-    }
+    //         }
+    //     });
+    // }
     setInterval(updateValue, 500); // Call updateValue every 500 milliseconds
-</script>
+</script> 
 
 
 </body>
 
 </html>
+
+
+

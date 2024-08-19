@@ -41,3 +41,16 @@ class DetectionLog(models.Model):
     def __str__(self):
         return f"{self.plate_text} - {self.time}"
 
+
+class TriggState(models.Model):
+    value = models.IntegerField(default=0)
+
+    @classmethod
+    def get_value(cls):
+        return cls.objects.first().value if cls.objects.exists() else 0
+
+    @classmethod
+    def set_value(cls, value):
+        obj, created = cls.objects.get_or_create(id=1)
+        obj.value = value
+        obj.save()

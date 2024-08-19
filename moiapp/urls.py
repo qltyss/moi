@@ -42,9 +42,7 @@ urlpatterns = [
     
     # Dania's urls
     path('video_feed_html/', views.video_feed_html, name='video_feed_html'),
-    path('get_value/', views.get_value, name='get_value'),
-    path('turn_on/', views.turn_on, name='turn_on'),
-    path('turn_off/', views.turn_off, name='turn_off'),
+   
     
     
     
